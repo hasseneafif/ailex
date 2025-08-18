@@ -2,36 +2,43 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import React from "react";
+
 const Footer = () => {
   return (
     <footer
       className="wow fadeInUp dark:bg-gray-dark relative z-10 bg-white pt-16 md:pt-20 lg:pt-24"
       data-wow-delay=".1s"
+      role="contentinfo"
+      aria-labelledby="footer-heading"
     >
+      <h2 id="footer-heading" className="sr-only">Footer</h2>
       <div className="container">
         <div className="-mx-4 flex flex-wrap">
           <div className="w-full px-4 md:w-1/2 lg:w-4/12 xl:w-5/12">
             <div className="mb-12 lg:mb-16">
-              <Link href="/" className="mb-8 w-40 inline-block">
+              <Link href="/" className="mb-8 w-40 inline-block" aria-label="Go to homepage">
                 <Image
                   src="/images/logo/logo-black.svg"
-                  alt="logo"
+                  alt="Hassene Afif logo black"
                   className="w-full dark:hidden"
                   width={48}
                   height={20}
+                  priority
                 />
                 <Image
                   src="/images/logo/logo-white.svg"
-                  alt="logo"
+                  alt="Hassene Afif logo white"
                   className="hidden w-full dark:block"
                   width={48}
                   height={20}
+                  priority
                 />
               </Link>
 
               {/* Description */}
               <p className="dark:text-body-color-dark mb-6 text-base leading-relaxed text-body-color max-w-[360px]">
-               Designed, coded, animated and deployed by yours truly.
+                Designed, coded, animated and deployed by yours truly.
               </p>
 
               {/* Bottom row: icons - copyright - empty */}
@@ -43,7 +50,7 @@ const Footer = () => {
                     href="https://www.linkedin.com/in/yhasseneafif"
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label="LinkedIn"
+                    aria-label="LinkedIn profile of Hassene Afif"
                     className="dark:text-body-color-dark text-body-color duration-300 hover:text-primary dark:hover:text-primary"
                   >
                     <svg
@@ -51,6 +58,8 @@ const Footer = () => {
                       width="22"
                       height="22"
                       viewBox="0 0 24 24"
+                      aria-hidden="true"
+                      focusable="false"
                     >
                       <path
                         fill="currentColor"
@@ -59,32 +68,10 @@ const Footer = () => {
                     </svg>
                   </a>
 
-                  {/* <a
-                    href="https://github.com/yourprofile"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="GitHub"
-                    className="dark:text-body-color-dark text-body-color duration-300 hover:text-primary dark:hover:text-primary"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="18"
-                      height="18"
-                      viewBox="0 0 432 416"
-                      fill="none"
-                      className="fill-current"
-                    >
-                      <path
-                        fill="currentColor"
-                        d="M213.5 0q88.5 0 151 62.5T427 213q0 70-41 125.5T281 416q-14 2-14-11v-58q0-27-15-40q44-5 70.5-27t26.5-77q0-34-22-58q11-26-2-57q-18-5-58 22q-26-7-54-7t-53 7q-18-12-32.5-17.5T107 88h-6q-12 31-2 57q-22 24-22 58q0 55 27 77t70 27q-11 10-13 29q-42 18-62-18q-12-20-33-22q-2 0-4.5.5t-5 3.5t8.5 9q14 7 23 31q1 2 2 4.5t6.5 9.5t13 10.5T130 371t30-2v36q0 13-14 11q-64-22-105-77.5T0 213q0-88 62.5-150.5T213.5 0z"
-                      />
-                    </svg>
-                  </a> */}
-
                   {/* Email */}
                   <a
                     href="mailto:hasseneafif@gmail.com"
-                    aria-label="Email"
+                    aria-label="Email Hassene Afif"
                     className="dark:text-body-color-dark text-body-color duration-300 hover:text-primary dark:hover:text-primary"
                   >
                     <svg
@@ -92,6 +79,8 @@ const Footer = () => {
                       width="20"
                       height="20"
                       viewBox="0 0 20 20"
+                      aria-hidden="true"
+                      focusable="false"
                     >
                       <path
                         fill="white"
@@ -104,14 +93,17 @@ const Footer = () => {
                   <div className="relative group">
                     <button
                       type="button"
-                      aria-label="Phone"
+                      aria-label="Show phone number"
                       className="dark:text-body-color-dark text-body-color duration-300 hover:text-primary dark:hover:text-primary focus:outline-none"
+                      tabIndex={0}
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="15"
                         height="15"
                         viewBox="0 0 16 16"
+                        aria-hidden="true"
+                        focusable="false"
                       >
                         <path
                           fill="white"
@@ -132,7 +124,6 @@ const Footer = () => {
                   </span>
                 </div>
 
-     
               </div>
             </div>
           </div>
@@ -142,4 +133,4 @@ const Footer = () => {
   );
 };
 
-export default Footer;
+export default React.memo(Footer);

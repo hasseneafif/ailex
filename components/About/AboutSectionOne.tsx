@@ -1,7 +1,9 @@
 "use client"
-import ConstellationBackground from "./ConstellationBackground";
+import dynamic from "next/dynamic";
+const ConstellationBackground = dynamic(() => import("./ConstellationBackground"), { ssr: false });
 
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useMemo, useCallback } from "react";
+import Image from "next/image";
 import { sendChatMessage } from "../../services/chatService";
 
 
@@ -13,19 +15,28 @@ const AboutSectionOne = () => {
   const chartRef = useRef(null);
   const [chartWidth, setChartWidth] = useState(400);
 
+  // Debounced resize handler
   useEffect(() => {
+    let resizeTimeout: NodeJS.Timeout;
     function updateWidth() {
       if (chartRef.current) {
         setChartWidth(chartRef.current.offsetWidth);
       }
     }
+    function handleResize() {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(updateWidth, 100);
+    }
     updateWidth();
-    window.addEventListener("resize", updateWidth);
-    return () => window.removeEventListener("resize", updateWidth);
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      clearTimeout(resizeTimeout);
+    };
   }, []);
 
   const [chatHistory, setChatHistory] = useState([
-    { role: "assistant", content: "Hey, how can i help you?" },
+    { role: "assistant", content: "Hey, how can I help you?" },
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -86,20 +97,19 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   }, []);
 
   // On first input, request token if not present
-  const handleInput = (e) => {
+  const handleInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
     if (!token && !tokenRequested && e.target.value.trim() !== "") {
       setTokenRequested(true);
       fetchToken();
     }
-  };
+  }, [token, tokenRequested]);
 
   // Wait for token before sending chat
-  const handleSend = async (e) => {
+  const handleSend = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!input.trim() || rateLimited) return;
     if (!token) {
-      // Wait for token to be set, then retry
       setTokenRequested(true);
       if (!tokenRequested) fetchToken();
       const waitForToken = async () => {
@@ -113,7 +123,7 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
         }
       };
       await waitForToken();
-      if (!localStorage.getItem("chat_token")) return; // still no token
+      if (!localStorage.getItem("chat_token")) return;
     }
     const authToken = token || localStorage.getItem("chat_token");
     const newHistory = [...chatHistory, { role: "user", content: input }];
@@ -130,7 +140,7 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
       if (response && response.reply) {
         setChatHistory((prev) => [...prev, { role: "assistant", content: response.reply }]);
       }
-    } catch (err) {
+    } catch (err: any) {
       let errorMsg = "Error when interacting with the AI.";
       if (err.message && (err.message.toLowerCase().includes("rate") || err.message.toLowerCase().includes("limit"))) {
         errorMsg = "You have reached your daily limit. Try again tomorrow.";
@@ -140,46 +150,53 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     } finally {
       setLoading(false);
     }
-  };
+  }, [input, rateLimited, token, tokenRequested, chatHistory]);
+
+  // Memoized chat bubbles for performance
+  const ChatBubbles = useMemo(() => (
+    <>
+      {chatHistory.map((msg, idx) =>
+        msg.role === "assistant" ? (
+          <div key={idx} className="flex items-start gap-2">
+            <Image src="/images/logo/v-icon.svg" alt="Assistant Icon" width={32} height={32} className="w-8 h-8 p-0" />
+            <div className="bg-gray-100 dark:bg-gray-800 rounded-lg px-4 py-2 text-sm text-gray-900 dark:text-white max-w-[70%]" aria-label="AI response">{msg.content}</div>
+          </div>
+        ) : (
+          <div key={idx} className="flex items-start gap-2 flex-row-reverse">
+            <div className="bg-primary text-black rounded-lg px-4 py-2 text-sm max-w-[70%]" aria-label="User message">{msg.content}</div>
+          </div>
+        )
+      )}
+      {loading && (
+        <div className="flex items-start gap-2">
+          <Image src="/images/logo/v-icon.svg" alt="Assistant Icon" width={32} height={32} className="w-8 h-8 p-0" />
+          <div className="bg-gray-100 dark:bg-gray-800 rounded-lg px-4 py-2 text-sm text-gray-900 dark:text-white max-w-[70%] opacity-60 italic">L'IA est en train de répondre...</div>
+        </div>
+      )}
+    </>
+  ), [chatHistory, loading]);
 
   return (
-    <section id="hassai" className="pt-16 md:pt-20 lg:pt-28">
+    <section id="hassai" className="pt-16 md:pt-20 lg:pt-28" aria-labelledby="about-ai-heading">
+      <h2 id="about-ai-heading" className="sr-only">About Hass AI Chat</h2>
       <div className="container">
         <div className="border-b border-body-color/[.15] pb-16 dark:border-white/[.15] md:pb-20 lg:pb-28">
           <div className="-mx-4 flex flex-wrap items-center">
             {/* Left side: Chat UI (mobile has constellation bg, desktop does not) */}
             <div className="w-full px-4 lg:w-1/2">
-              <div className="relative max-w-[570px] mx-auto mb-8 min-h-[350px] flex flex-col overflow-hidden">
+              <div className="relative max-w-[570px] mx-auto mb-8 min-h-[350px] flex flex-col overflow-hidden" aria-live="polite">
                 {/* Mobile-only constellation background */}
-                <div className="absolute inset-0 z-0 md:hidden pointer-events-none">
+                <div className="absolute inset-0 z-0 md:hidden pointer-events-none" aria-hidden="true">
                   <ConstellationBackground speedMultiplier={speedMultiplier} />
                 </div>
                 {/* Title and description */}
-                <h2 className="mb-0 text-sm md:text-lg font-xoireqe text-black dark:text-white  relative z-10">Hass AI</h2>
+                <h3 className="mb-0 text-sm md:text-lg font-xoireqe text-black dark:text-white  relative z-10">Hass AI</h3>
                 <p className="mb-12 text-base font-ubunto !leading-relaxed text-body-color md:text-sm relative z-10">Ask me anything.</p>
                 {/* Chat content */}
-                <div ref={chatContainerRef} className="flex-1 overflow-y-auto space-y-4 mb-4 max-h-80 pr-2 relative z-10">
-                  {/* Render chat history */}
-                  {chatHistory.map((msg, idx) =>
-                    msg.role === "assistant" ? (
-                      <div key={idx} className="flex items-start gap-2">
-                        <img src="/images/logo/v-icon.svg" alt="User Icon" className="w-8 h-8 p-0" />
-                        <div className="bg-gray-100 dark:bg-gray-800 rounded-lg px-4 py-2 text-sm text-gray-900 dark:text-white max-w-[70%]">{msg.content}</div>
-                      </div>
-                    ) : (
-                      <div key={idx} className="flex items-start gap-2 flex-row-reverse">
-                        <div className="bg-primary text-black rounded-lg px-4 py-2 text-sm max-w-[70%]">{msg.content}</div>
-                      </div>
-                    )
-                  )}
-                  {loading && (
-                    <div className="flex items-start gap-2">
-                      <img src="/images/logo/v-icon.svg" alt="User Icon" className="w-8 h-8 p-0" />
-                      <div className="bg-gray-100 dark:bg-gray-800 rounded-lg px-4 py-2 text-sm text-gray-900 dark:text-white max-w-[70%] opacity-60 italic">L'IA est en train de répondre...</div>
-                    </div>
-                  )}
+                <div ref={chatContainerRef} className="flex-1 overflow-y-auto space-y-4 mb-4 max-h-80 pr-2 relative z-10" aria-live="polite" aria-atomic="false">
+                  {ChatBubbles}
                 </div>
-                <form className="flex gap-2 mt-2 relative z-10" onSubmit={handleSend} autoComplete="off">
+                <form className="flex gap-2 mt-2 relative z-10" onSubmit={handleSend} autoComplete="off" aria-label="Chat input form">
                   <input
                     type="text"
                     className="border-stroke dark:text-body-color-dark dark:shadow-two w-full rounded-sm border bg-[#181a20] dark:bg-[#181a20] px-6 py-3 text-base text-white outline-none focus:border-primary dark:border-transparent focus:border-primary focus:shadow-none"
@@ -187,13 +204,15 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
                     value={input}
                     onChange={handleInput}
                     disabled={loading || rateLimited}
+                    aria-label="Type your message"
                   />
                   <button
                     type="submit"
                     className="rounded border border-white px-4 py-2 text-base font-semibold text-white bg-transparent hover:bg-white hover:text-primary transition-all duration-200 flex items-center justify-center disabled:opacity-60 disabled:cursor-not-allowed"
                     disabled={loading || !input.trim() || rateLimited}
+                    aria-label="Send message"
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-5 h-5">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-5 h-5" aria-hidden="true">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10l9 9m0 0l9-9m-9 9V3" />
                     </svg>
                   </button>
@@ -206,6 +225,7 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
                 ref={chartRef}
                 className="wow fadeInUp relative mx-auto w-full max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl aspect-[5/4] lg:mr-0 hidden md:block"
                 data-wow-delay=".2s"
+                aria-hidden="true"
               >
                 <ConstellationBackground speedMultiplier={speedMultiplier} />
               </div>
@@ -217,4 +237,4 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   );
 };
 
-export default AboutSectionOne;
+export default React.memo(AboutSectionOne);
