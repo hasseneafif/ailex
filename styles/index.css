@@ -1,4 +1,82 @@
+/* Holographic card active state for section scroll-in animation */
+@media (min-width: 1024px) {
+  .holographic-card {
+    transition: transform 0.5s cubic-bezier(.4,1.5,.5,1), box-shadow 0.5s cubic-bezier(.4,1.5,.5,1);
+  }
+  .holographic-card.holographic-card-active {
+    transform: scale(1.03);
+    box-shadow: 0 0 20px rgba(255,255,255,0.5);
+  }
+  .holographic-card .holographic-card-before {
+    opacity: 0;
+    transform: rotate(-45deg);
+    transition: all 0.5s ease;
+  }
+  .holographic-card.holographic-card-active .holographic-card-before {
+    opacity: 1;
+    transform: rotate(-45deg) translateY(100%);
+  }
+}
+@media (min-width: 1024px) {
+  .skill-pop {
+    transition: transform 0.25s cubic-bezier(.4,1.5,.5,1), box-shadow 0.25s cubic-bezier(.4,1.5,.5,1);
+    will-change: transform, box-shadow;
+  }
+  .skill-pop:hover {
+    transform: scale(1.18) translateY(-10px);
+    z-index: 2;
+  }
+}
+/* Holographic Card Hover Effect for Blog Project Cards */
+.holographic-card {
+  position: relative;
+  overflow: hidden;
+
+  transition: all 0.5s ease;
+}
+.holographic-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+}
+.holographic-card-before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(0deg, transparent, transparent 30%, rgba(255, 255, 255, 0.447));
+  transform: rotate(-45deg);
+  transition: all 0.5s ease;
+  opacity: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+.holographic-card:hover .holographic-card-before {
+  opacity: 1;
+  transform: rotate(-45deg) translateY(100%);
+}
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+/* Local font faces */
+@font-face {
+  font-family: 'Phitagate';
+  src: url('/fonts/Phitagate-Regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Ubuntu';
+  src: url('/fonts/Ubunto-R.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'XOIREQE';
+  src: url('/fonts/XOIREQE.TTF') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
 
 @tailwind base;
 @tailwind components;
@@ -12,6 +90,11 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  overflow-x: hidden;
 }
 
 @layer components {
@@ -36,3 +119,19 @@ html {
     @apply opacity-100;
   }
 }
+
+
+.font-phitagate {
+  font-family: 'Phitagate', sans-serif;
+}
+.font-ubuntu {
+  font-family: 'Ubuntu', sans-serif;
+}
+.font-xoireqe {
+  font-family: 'XOIREQE', sans-serif;
+}
+
+
+
+
+

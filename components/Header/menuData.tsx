@@ -3,20 +3,20 @@ import { Menu } from "@/types/menu";
 const menuData: Menu[] = [
   {
     id: 1,
-    title: "Home",
-    path: "/",
+    title: "Hass AI",
+    path: "/#hassai",
     newTab: false,
   },
   {
     id: 2,
-    title: "About",
-    path: "/#about",
+    title: "Projects",
+    path: "/#projects",
     newTab: false,
   },
   {
     id: 4,
     title: "Contact",
-    path: "/#contact",
+    path: "/#contactlight",
     newTab: false,
   },
 ];

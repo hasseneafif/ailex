@@ -1,8 +1,14 @@
 import { useEffect, useRef } from "react";
 
-const ConstellationBackground = () => {
+const ConstellationBackground = ({ speedMultiplier = 1.0 }: { speedMultiplier?: number }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationRef = useRef<number>();
+  const speedMultiplierRef = useRef(speedMultiplier);
+  const parentSize = useRef({ width: 0, height: 0 });
+
+  useEffect(() => {
+    speedMultiplierRef.current = speedMultiplier;
+  }, [speedMultiplier]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -14,6 +20,7 @@ const ConstellationBackground = () => {
     let height = canvas.parentElement?.offsetHeight || window.innerHeight;
     canvas.width = width;
     canvas.height = height;
+    parentSize.current = { width, height };
 
     const config = {
       star: { color: "rgba(255,255,255,.5)", width: 1.5, randomWidth: true },
@@ -60,8 +67,8 @@ const ConstellationBackground = () => {
         const star = config.stars[i];
         if (star.y < 0 || star.y > height) star.vy = -star.vy;
         if (star.x < 0 || star.x > width) star.vx = -star.vx;
-        star.x += star.vx;
-        star.y += star.vy;
+        star.x += star.vx * speedMultiplierRef.current;
+        star.y += star.vy * speedMultiplierRef.current;
       }
     }
 
@@ -93,7 +100,7 @@ const ConstellationBackground = () => {
       animationRef.current = requestAnimationFrame(animate);
     }
 
-    function handleResize() {
+    function resizeCanvas() {
       width = canvas.parentElement?.offsetWidth || window.innerWidth;
       height = canvas.parentElement?.offsetHeight || window.innerHeight;
       canvas.width = width;
@@ -104,10 +111,19 @@ const ConstellationBackground = () => {
       createStars();
     }
 
+    // Use ResizeObserver for parent
+    let resizeObserver: ResizeObserver | null = null;
+    if (canvas.parentElement && typeof ResizeObserver !== 'undefined') {
+      resizeObserver = new ResizeObserver(() => {
+        resizeCanvas();
+      });
+      resizeObserver.observe(canvas.parentElement);
+    }
+
     createStars();
     animate();
 
-    window.addEventListener("resize", handleResize);
+    window.addEventListener("resize", resizeCanvas);
     canvas.addEventListener("mousemove", (e) => {
       const rect = canvas.getBoundingClientRect();
       config.position.x = e.clientX - rect.left;
@@ -115,7 +131,8 @@ const ConstellationBackground = () => {
     });
 
     return () => {
-      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("resize", resizeCanvas);
+      if (resizeObserver && canvas.parentElement) resizeObserver.disconnect();
       if (animationRef.current) cancelAnimationFrame(animationRef.current);
     };
   }, []);

@@ -4,74 +4,39 @@ const featuresData: Feature[] = [
   {
     id: 1,
     icon: (
-      // Icône « Intelligence artificielle / prédiction » : cerveau stylisé minimaliste
-      <svg
-        width="40"
-        height="40"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className="fill-none"
-      >
-        <path d="M12 2a9 9 0 0 0-9 9v7a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3v-7a9 9 0 0 0-3-7z" />
-        <path d="M9 12h6M9 16h6M12 8v8" />
+           <svg width="40" height="40" viewBox="0 0 44.8 27.86" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon fill="#000" points="44.8 1.03 22.92 27.86 0 0 22.77 11.65 44.8 1.03"/>
       </svg>
+   
     ),
-    title: "Prédiction intelligente des actions",
+    title: "Who am i?",
     paragraph:
-      "Grâce à l’intelligence artificielle, Vestr.ai analyse les données boursières pour anticiper les tendances et vous aider à investir avec confiance.",
+      "Hassene, a Full-Stack Software/AI Engineer with a passion for designing and innovating solutions",
   },
   {
     id: 2,
     icon: (
-      // Icône « Recommandations personnalisées » : bulle de dialogue avec coche
-      <svg
-        width="40"
-        height="40"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className="fill-none"
-      >
-        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-        <polyline points="9 11 12 14 22 4" />
+    <svg width="40" height="40" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill="black" d="M24 23h2v8h-2zm4-2h2v10h-2zm-8 6h2v4h-2zm-2-7v-2h1v-7h-1V9h4v2h-1v7h1v2zm-3.5 0h2L13 9h-3L6.503 20h2l.601-2h4.778zm-4.794-4l1.628-5.411l.256-.003L13.264 16z"/>
+        <path fill="black" d="M17 30H0V0h30v17h-2V2H2v26h15z"/>
       </svg>
     ),
-    title: "Recommandations personnalisées",
+    title: "Two titles",
     paragraph:
-      "Recevez des conseils clairs sur les actions à acheter, vendre ou conserver, adaptés à votre profil et à l’évolution du marché.",
+      "With over 3 years of intense experience, i have mastered the art of software development, all while honing my skills in AI and machine learning.",
   },
   {
     id: 3,
     icon: (
-      // Icône « Interface épurée » : fenêtre d’application simplifiée (rectangle avec 3 barres)
-      <svg
-        width="40"
-        height="40"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className="fill-none"
-      >
-        <rect x="3" y="4" width="18" height="16" rx="2" ry="2" />
-        <line x1="3" y1="10" x2="21" y2="10" />
-        <line x1="7" y1="15" x2="17" y2="15" />
-        <line x1="7" y1="19" x2="13" y2="19" />
+      <svg width="40" height="40" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill="black" fillRule="evenodd" d="m256 34.347l192 110.851v221.703L256 477.752L64 366.901V145.198zM106.666 192.001v150.266l128 73.9V265.902zm298.667.001l-128 73.9v150.265l128-73.9zM256 83.614l-125.867 72.67L256 228.952l125.867-72.67z"/>
       </svg>
     ),
-    title: "Interface épurée et intuitive",
+    title: "A to Z Versatility",
     paragraph:
-      "Profitez d’une interface claire et accessible, sans complexité inutile, pour prendre vos décisions rapidement et efficacement.",
+      "My versatile profile allowed me to have a product oriented mindset, delivering full projects from design, to ai to engineering",
   },
+
 ];
 
 export default featuresData;

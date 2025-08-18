@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1025.08 228.42">
+  <defs>
+    <style>
+      .cls-1, .cls-2 {
+        fill: #fff;
+      }
+
+      .cls-2 {
+        font-family: Xoireqe, Xoireqe;
+        font-size: 203.52px;
+        letter-spacing: 0em;
+      }
+
+      .cls-3 {
+        fill: #ae84bb;
+      }
+    </style>
+  </defs>
+  <g id="Layer_1-2" data-name="Layer 1">
+    <text class="cls-2" transform="translate(218.59 177.27) scale(.86 1)"><tspan x="0" y="0">ESTR</tspan></text>
+    <polygon class="cls-1" points="224.07 31.28 114.64 177.88 0 25.64 113.87 89.28 224.07 31.28"/>
+    <polygon class="cls-3" points="41.43 27.07 114.45 65.53 187.37 26.56 113.97 43.78 41.43 27.07"/>
+  </g>
+</svg>

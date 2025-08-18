@@ -35,20 +35,22 @@ module.exports = {
       colors: {
         current: "currentColor",
         transparent: "transparent",
-        white: "#FFFFFF",
-        black: "#0B0F1A", // deeper black
-        dark: "#141820",  // even darker gray for main background
-        primary: "#6B21A8", // deep dark purple (twilight tech)
-        yellow: "#FBB040", // optional highlight
-        "body-color": "#A0A4AE", // muted silver tone for text
-        "body-color-dark": "#C3C7D1", // lighter silver text
-        "gray-dark": "#1E1E2E", // neutral dark gray
-        "gray-light": "#F3F4F7", // light for cards in light mode
-        stroke: "#D1D5DB", // light border/silver-gray
-        "stroke-dark": "#2A2F3C", // dark border lines
-        "bg-color-dark": "#13141A", // main background dark tone
+        white: "#FFFFFF",            // white accents (buttons, borders, icons)
+        black: "#000000",            // full black background
+        dark: "#0A0A0A",             // slightly lighter black for layers
+        primary: "#FFFFFF",          // white accent color (used in buttons, links)
+        yellow: "#FBB040",           // optional pop color (if needed)
+        "body-color": "#D4D4D4",     // soft gray text
+        "body-color-dark": "#FAFAFA",// bright white for strong text contrast
+        "gray-dark": "#000000",      // card backgrounds
+        "gray-light": "#1C1C1C",     // hover states or sections
+        stroke: "#FFFFFF",           // borders and outlines in white
+        "stroke-dark": "#2A2A2A",    // optional inner strokes
+        "bg-color-dark": "#000000",  // main black background
       },
-
+      
+      
+      
       boxShadow: {
         signUp: "0px 5px 10px rgba(4, 10, 34, 0.2)",
         one: "0px 2px 3px rgba(7, 7, 77, 0.05)",

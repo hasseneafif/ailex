@@ -1,83 +1,106 @@
+// "use client"
+// import Image from "next/image";
 
-const Contact = () => {
-  return (
-    <section id="contact" className="overflow-hidden py-16 md:py-20 lg:py-28">
-      <div className="container">
-        <div className="-mx-4 flex flex-wrap">
-          <div className="w-full px-4 lg:w-7/12 xl:w-8/12">
-            <div
-              className="wow fadeInUp shadow-three dark:bg-gray-dark mb-12 rounded-sm bg-white px-8 py-11 sm:p-[55px] lg:mb-5 lg:px-8 xl:p-[55px]"
-              data-wow-delay=".15s
-              "
-            >
-              <h2 className="mb-3 text-2xl font-bold text-black dark:text-white sm:text-3xl lg:text-2xl xl:text-3xl">
-                Contactez-nous
-              </h2>
-              <p className="mb-12 text-base font-medium text-body-color">
-                Notre équipe vous aidera à résoudre vos questions et problèmes.
-              </p>
-              <form>
-                <div className="-mx-4 flex flex-wrap">
-                  <div className="w-full px-4 md:w-1/2">
-                    <div className="mb-8">
-                      <label
-                        htmlFor="name"
-                        className="mb-3 block text-sm font-medium text-dark dark:text-white"
-                      >
-                        Votre Nom
-                      </label>
-                      <input
-                        type="text"
-                        placeholder="Entrez votre nom"
-                        className="border-stroke dark:text-body-color-dark dark:shadow-two w-full rounded-sm border bg-[#f8f8f8] px-6 py-3 text-base text-body-color outline-none focus:border-primary dark:border-transparent dark:bg-[#2C303B] dark:focus:border-primary dark:focus:shadow-none"
-                      />
-                    </div>
-                  </div>
-                  <div className="w-full px-4 md:w-1/2">
-                    <div className="mb-8">
-                      <label
-                        htmlFor="email"
-                        className="mb-3 block text-sm font-medium text-dark dark:text-white"
-                      >
-                        Votre Email
-                      </label>
-                      <input
-                        type="email"
-                        placeholder="Entrez votre email"
-                        className="border-stroke dark:text-body-color-dark dark:shadow-two w-full rounded-sm border bg-[#f8f8f8] px-6 py-3 text-base text-body-color outline-none focus:border-primary dark:border-transparent dark:bg-[#2C303B] dark:focus:border-primary dark:focus:shadow-none"
-                      />
-                    </div>
-                  </div>
-                  <div className="w-full px-4">
-                    <div className="mb-8">
-                      <label
-                        htmlFor="message"
-                        className="mb-3 block text-sm font-medium text-dark dark:text-white"
-                      >
-                        Votre Message
-                      </label>
-                      <textarea
-                        name="message"
-                        rows={5}
-                        placeholder="Entrez votre Message"
-                        className="border-stroke dark:text-body-color-dark dark:shadow-two w-full resize-none rounded-sm border bg-[#f8f8f8] px-6 py-3 text-base text-body-color outline-none focus:border-primary dark:border-transparent dark:bg-[#2C303B] dark:focus:border-primary dark:focus:shadow-none"
-                      ></textarea>
-                    </div>
-                  </div>
-                  <div className="w-full px-4">
-                    <button className="shadow-submit dark:shadow-submit-dark rounded-sm bg-primary px-9 py-4 text-base font-medium text-white duration-300 hover:bg-primary/90">
-                      Soumettre le Ticket
-                    </button>
-                  </div>
-                </div>
-              </form>
-            </div>
-          </div>
-  
-        </div>
-      </div>
-    </section>
-  );
-};
+// const Contact = () => {
+//   return (
+//     <section
+//       id="contact"
+//       className="relative min-h-[80vh] flex items-center justify-center bg-black py-16 md:py-20 lg:py-28 xl:px-40 overflow-hidden"
+//     >
+//       <div className="w-full flex flex-col md:flex-row items-center justify-center gap-0 md:gap-[30px] relative">
+        
+//         {/* Image + caption absolutely placed */}
+//         <div className="relative flex-shrink-0 flex justify-start md:justify-end z-10">
+//           <Image
+//             src="/images/hero/contacthbg.png"
+//             alt="Contact visual"
+//             width={180}
+//             height={200}
+//             className="shadow-2xl"
+//             priority
+//           />
+//           <span
+//             className="absolute left-2 md:w-[150%] md:left-0 -bottom-12 text-xs text-red-500 font-ubuntu tracking-wide"
+//             style={{ fontFamily: "Ubuntu, sans-serif" }}
+//           >
+//             Feel free to reach out for any inquiries or collaborations.
+//           </span>
+//         </div>
 
-export default Contact;
+//         {/* Form */}
+//         <div className="w-full md:w-1/2 flex flex-col items-start justify-center z-20 md:ml-0 relative">
+//           <h2
+//             className="font-xoireqe text-white text-xl sm:text-2xl md:text-2xl mb-8 tracking-widest text-left"
+//             style={{ fontFamily: "XOIREQE, sans-serif" }}
+//           >
+//             CONTACT ME
+//           </h2>
+//           <form className="w-full max-w-[400px] flex flex-col gap-6 md:mr-0 mr-4">
+//             <input
+//               type="text"
+//               placeholder="Name"
+//               className="bg-[#18181b] text-white placeholder-gray-400 px-5 py-4 outline-none focus:ring-2 focus:ring-white/30 transition"
+//               autoComplete="off"
+//             />
+//             <input
+//               type="email"
+//               placeholder="Email"
+//               className="bg-[#18181b] text-white placeholder-gray-400 px-5 py-4 outline-none focus:ring-2 focus:ring-white/30 transition"
+//               autoComplete="off"
+//             />
+//             <textarea
+//               placeholder="Message"
+//               rows={4}
+//               className="bg-[#18181b] text-white placeholder-gray-400 px-5 py-4 outline-none focus:ring-2 focus:ring-white/30 transition resize-none"
+//             />
+//             {/* <button
+//               type="submit"
+//               className="mt-2 bg-white text-black font-semibold rounded-lg px-5 py-3 hover:bg-gray-200 transition"
+//             >
+//               Send
+//             </button> */}
+//           </form>
+//         </div>
+//       </div>
+
+//       {/* Mobile overlay effect */}
+//       <style jsx>{`
+//         @media (max-width: 768px) {
+//           section#contact {
+//             padding-left: 0;
+//             padding-right: 0;
+//           }
+//           section#contact > div {
+//             flex-direction: row;
+//             align-items: flex-start;
+//           }
+//           section#contact > div > div:first-child {
+//             position: absolute;
+//             left: 0;
+//             top: 50%;
+//             transform: translateY(-50%);
+//             width: 60vw;
+//             min-width: 140px;
+//             max-width: 80vw;
+//             z-index: 5;
+//             opacity: 0.9;
+//           }
+//           section#contact > div > div:last-child {
+//             position: relative;
+//             width: 75vw;
+//             margin-left: auto;
+//             margin-right: 4vw;
+//             z-index: 10;
+//             background: transparent;
+//           }
+//           section#contact h2 {
+//             text-align: left;
+//             margin-bottom: 2rem;
+//           }
+//         }
+//       `}</style>
+//     </section>
+//   );
+// };
+
+// export default Contact;

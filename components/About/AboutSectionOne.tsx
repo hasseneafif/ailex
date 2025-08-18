@@ -1,30 +1,17 @@
 "use client"
-import SectionTitle from "../Common/SectionTitle";
-// import AnimatedChartBackground from "./AnimatedChartBackground";
 import ConstellationBackground from "./ConstellationBackground";
 
 import React, { useRef, useEffect, useState } from "react";
+import { sendChatMessage } from "../../services/chatService";
 
-const checkIcon = (
-  <svg width="16" height="13" viewBox="0 0 16 13" className="fill-current">
-    <path d="M5.8535 12.6631C5.65824 12.8584 5.34166 12.8584 5.1464 12.6631L0.678505 8.1952C0.483242 7.99994 0.483242 7.68336 0.678505 7.4881L2.32921 5.83739C2.52467 5.64193 2.84166 5.64216 3.03684 5.83791L5.14622 7.95354C5.34147 8.14936 5.65859 8.14952 5.85403 7.95388L13.3797 0.420561C13.575 0.22513 13.8917 0.225051 14.087 0.420383L15.7381 2.07143C15.9333 2.26669 15.9333 2.58327 15.7381 2.77854L5.8535 12.6631Z" />
-  </svg>
-);
+
 
 const AboutSectionOne = () => {
-  const List = ({ text }) => (
-    <p className="mb-5 flex items-center text-lg font-medium text-body-color">
-      <span className="mr-4 flex h-[30px] w-[30px] items-center justify-center rounded-md bg-primary bg-opacity-10 text-primary">
-        {checkIcon}
-      </span>
-      {text}
-    </p>
-  );
+
 
   // Responsive chart width
   const chartRef = useRef(null);
   const [chartWidth, setChartWidth] = useState(400);
-  const chartHeight = Math.round(chartWidth * 0.8); // 5:4 aspect ratio
 
   useEffect(() => {
     function updateWidth() {
@@ -37,49 +24,191 @@ const AboutSectionOne = () => {
     return () => window.removeEventListener("resize", updateWidth);
   }, []);
 
+  const [chatHistory, setChatHistory] = useState([
+    { role: "assistant", content: "Hey, how can i help you?" },
+  ]);
+  const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [rateLimited, setRateLimited] = useState(false);
+  const [speedMultiplier, setSpeedMultiplier] = useState(1.0);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
+  const [token, setToken] = useState<string | null>(null);
+  const [tokenRequested, setTokenRequested] = useState(false);
+
+  // Smoothly adjust animation speed
+  useEffect(() => {
+    const targetSpeed = loading ? 5.0 : 1.0;
+    let animationFrame;
+
+    const animate = () => {
+      setSpeedMultiplier((currentSpeed) => {
+        const diff = targetSpeed - currentSpeed;
+        if (Math.abs(diff) < 0.1) {
+          cancelAnimationFrame(animationFrame);
+          return targetSpeed;
+        }
+        return currentSpeed + diff * 0.1;
+      });
+      animationFrame = requestAnimationFrame(animate);
+    };
+
+    animationFrame = requestAnimationFrame(animate);
+
+    return () => cancelAnimationFrame(animationFrame);
+  }, [loading]);
+
+  // Scroll to bottom on new message or loading change
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  }, [chatHistory, loading]);
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
+  // Fetch token from /chat/meta and store in state/localStorage
+  const fetchToken = async () => {
+    try {
+      const res = await fetch(`${apiUrl}chat/meta`);
+      const data = await res.json();
+      if (data.token) {
+        setToken(data.token);
+        localStorage.setItem("chat_token", data.token);
+      }
+    } catch (e) {
+      // Optionally handle error
+    }
+  };
+
+  // On mount, check for token in localStorage
+  useEffect(() => {
+    const stored = localStorage.getItem("chat_token");
+    if (stored) setToken(stored);
+  }, []);
+
+  // On first input, request token if not present
+  const handleInput = (e) => {
+    setInput(e.target.value);
+    if (!token && !tokenRequested && e.target.value.trim() !== "") {
+      setTokenRequested(true);
+      fetchToken();
+    }
+  };
+
+  // Wait for token before sending chat
+  const handleSend = async (e) => {
+    e.preventDefault();
+    if (!input.trim() || rateLimited) return;
+    if (!token) {
+      // Wait for token to be set, then retry
+      setTokenRequested(true);
+      if (!tokenRequested) fetchToken();
+      const waitForToken = async () => {
+        for (let i = 0; i < 20; i++) {
+          const t = localStorage.getItem("chat_token");
+          if (t) {
+            setToken(t);
+            break;
+          }
+          await new Promise(res => setTimeout(res, 100));
+        }
+      };
+      await waitForToken();
+      if (!localStorage.getItem("chat_token")) return; // still no token
+    }
+    const authToken = token || localStorage.getItem("chat_token");
+    const newHistory = [...chatHistory, { role: "user", content: input }];
+    setChatHistory(newHistory);
+    setInput("");
+    setLoading(true);
+    try {
+      const response = await sendChatMessage({
+        sessionId: "demo-session-id",
+        message: input,
+        history: newHistory,
+        token: authToken,
+      });
+      if (response && response.reply) {
+        setChatHistory((prev) => [...prev, { role: "assistant", content: response.reply }]);
+      }
+    } catch (err) {
+      let errorMsg = "Error when interacting with the AI.";
+      if (err.message && (err.message.toLowerCase().includes("rate") || err.message.toLowerCase().includes("limit"))) {
+        errorMsg = "You have reached your daily limit. Try again tomorrow.";
+        setRateLimited(true);
+      }
+      setChatHistory((prev) => [...prev, { role: "assistant", content: errorMsg }]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <section id="about" className="pt-16 md:pt-20 lg:pt-28">
+    <section id="hassai" className="pt-16 md:pt-20 lg:pt-28">
       <div className="container">
         <div className="border-b border-body-color/[.15] pb-16 dark:border-white/[.15] md:pb-20 lg:pb-28">
           <div className="-mx-4 flex flex-wrap items-center">
+            {/* Left side: Chat UI (mobile has constellation bg, desktop does not) */}
             <div className="w-full px-4 lg:w-1/2">
-              <SectionTitle
-                title="L’IA au service de vos investissements"
-                paragraph="Vestr.ai analyse les données financières et historiques pour anticiper les mouvements du marché avec une interface simple et épurée."
-                mb="44px"
-              />
-
-              <div
-                className="wow fadeInUp max-w-[570px] lg:mb-0"
-                data-wow-delay=".15s"
-              >
-                <div className="mx-[-12px] flex flex-wrap">
-                  <div className="w-full px-3 sm:w-1/2 lg:w-full xl:w-1/2">
-                    <List text="Prédictions basées IA" />
-                    <List text="Conseils personnalisés" />
-                    <List text="Interface intuitive" />
-                  </div>
-
-                  <div className="w-full px-3 sm:w-1/2 lg:w-full xl:w-1/2">
-                    <List text="Données en temps réel" />
-                    <List text="Simplicité d’utilisation" />
-                    <List text="Décisions efficaces" />
-                  </div>
+              <div className="relative max-w-[570px] mx-auto mb-8 min-h-[350px] flex flex-col overflow-hidden">
+                {/* Mobile-only constellation background */}
+                <div className="absolute inset-0 z-0 md:hidden pointer-events-none">
+                  <ConstellationBackground speedMultiplier={speedMultiplier} />
                 </div>
+                {/* Title and description */}
+                <h2 className="mb-0 text-sm md:text-lg font-xoireqe text-black dark:text-white  relative z-10">Hass AI</h2>
+                <p className="mb-12 text-base font-ubunto !leading-relaxed text-body-color md:text-sm relative z-10">Ask me anything.</p>
+                {/* Chat content */}
+                <div ref={chatContainerRef} className="flex-1 overflow-y-auto space-y-4 mb-4 max-h-80 pr-2 relative z-10">
+                  {/* Render chat history */}
+                  {chatHistory.map((msg, idx) =>
+                    msg.role === "assistant" ? (
+                      <div key={idx} className="flex items-start gap-2">
+                        <img src="/images/logo/v-icon.svg" alt="User Icon" className="w-8 h-8 p-0" />
+                        <div className="bg-gray-100 dark:bg-gray-800 rounded-lg px-4 py-2 text-sm text-gray-900 dark:text-white max-w-[70%]">{msg.content}</div>
+                      </div>
+                    ) : (
+                      <div key={idx} className="flex items-start gap-2 flex-row-reverse">
+                        <div className="bg-primary text-black rounded-lg px-4 py-2 text-sm max-w-[70%]">{msg.content}</div>
+                      </div>
+                    )
+                  )}
+                  {loading && (
+                    <div className="flex items-start gap-2">
+                      <img src="/images/logo/v-icon.svg" alt="User Icon" className="w-8 h-8 p-0" />
+                      <div className="bg-gray-100 dark:bg-gray-800 rounded-lg px-4 py-2 text-sm text-gray-900 dark:text-white max-w-[70%] opacity-60 italic">L'IA est en train de répondre...</div>
+                    </div>
+                  )}
+                </div>
+                <form className="flex gap-2 mt-2 relative z-10" onSubmit={handleSend} autoComplete="off">
+                  <input
+                    type="text"
+                    className="border-stroke dark:text-body-color-dark dark:shadow-two w-full rounded-sm border bg-[#181a20] dark:bg-[#181a20] px-6 py-3 text-base text-white outline-none focus:border-primary dark:border-transparent focus:border-primary focus:shadow-none"
+                    placeholder={rateLimited ? "Limit reached, try again tomorrow." : "Type a message."}
+                    value={input}
+                    onChange={handleInput}
+                    disabled={loading || rateLimited}
+                  />
+                  <button
+                    type="submit"
+                    className="rounded border border-white px-4 py-2 text-base font-semibold text-white bg-transparent hover:bg-white hover:text-primary transition-all duration-200 flex items-center justify-center disabled:opacity-60 disabled:cursor-not-allowed"
+                    disabled={loading || !input.trim() || rateLimited}
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-5 h-5">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10l9 9m0 0l9-9m-9 9V3" />
+                    </svg>
+                  </button>
+                </form>
               </div>
             </div>
-
+            {/* Right side: Constellation animation (desktop only) */}
             <div className="w-full px-4 lg:w-1/2">
               <div
                 ref={chartRef}
-                className="wow fadeInUp relative mx-auto w-full max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl aspect-[5/4] lg:mr-0"
+                className="wow fadeInUp relative mx-auto w-full max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl aspect-[5/4] lg:mr-0 hidden md:block"
                 data-wow-delay=".2s"
               >
-
-                 <ConstellationBackground />
-                {/* <AnimatedChartBackground lineColor="#1cfc03" width={chartWidth} height={chartHeight} /> */}
+                <ConstellationBackground speedMultiplier={speedMultiplier} />
               </div>
-
             </div>
           </div>
         </div>
