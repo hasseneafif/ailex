@@ -166,7 +166,7 @@ const HeroFresh: React.FC = () => {
           <div className="relative mt-4" ref={dropdownRef}>
             <button
               onClick={() => setShowDropdown(!showDropdown)}
-              className="font-xoireqe neon-green-mobile  border border-white bg-transparent w-[130px] h-[35px] rounded transition-colors duration-300 hover:bg-white hover:text-black"
+              className="font-xoireqe text-black xl:text-white  border border-white bg-white xl:bg-transparent w-[130px] h-[35px] rounded transition-colors duration-300 hover:bg-white hover:text-black"
               aria-haspopup="listbox"
               aria-expanded={showDropdown}
               aria-controls="cv-dropdown"
