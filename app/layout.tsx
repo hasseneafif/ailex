@@ -4,7 +4,8 @@ import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import ScrollToTop from "@/components/ScrollToTop";
 import LenisSmoothScroll from "@/components/Common/LenisSmoothScroll";
-import "../styles/index.css";
+ import "../styles/index.min.css";
+// import "../styles/index.css";
 
 
 export default function RootLayout({

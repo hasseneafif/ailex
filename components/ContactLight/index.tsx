@@ -24,6 +24,8 @@ const ContactLight = () => {
             height={100}
             className="mx-auto"
             style={{ objectFit: "contain" }}
+              draggable={false}
+
             priority
           />
           <span

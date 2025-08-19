@@ -1,13 +1,15 @@
-import AboutSectionOne from "@/components/About/AboutSectionOne";
-import Blog from "@/components/Blog";
-import ScrollUp from "@/components/Common/ScrollUp";
-import Features from "@/components/Features";
-import Hero from "@/components/Hero";
-import Certifs from "@/components/Certifs";
-import Skills from "@/components/Skills";
-
 import { Metadata } from "next";
-import ContactLight from "@/components/ContactLight";
+import dynamic from "next/dynamic";
+import ScrollUp from "@/components/Common/ScrollUp";
+import Hero from "@/components/Hero";
+
+// Dynamic imports for below-the-fold sections
+const Features = dynamic(() => import("@/components/Features"));
+const Certifs = dynamic(() => import("@/components/Certifs"));
+const AboutSectionOne = dynamic(() => import("@/components/About/AboutSectionOne"));
+const Skills = dynamic(() => import("@/components/Skills"));
+const Blog = dynamic(() => import("@/components/Blog"), { ssr: false }); // Blog often heavy, skip SSR
+const ContactLight = dynamic(() => import("@/components/ContactLight"));
 
 export const metadata: Metadata = {
   title: "Hass - Home",
@@ -18,7 +20,10 @@ export default function Home() {
   return (
     <>
       <ScrollUp />
+      {/* Above-the-fold content */}
       <Hero />
+
+      {/* Below-the-fold content */}
       <Features />
       <Certifs />
       <AboutSectionOne />

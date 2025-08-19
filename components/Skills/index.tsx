@@ -60,7 +60,7 @@ const Skills = () => {
                 alt={logo.label}
                 width={logo.width}
                 height={logo.height}
-                className="select-none opacity-90"
+                className="select-none opacity-90 brightness-98 hover:brightness-75 transition duration-500 ease-in-out"
                 draggable={false}
                 style={{ userSelect: 'none', width: logo.width, height: logo.height, objectFit: 'contain' }}
                 loading="lazy"

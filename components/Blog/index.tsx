@@ -48,6 +48,8 @@ const ProjectList = () => {
                     height={(project.height || 112) * 0.8}
                     className="object-contain rounded mb-6"
                     loading="lazy"
+                      draggable={false}
+
                   />
                   <span id={`project-title-${project.id}`} className="font-xoireqe text-left text-[0.85rem] md:text-[1rem] text-white font-light w-full">
                     {project.title}

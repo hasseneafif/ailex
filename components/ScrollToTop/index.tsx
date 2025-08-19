@@ -1,43 +1,38 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
+import React from "react";
 
-export default function ScrollToTop() {
+const ScrollToTop = () => {
   const [isVisible, setIsVisible] = useState(false);
 
-  // Top: 0 takes us all the way back to the top of the page
-  // Behavior: smooth keeps it smooth!
-  const scrollToTop = () => {
+  const scrollToTop = useCallback(() => {
     window.scrollTo({
       top: 0,
       behavior: "smooth",
     });
-  };
+  }, []);
 
   useEffect(() => {
-    // Button is displayed after scrolling for 500 pixels
     const toggleVisibility = () => {
-      if (window.pageYOffset > 300) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
-      }
+      setIsVisible(window.pageYOffset > 300);
     };
-
     window.addEventListener("scroll", toggleVisibility);
-
     return () => window.removeEventListener("scroll", toggleVisibility);
   }, []);
 
   return (
     <div className="fixed bottom-8 right-8 z-[99]">
       {isVisible && (
-        <div
+        <button
           onClick={scrollToTop}
-          aria-label="scroll to top"
-          className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-md bg-primary text-black shadow-md transition duration-300 ease-in-out hover:bg-opacity-80 hover:shadow-signUp"
+          aria-label="Scroll to top"
+          className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-md bg-primary text-black shadow-md transition duration-300 ease-in-out hover:bg-opacity-80 hover:shadow-signUp focus:outline-none focus:ring-2 focus:ring-black"
+          tabIndex={0}
         >
-          <span className="mt-[6px] h-3 w-3 rotate-45 border-l border-t border-4 border-black"></span>
-        </div>
+          <span className="mt-[6px] h-3 w-3 rotate-45 border-l border-t border-4 border-black" aria-hidden="true"></span>
+        </button>
       )}
     </div>
   );
-}
+};
+
+export default React.memo(ScrollToTop);

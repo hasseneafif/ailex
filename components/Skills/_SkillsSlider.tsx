@@ -1,5 +1,6 @@
 "use client"
 import React from "react";
+import Image from "next/image";
 
 const skillLogos = [
   "docker.png",
@@ -34,13 +35,14 @@ const Skills = () => {
             }}
           >
             {skillLogos.concat(skillLogos).map((logo, idx) => (
-              <img
+              <Image
                 key={idx}
                 src={`/images/skills/new/1x/${logo}`}
                 alt={logo.replace(".png", "")}
                 className="h-16 w-auto select-none pointer-events-none opacity-90"
                 draggable="false"
                 style={{ userSelect: "none" }}
+
               />
             ))}
           </div>

@@ -103,7 +103,7 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
       setTokenRequested(true);
       fetchToken();
     }
-  }, [token, tokenRequested]);
+  }, [token, tokenRequested, fetchToken]);
 
   // Wait for token before sending chat
   const handleSend = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
@@ -111,7 +111,7 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     if (!input.trim() || rateLimited) return;
     if (!token) {
       setTokenRequested(true);
-      if (!tokenRequested) fetchToken();
+  if (!tokenRequested) fetchToken();
       const waitForToken = async () => {
         for (let i = 0; i < 20; i++) {
           const t = localStorage.getItem("chat_token");
@@ -150,7 +150,7 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     } finally {
       setLoading(false);
     }
-  }, [input, rateLimited, token, tokenRequested, chatHistory]);
+  }, [input, rateLimited, token, tokenRequested, chatHistory, fetchToken]);
 
   // Memoized chat bubbles for performance
   const ChatBubbles = useMemo(() => (
@@ -158,7 +158,7 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
       {chatHistory.map((msg, idx) =>
         msg.role === "assistant" ? (
           <div key={idx} className="flex items-start gap-2">
-            <Image src="/images/logo/v-icon.svg" alt="Assistant Icon" width={32} height={32} className="w-8 h-8 p-0" />
+            <Image src="/images/logo/v-icon.svg" alt="Assistant Icon" width={32} height={32} className="w-8 h-8 p-0"   draggable={false} />
             <div className="bg-gray-100 dark:bg-gray-800 rounded-lg px-4 py-2 text-sm text-gray-900 dark:text-white max-w-[70%]" aria-label="AI response">{msg.content}</div>
           </div>
         ) : (
@@ -169,8 +169,8 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
       )}
       {loading && (
         <div className="flex items-start gap-2">
-          <Image src="/images/logo/v-icon.svg" alt="Assistant Icon" width={32} height={32} className="w-8 h-8 p-0" />
-          <div className="bg-gray-100 dark:bg-gray-800 rounded-lg px-4 py-2 text-sm text-gray-900 dark:text-white max-w-[70%] opacity-60 italic">L'IA est en train de répondre...</div>
+          <Image src="/images/logo/v-icon.svg" alt="Assistant Icon" width={32} height={32} className="w-8 h-8 p-0"   draggable={false}/>
+          <div className="bg-gray-100 dark:bg-gray-800 rounded-lg px-4 py-2 text-sm text-gray-900 dark:text-white max-w-[70%] opacity-60 italic">L&apos;IA est en train de r&eacute;pondre...</div>
         </div>
       )}
     </>
