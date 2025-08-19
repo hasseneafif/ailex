@@ -76,56 +76,47 @@ const AboutSectionOne = () => {
   }, [chatHistory, loading]);
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-  // Fetch token from /chat/meta and store in state/localStorage
-  const fetchToken = async () => {
+
+  // Fetch token from /chat/meta and store in state only
+  const fetchToken = useCallback(async () => {
     try {
       const res = await fetch(`${apiUrl}chat/meta`);
       const data = await res.json();
       if (data.token) {
         setToken(data.token);
-        localStorage.setItem("chat_token", data.token);
       }
     } catch (e) {
       // Optionally handle error
     }
-  };
+  }, [apiUrl]);
 
-  // On mount, check for token in localStorage
-  useEffect(() => {
-    const stored = localStorage.getItem("chat_token");
-    if (stored) setToken(stored);
-  }, []);
 
-  // On first input, request token if not present
-  const handleInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setInput(e.target.value);
-    if (!token && !tokenRequested && e.target.value.trim() !== "") {
-      setTokenRequested(true);
-      fetchToken();
-    }
-  }, [token, tokenRequested, fetchToken]);
+    // On first input, request token if not present
+    const handleInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+      setInput(e.target.value);
+      if (!token && !tokenRequested && e.target.value.trim() !== "") {
+        setTokenRequested(true);
+        fetchToken();
+      }
+    }, [token, tokenRequested, fetchToken]);
+
 
   // Wait for token before sending chat
+
   const handleSend = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!input.trim() || rateLimited) return;
     if (!token) {
       setTokenRequested(true);
-  if (!tokenRequested) fetchToken();
-      const waitForToken = async () => {
-        for (let i = 0; i < 20; i++) {
-          const t = localStorage.getItem("chat_token");
-          if (t) {
-            setToken(t);
-            break;
-          }
-          await new Promise(res => setTimeout(res, 100));
-        }
-      };
-      await waitForToken();
-      if (!localStorage.getItem("chat_token")) return;
+      await fetchToken();
+      // Wait for token to be set
+      for (let i = 0; i < 20; i++) {
+        if (token) break;
+        await new Promise(res => setTimeout(res, 100));
+      }
+      if (!token) return;
     }
-    const authToken = token || localStorage.getItem("chat_token");
+    const authToken = token;
     const newHistory = [...chatHistory, { role: "user", content: input }];
     setChatHistory(newHistory);
     setInput("");
@@ -163,14 +154,14 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
           </div>
         ) : (
           <div key={idx} className="flex items-start gap-2 flex-row-reverse">
-            <div className="bg-primary text-black rounded-lg px-4 py-2 text-sm max-w-[70%]" aria-label="User message">{msg.content}</div>
+            <div className="bg-white text-black rounded-lg px-4 py-2 text-sm max-w-[70%]" aria-label="User message">{msg.content}</div>
           </div>
         )
       )}
       {loading && (
         <div className="flex items-start gap-2">
           <Image src="/images/logo/v-icon.svg" alt="Assistant Icon" width={32} height={32} className="w-8 h-8 p-0"   draggable={false}/>
-          <div className="bg-gray-100 dark:bg-gray-800 rounded-lg px-4 py-2 text-sm text-gray-900 dark:text-white max-w-[70%] opacity-60 italic">L&apos;IA est en train de r&eacute;pondre...</div>
+          <div className="bg-gray-100 dark:bg-gray-800 rounded-lg px-4 py-2 text-sm text-gray-900 dark:text-white max-w-[70%] opacity-60 italic">AI is responding...</div>
         </div>
       )}
     </>
