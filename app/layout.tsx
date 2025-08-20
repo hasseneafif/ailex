@@ -6,6 +6,7 @@ import ScrollToTop from "@/components/ScrollToTop";
 import LenisSmoothScroll from "@/components/Common/LenisSmoothScroll";
  import "../styles/index.min.css";
 // import "../styles/index.css";
+import { phitagate, ubuntu, xoireqe } from "@/fonts/fonts";
 
 
 export default function RootLayout({
@@ -14,7 +15,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html suppressHydrationWarning lang="en">
+    <html suppressHydrationWarning lang="en"  className={`${phitagate.variable} ${ubuntu.variable} ${xoireqe.variable}`}>
 
       <head />
 

@@ -1,23 +1,6 @@
 
 /* Local font faces */
-@font-face {
-  font-family: 'Phitagate';
-  src: url('/fonts/Phitagate-Regular.woff2') format('woff2');
-  font-weight: normal;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Ubuntu';
-  src: url('/fonts/Ubuntu-R.woff2') format('woff2');
-  font-weight: normal;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'XOIREQE';
-  src: url('/fonts/XOIREQE.woff2') format('woff2');
-  font-weight: normal;
-  font-style: normal;
-}
+
 
 /* Tailwind layers */
 @tailwind base;
@@ -39,9 +22,9 @@ html {
 }
 
 /* Fonts utility classes */
-.font-phitagate { font-family: 'Phitagate', sans-serif; }
-.font-ubuntu { font-family: 'Ubuntu', sans-serif; }
-.font-xoireqe { font-family: 'XOIREQE', sans-serif; }
+.font-phitagate { font-family: var(--font-phitagate), sans-serif; }
+.font-ubuntu { font-family: var(--font-ubuntu), sans-serif; }
+.font-xoireqe { font-family: var(--font-xoireqe), sans-serif; }
 
 /* Holographic cards */
 .holographic-card {
