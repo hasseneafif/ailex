@@ -17,7 +17,34 @@ export default function RootLayout({
   return (
     <html suppressHydrationWarning lang="en"  className={`${phitagate.variable} ${ubuntu.variable} ${xoireqe.variable}`}>
 
-      <head />
+      <head>
+             {/* Preload Phitagate */}
+        <link
+          rel="preload"
+          href="../fonts/Phitagate-Regular.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+
+        {/* Preload Ubuntu */}
+        <link
+          rel="preload"
+          href="/fonts/Ubuntu-R.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+
+        {/* Preload XOIREQE */}
+        <link
+          rel="preload"
+          href="/fonts/XOIREQE.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+      </head>
 
       <body className={`bg-[#FCFCFC] bg-black`}>
         <LenisSmoothScroll />

@@ -11,7 +11,6 @@ export const phitagate = localFont({
     },
   ],
   variable: "--font-phitagate",
-  display: "block",
 });
 
 // Ubuntu
@@ -24,7 +23,6 @@ export const ubuntu = localFont({
     },
   ],
   variable: "--font-ubuntu",
-  display: "block",
 });
 
 // XOIREQE
@@ -37,5 +35,4 @@ export const xoireqe = localFont({
     },
   ],
   variable: "--font-xoireqe",
-  display: "block",
 });
