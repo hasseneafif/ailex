@@ -127,9 +127,8 @@ const HeroFresh: React.FC = () => {
               height={600}
               className="object-contain hero-bg-img"
               style={{ objectFit: "contain", height: "100%", width: "auto", maxWidth: "100%" }}
-              priority={true}
-fetchPriority="high"
-              loading="eager"                draggable={false}
+              priority={false}
+              loading="lazy"                draggable={false}
 
             />
           </div>
