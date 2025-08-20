@@ -113,10 +113,10 @@ const HeroFresh: React.FC = () => {
               height={600}
               className="object-contain hero-bg-img"
               style={{ objectFit: "contain", height: "100%", width: "auto", maxWidth: "100%" }}
-              priority={false}
-              loading="lazy"
-                draggable={false}
-
+              priority={true}
+              fetchPriority="high"
+              loading="eager"
+              draggable={false}
             />
           </div>
           <div className="relative hero-img-wrapper" style={{ width: "auto", height: "60vh", minWidth: 0 }}>
@@ -127,9 +127,9 @@ const HeroFresh: React.FC = () => {
               height={600}
               className="object-contain hero-bg-img"
               style={{ objectFit: "contain", height: "100%", width: "auto", maxWidth: "100%" }}
-              priority={false}
-              loading="lazy"
-                draggable={false}
+              priority={true}
+fetchPriority="high"
+              loading="eager"                draggable={false}
 
             />
           </div>
