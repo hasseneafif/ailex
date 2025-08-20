@@ -1,32 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 334.96 71.83">
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 302.72 47.87">
   <defs>
     <style>
       .cls-1 {
-        letter-spacing: 0em;
-      }
-
-      .cls-2, .cls-3 {
         fill: #fff;
-      }
-
-      .cls-4 {
-        letter-spacing: .01em;
-      }
-
-      .cls-5 {
-        fill: #ae84bb;
-      }
-
-      .cls-3 {
-        font-family: Xoireqe, Xoireqe;
-        font-size: 64px;
       }
     </style>
   </defs>
   <g id="Layer_1-2" data-name="Layer 1">
-    <polygon class="cls-5" points="89.92 11.73 116.56 23.83 143.17 11.58 116.39 16.99 89.92 11.73"/>
-    <text class="cls-3" transform="translate(0 55.74)"><tspan class="cls-4" x="0" y="0" xml:space="preserve">H  S</tspan><tspan class="cls-1" x="231.36" y="0">S</tspan></text>
-    <polygon class="cls-2" points="156.23 9.84 116.31 55.94 74.48 8.06 116.03 28.07 156.23 9.84"/>
+    <g>
+      <path class="cls-1" d="M55.17,17.47V0h12.35v47.68h-12.54v-18.05H12.42v18.05H0V0h11.84v17.47h43.33Z"/>
+      <path class="cls-1" d="M209.02,47.68l-53.57.19v-12.16h57.28v-5.7h-44.16c-4.39,0-8.18-1.41-11.36-4.22-3.18-2.82-4.77-6.36-4.77-10.62s1.83-7.89,5.5-10.75c3.46-2.69,7.53-4.03,12.22-4.03l51.58-.32v11.97l-56.38.06v5.76h43.52c4.31,0,8.06,1.47,11.26,4.42,3.2,2.94,4.8,6.53,4.8,10.75s-1.58,7.62-4.74,10.43c-3.16,2.82-6.89,4.22-11.2,4.22Z"/>
+      <path class="cls-1" d="M286.78,47.68l-53.57.19v-12.16h57.28v-5.7h-44.16c-4.39,0-8.18-1.41-11.36-4.22-3.18-2.82-4.77-6.36-4.77-10.62s1.83-7.89,5.5-10.75c3.46-2.69,7.53-4.03,12.22-4.03l51.58-.32v11.97l-56.38.06v5.76h43.52c4.31,0,8.06,1.47,11.26,4.42,3.2,2.94,4.8,6.53,4.8,10.75s-1.58,7.62-4.74,10.43c-3.16,2.82-6.89,4.22-11.2,4.22Z"/>
+    </g>
+    <polygon class="cls-1" points="152.9 1.77 112.98 47.87 71.15 0 112.7 20.01 152.9 1.77"/>
   </g>
 </svg>
