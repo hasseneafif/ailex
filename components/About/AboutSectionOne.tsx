@@ -176,10 +176,7 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
             {/* Left side: Chat UI (mobile has constellation bg, desktop does not) */}
             <div className="w-full px-4 lg:w-1/2">
               <div className="relative max-w-[570px] mx-auto mb-8 min-h-[350px] flex flex-col overflow-hidden" aria-live="polite">
-                {/* Mobile-only constellation background */}
-                <div className="absolute inset-0 z-0 md:hidden pointer-events-none" aria-hidden="true">
-                  <ConstellationBackground speedMultiplier={speedMultiplier} />
-                </div>
+             
                 {/* Title and description */}
                 <h3 className="mb-0 text-sm md:text-lg font-xoireqe text-black dark:text-white  relative z-10">Hass AI</h3>
                 <p className="mb-12 text-base font-ubunto !leading-relaxed text-body-color md:text-sm relative z-10">Ask me anything.</p>
@@ -214,7 +211,7 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
             <div className="w-full px-4 lg:w-1/2">
               <div
                 ref={chartRef}
-                className="wow fadeInUp relative mx-auto w-full max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl aspect-[5/4] lg:mr-0 hidden md:block"
+                className="wow fadeInUp relative mx-auto w-full max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl aspect-[5/4] lg:mr-0 hidden lg:block"
                 data-wow-delay=".2s"
                 aria-hidden="true"
               >

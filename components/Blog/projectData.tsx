@@ -37,7 +37,7 @@ const projectData: Project[] = [
   {
     id: 4,
     title: "T-mobile partner (Fliggs)",
-    paragraph: "An american mobile operator platform partnered with the giant T-Mobile",
+    paragraph: "An american mobile operator platform partnered with the giant T-Mobile.",
     image: "/images/projects/tm.png",
     tags: ["Mobile", "Operator"],
     publishDate: "2024-01-01",

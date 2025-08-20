@@ -72,7 +72,7 @@ const Skills = () => {
       {/* Mobile/Tablet: Animated slider (md and down) */}
       <div className="lg:hidden overflow-hidden w-full relative" style={{ width: "100vw" }}>
         <div
-          className="flex items-center gap-20 animate-skills-slider"
+          className="flex items-center gap-12 lg:gap-20 animate-skills-slider"
           style={{
             width: "max-content",
             animation: "skillsSlider 30s linear infinite",
