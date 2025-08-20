@@ -18,6 +18,14 @@ export default function RootLayout({
     <html suppressHydrationWarning lang="en"  className={`${phitagate.variable} ${ubuntu.variable} ${xoireqe.variable}`}>
 
       <head>
+          {/* Preload XOIREQE */}
+        <link
+          rel="preload"
+          href="/fonts/XOIREQE.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
              {/* Preload Phitagate */}
         <link
           rel="preload"
@@ -28,22 +36,15 @@ export default function RootLayout({
         />
 
         {/* Preload Ubuntu */}
-        <link
+        {/* <link
           rel="preload"
           href="/fonts/Ubuntu-R.woff2"
           as="font"
           type="font/woff2"
           crossOrigin="anonymous"
-        />
+        /> */}
 
-        {/* Preload XOIREQE */}
-        <link
-          rel="preload"
-          href="/fonts/XOIREQE.woff2"
-          as="font"
-          type="font/woff2"
-          crossOrigin="anonymous"
-        />
+      
       </head>
 
       <body className={`bg-[#FCFCFC] bg-black`}>
