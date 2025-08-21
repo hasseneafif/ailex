@@ -13,13 +13,7 @@ export async function sendChatMessage({ sessionId, message, history, token }: {
     headers,
     body: JSON.stringify({ sessionId, message, history }),
   });
-
-  if (res.status === 429) {
-    const data = await res.json();
-    throw new Error(data.error || "Rate limit reached");
-  }
-
-  if (!res.ok) {
+  if (!res.ok && res.status != 429) {
     throw new Error("Failed to fetch chat response");
   }
   return await res.json();

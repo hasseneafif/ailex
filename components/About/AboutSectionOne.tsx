@@ -49,6 +49,7 @@ useEffect(() => {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [rateLimited, setRateLimited] = useState(false);
+
   const [speedMultiplier, setSpeedMultiplier] = useState(1.0);
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const [token, setToken] = useState<string | null>(null);
@@ -140,19 +141,26 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
         history: newHistory,
         token: authToken,
       });
-      if (response && response.reply) {
-        setChatHistory((prev) => [...prev, { role: "assistant", content: response.reply }]);
-      }
-    } catch (err: any) {
-      let errorMsg = "Error when interacting with the AI.";
-      if (err.message && (err.message.toLowerCase().includes("rate") || err.message.toLowerCase().includes("limit"))) {
-        errorMsg = "You have reached your daily limit. Try again tomorrow.";
-        setRateLimited(true);
-      }
-      setChatHistory((prev) => [...prev, { role: "assistant", content: errorMsg }]);
-    } finally {
-      setLoading(false);
+
+
+     if (response.retryAfter) {
+      const timeUntil = new Date(response.retryAfter).toLocaleTimeString();
+      const errorMsg = `You have reached your daily limit. Try again after ${timeUntil}.`;
+      setChatHistory(prev => [...prev, { role: "assistant", content: errorMsg }]);
+      setRateLimited(true);
+      return; // stop further processing
     }
+
+    if (response && response.reply) {
+      setChatHistory(prev => [...prev, { role: "assistant", content: response.reply }]);
+    }
+
+  } catch (err: any) {
+    const errorMsg = "Error when interacting with the AI.";
+    setChatHistory(prev => [...prev, { role: "assistant", content: errorMsg }]);
+  } finally {
+    setLoading(false);
+  }
   }, [input, rateLimited, token, tokenRequested, chatHistory, fetchToken]);
 
   // Memoized chat bubbles for performance
@@ -200,7 +208,7 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
                   <input
                     type="text"
                     className="border-stroke dark:text-body-color-dark dark:shadow-two w-full rounded-sm border bg-[#181a20] dark:bg-[#181a20] px-6 py-3 text-base text-white outline-none focus:border-primary dark:border-transparent focus:border-primary focus:shadow-none"
-                    placeholder={rateLimited ? "Limit reached, try again tomorrow." : "Type a message."}
+placeholder={rateLimited ? `Limit reached, try again tomorrow.` : "Type a message."}
                     value={input}
                     onChange={handleInput}
                     disabled={loading || rateLimited}
