@@ -24,7 +24,7 @@ const HeroFreshDesktop: React.FC<HeroFreshDesktopProps> = ({
       <div ref={imageWrapperRef} className="relative flex flex-col items-center">
         {/* Desktop image */}
       <Image
-  src="/images/hero/new/ndesktop.png"
+  src="/images/hero/new/ndesktop-min.png"
   alt="Hero desktop"
   width={600}
   height={800}
@@ -32,14 +32,14 @@ const HeroFreshDesktop: React.FC<HeroFreshDesktopProps> = ({
   priority
   fetchPriority="high"
   quality={100}     // full quality
-  unoptimized       // serve original without compression
+  unoptimized
   draggable={false}
 />
 
 
         {/* Mobile image */}
        <Image
-  src="/images/hero/new/nmobile.png"
+  src="/images/hero/new/nmobile-min.png"
   alt="Hero mobile"
   width={600}
   height={800}
@@ -47,7 +47,7 @@ const HeroFreshDesktop: React.FC<HeroFreshDesktopProps> = ({
   priority   // ✅ loads ASAP
   fetchPriority="high" // ✅ extra hint for browser
     quality={100}     // full quality
-  unoptimized       // serve original without compression
+    unoptimized
   draggable={false}
 />
 

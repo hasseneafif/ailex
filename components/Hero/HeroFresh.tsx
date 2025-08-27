@@ -31,11 +31,8 @@ const HeroFresh: React.FC = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [showDropdown, handleClickOutside]);
 
-  return isDesktop ? (
-    <HeroFreshDesktop titleRef={titleRef} dropdownRef={dropdownRef} showDropdown={showDropdown} setShowDropdown={setShowDropdown} />
-  ) : (
-    <HeroFreshDesktop titleRef={titleRef} dropdownRef={dropdownRef} showDropdown={showDropdown} setShowDropdown={setShowDropdown} />
-  );
+  return     <HeroFreshDesktop titleRef={titleRef} dropdownRef={dropdownRef} showDropdown={showDropdown} setShowDropdown={setShowDropdown} />
+
 };
 
 export default HeroFresh;
