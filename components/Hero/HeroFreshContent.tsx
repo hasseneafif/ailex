@@ -28,7 +28,8 @@ const HeroFreshDesktop: React.FC<HeroFreshDesktopProps> = ({
   priority
   fetchPriority="high"
   draggable={false}
-  quality={70}
+  unoptimized
+  quality={100}
 />
 
 
@@ -41,8 +42,8 @@ const HeroFreshDesktop: React.FC<HeroFreshDesktopProps> = ({
   className="block md:hidden w-[70vh] h-auto object-contain"
   priority   // ✅ loads ASAP
   fetchPriority="high" // ✅ extra hint for browser
-    quality={70}     // full quality
-    
+    quality={100}     // full quality
+    unoptimized
   draggable={false}
 />
 
