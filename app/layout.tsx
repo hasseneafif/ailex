@@ -26,6 +26,9 @@ export default function RootLayout({
           type="font/woff2"
           crossOrigin="anonymous"
         />
+        <link rel="preload" as="image" href="/images/hero/new/ndesktop.png" />
+        <link rel="preload" as="image" href="/images/hero/new/nmobile.png" />
+
              {/* Preload Phitagate */}
         <link
           rel="preload"

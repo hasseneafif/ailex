@@ -21,7 +21,7 @@ const Footer = () => {
                 <Image
                   src="/images/logo/logo-black.svg"
                   alt="Hassene Afif logo black"
-                  className="w-full dark:hidden"
+                  className="w-[100px] dark:hidden"
                   width={48}
                   height={20}
                   priority
@@ -29,7 +29,7 @@ const Footer = () => {
                 <Image
                   src="/images/logo/logo-white.svg"
                   alt="Hassene Afif logo white"
-                  className="hidden w-full dark:block"
+                  className="hidden w-[100px] dark:block"
                   width={48}
                   height={20}
                   priority

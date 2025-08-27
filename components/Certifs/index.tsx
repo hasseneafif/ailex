@@ -27,7 +27,7 @@ const Certifs = () => {
                   alt="IBM Certification logo"
                   width={60}
                   height={48}
-                  className="h-8 sm:h-8 md:h-8 w-auto max-w-[80px] sm:max-w-[100px] md:max-w-[200px] mx-auto skill-pop"
+                  className="h-8 sm:h-8 md:h-8 w-auto max-w-[70px] sm:max-w-[70px] md:max-w-[200px] mx-auto skill-pop"
                   loading="lazy"
                     draggable={false}
 

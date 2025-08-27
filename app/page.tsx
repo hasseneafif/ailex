@@ -12,8 +12,8 @@ const Blog = dynamic(() => import("@/components/Blog"), { ssr: false }); // Blog
 const ContactLight = dynamic(() => import("@/components/ContactLight"));
 
 export const metadata: Metadata = {
-  title: "Hass - Home",
-  description: "This is Home for Hassene Afif's website.",
+  title: "Hassene Afif",
+  description: "Hassene Afif's personal space",
 };
 
 export default function Home() {

@@ -15,7 +15,7 @@ const projectData: Project[] = [
   {
     id: 2,
     title: "AI Stock prediction",
-    paragraph: "An AI stock prediction platform that uses LLaMa to analyze stock market trends.",
+    paragraph: "An AI stock prediction platform that uses AI Models to analyze stock market trends.",
     image: "/images/projects/vestr.svg",
     tags: ["AI", "Stocks"],
     publishDate: "2024-01-01",

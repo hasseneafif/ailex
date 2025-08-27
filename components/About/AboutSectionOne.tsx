@@ -164,28 +164,50 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   }, [input, rateLimited, token, tokenRequested, chatHistory, fetchToken]);
 
   // Memoized chat bubbles for performance
-  const ChatBubbles = useMemo(() => (
-    <>
-      {chatHistory.map((msg, idx) =>
-        msg.role === "assistant" ? (
-          <div key={idx} className="flex items-start gap-2">
-            <Image src="/images/logo/v-icon.svg" alt="Assistant Icon" width={32} height={32} className="w-8 h-8 p-0"   draggable={false} />
-            <div className="bg-gray-100 dark:bg-gray-800 rounded-lg px-4 py-2 text-sm text-gray-900 dark:text-white max-w-[70%]" aria-label="AI response">{msg.content}</div>
+// Memoized chat bubbles for performance
+const ChatBubbles = useMemo(() => (
+  <>
+    {chatHistory.map((msg, idx) =>
+      msg.role === "assistant" ? (
+        <div key={idx} className="flex items-start gap-2">
+          <Image
+            src="/images/logo/v-icon.svg"
+            alt="Assistant Icon"
+            width={32}
+            height={32}
+            className="w-8 h-8 p-0"
+            draggable={false}
+          />
+          <div className="bg-gray-100 dark:bg-gray-800 rounded-lg px-4 py-2 text-sm text-gray-900 dark:text-white max-w-[70%]" aria-label="AI response">
+            {msg.content}
           </div>
-        ) : (
-          <div key={idx} className="flex items-start gap-2 flex-row-reverse">
-            <div className="bg-white text-black rounded-lg px-4 py-2 text-sm max-w-[70%]" aria-label="User message">{msg.content}</div>
-          </div>
-        )
-      )}
-      {loading && (
-        <div className="flex items-start gap-2">
-          <Image src="/images/logo/v-icon.svg" alt="Assistant Icon" width={32} height={32} className="w-8 h-8 p-0"   draggable={false}/>
-          <div className="bg-gray-100 dark:bg-gray-800 rounded-lg px-4 py-2 text-sm text-gray-900 dark:text-white max-w-[70%] opacity-60 italic">AI is responding...</div>
         </div>
-      )}
-    </>
-  ), [chatHistory, loading]);
+      ) : (
+        <div key={idx} className="flex items-start gap-2 flex-row-reverse">
+          <div className="bg-white text-black rounded-lg px-4 py-2 text-sm max-w-[70%]" aria-label="User message">{msg.content}</div>
+        </div>
+      )
+    )}
+
+    {/* AI typing/loading message */}
+    {(loading || tokenLoading) && (
+      <div className="flex items-start gap-2">
+        <Image
+          src="/images/logo/v-icon.svg"
+          alt="Assistant Icon"
+          width={32}
+          height={32}
+          className="w-8 h-8 p-0"
+          draggable={false}
+        />
+        <div className="bg-gray-100 dark:bg-gray-800 rounded-lg px-4 py-2 text-sm text-gray-900 dark:text-white max-w-[70%] opacity-60 italic">
+          {tokenLoading ? "Waking server up..." : "AI is responding..."}
+        </div>
+      </div>
+    )}
+  </>
+), [chatHistory, loading, tokenLoading]);
+
 
   return (
     <section id="hassai" className="pt-16 md:pt-20 lg:pt-28" aria-labelledby="about-ai-heading">

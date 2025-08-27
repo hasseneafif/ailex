@@ -86,9 +86,9 @@ html {
 
 
 /* Hero text small screen */
-@media (max-width: 990px) {
+
   .neon-green-mobile { color: #39ff14 !important; text-shadow: 0 2px 8px rgba(0,0,0,0.25) !important; }
-}
+
 
 /* Hero image height XL */
 @media (min-width: 1280px) {
