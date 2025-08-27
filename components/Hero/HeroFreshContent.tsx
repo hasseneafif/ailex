@@ -40,14 +40,13 @@ const HeroFreshDesktop: React.FC<HeroFreshDesktopProps> = ({
   width={600}
   height={800}
   className="block md:hidden w-[70vh] h-auto object-contain"
-  priority   // ✅ loads ASAP
-  fetchPriority="high" // ✅ extra hint for browser
-    quality={100}     // full quality
+  priority   
+  fetchPriority="high" 
+    quality={100}     
     unoptimized
   draggable={false}
 />
 
-        {/* Rotated text block under image aligned to right */}
         <div className="absolute bottom-[-13rem] right-[-90px] md:bottom-[-17rem] md:right-[-120px] flex flex-col items-baseline rotate-90">
           <h1
             className="font-xoireqe text-[1.5rem] md:text-[2rem] drop-shadow-lg text-white text-center"

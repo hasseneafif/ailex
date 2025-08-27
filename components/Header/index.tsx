@@ -138,8 +138,8 @@ const Header = () => {
                             href={menuItem.path}
                             className={`flex py-2 text-[0.85rem] lg:mr-0 lg:inline-flex lg:px-0 lg:py-6 ${
                               usePathName === menuItem.path
-                                ? "text-white font-semibold"
-                                : "text-white font-semibold"
+                                ? "text-black font-semibold lg:text-white"
+                                : "text-black font-semibold lg:text-white"
                             }`}
                             tabIndex={0}
                             aria-current={usePathName === menuItem.path ? "page" : undefined}
