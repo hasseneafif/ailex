@@ -38,22 +38,45 @@ const Header = () => {
     setOpenIndex((prev) => (prev === index ? -1 : index));
   }, []);
 
-  const [showDropdown, setShowDropdown] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  const handleClickOutside = useCallback((event: MouseEvent) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-      setShowDropdown(false);
+  // Mobile CV dropdown
+  const [showMobileDropdown, setShowMobileDropdown] = useState(false);
+  const mobileDropdownRef = useRef<HTMLDivElement>(null);
+  
+  // Desktop CV dropdown
+  const [showDesktopDropdown, setShowDesktopDropdown] = useState(false);
+  const desktopDropdownRef = useRef<HTMLDivElement>(null);
+  
+  // Handle click outside for mobile dropdown
+  const handleMobileClickOutside = useCallback((event: MouseEvent) => {
+    if (mobileDropdownRef.current && !mobileDropdownRef.current.contains(event.target as Node)) {
+      setShowMobileDropdown(false);
     }
   }, []);
-  useEffect(() => {
-    if (showDropdown) {
-      document.addEventListener("mousedown", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
+  
+  // Handle click outside for desktop dropdown
+  const handleDesktopClickOutside = useCallback((event: MouseEvent) => {
+    if (desktopDropdownRef.current && !desktopDropdownRef.current.contains(event.target as Node)) {
+      setShowDesktopDropdown(false);
     }
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [showDropdown, handleClickOutside]);
+  }, []);
 
+  useEffect(() => {
+    if (showMobileDropdown) {
+      document.addEventListener("mousedown", handleMobileClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleMobileClickOutside);
+    }
+    return () => document.removeEventListener("mousedown", handleMobileClickOutside);
+  }, [showMobileDropdown, handleMobileClickOutside]);
+
+  useEffect(() => {
+    if (showDesktopDropdown) {
+      document.addEventListener("mousedown", handleDesktopClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleDesktopClickOutside);
+    }
+    return () => document.removeEventListener("mousedown", handleDesktopClickOutside);
+  }, [showDesktopDropdown, handleDesktopClickOutside]);
 
   const usePathName = usePathname();
 
@@ -194,21 +217,21 @@ const Header = () => {
                     
                     {/* CV Button for Mobile - Inside hamburger menu */}
                     <li className="group relative lg:hidden">
-                      <div className="relative" ref={dropdownRef}>
+                      <div className="relative" ref={mobileDropdownRef}>
                         <button
-                          onClick={() => setShowDropdown(!showDropdown)}
-                          className="font-xoireqe text-black  bg-white  rounded transition-colors duration-300 hover:bg-gray-100 text-sm mt-2"
+                          onClick={() => setShowMobileDropdown(!showMobileDropdown)}
+                          className="font-xoireqe text-black bg-white rounded transition-colors duration-300 hover:bg-gray-100 text-sm mt-2"
                         >
                           CV
                         </button>
-                        {showDropdown && (
+                        {showMobileDropdown && (
                           <div
                             className="absolute left-0 mt-2 w-[130px] bg-black border border-white rounded shadow-lg flex flex-col z-20"
                           >
                             <a
                               href="/cvs/Hassene_Afif_CV.pdf"
                               download
-                              onClick={() => setShowDropdown(false)}
+                              onClick={() => setShowMobileDropdown(false)}
                               className="px-4 py-2 text-white hover:bg-white hover:text-black transition-colors"
                             >
                               English
@@ -216,7 +239,7 @@ const Header = () => {
                             <a
                               href="/cvs/Hassene_Afif_CV_FR.pdf"
                               download
-                              onClick={() => setShowDropdown(false)}
+                              onClick={() => setShowMobileDropdown(false)}
                               className="px-4 py-2 text-white hover:bg-white hover:text-black transition-colors"
                             >
                               French
@@ -225,27 +248,28 @@ const Header = () => {
                         )}
                       </div>
                     </li>
+
                   </ul>
                 </nav>
               </div>
               
               {/* CV Button for Desktop - Far right */}
               <div className="hidden lg:block">
-                <div className="relative" ref={dropdownRef}>
+                <div className="relative" ref={desktopDropdownRef}>
                   <button
-                    onClick={() => setShowDropdown(!showDropdown)}
+                    onClick={() => setShowDesktopDropdown(!showDesktopDropdown)}
                     className="font-xoireqe text-black xl:text-white border border-white bg-white xl:bg-transparent w-[65px] h-[32px] rounded transition-colors duration-300 hover:bg-white hover:text-black text-sm"
                   >
                     CV
                   </button>
-                  {showDropdown && (
+                  {showDesktopDropdown && (
                     <div
                       className="absolute right-0 mt-2 w-[130px] bg-black border border-white rounded shadow-lg flex flex-col z-20"
                     >
                       <a
                         href="/cvs/Hassene_Afif_CV.pdf"
                         download
-                        onClick={() => setShowDropdown(false)}
+                        onClick={() => setShowDesktopDropdown(false)}
                         className="px-4 py-2 text-white hover:bg-white hover:text-black transition-colors"
                       >
                         English
@@ -253,7 +277,7 @@ const Header = () => {
                       <a
                         href="/cvs/Hassene_Afif_CV_FR.pdf"
                         download
-                        onClick={() => setShowDropdown(false)}
+                        onClick={() => setShowDesktopDropdown(false)}
                         className="px-4 py-2 text-white hover:bg-white hover:text-black transition-colors"
                       >
                         French
