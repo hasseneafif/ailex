@@ -26,36 +26,6 @@ html {
 .font-ubuntu { font-family: var(--font-ubuntu), sans-serif; }
 .font-xoireqe { font-family: var(--font-xoireqe), sans-serif; }
 
-/* Holographic cards */
-.holographic-card {
-  position: relative;
-  overflow: hidden;
-  transition: transform 0.5s ease, box-shadow 0.5s ease;
-}
-.holographic-card-before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(0deg, transparent, transparent 30%, rgba(255,255,255,0.447));
-  transform: rotate(-45deg);
-  transition: all 0.5s ease;
-  opacity: 0;
-  z-index: 1;
-  pointer-events: none;
-}
-.holographic-card:hover,
-.holographic-card.holographic-card-active {
-  transform: scale(1.05);
-  box-shadow: 0 0 20px rgba(255,255,255,0.5);
-}
-.holographic-card:hover .holographic-card-before,
-.holographic-card.holographic-card-active .holographic-card-before {
-  opacity: 1;
-  transform: rotate(-45deg) translateY(100%);
-}
 
 /* Skill pop hover */
 @media (min-width: 1024px) {
@@ -69,45 +39,17 @@ html {
   }
 }
 
-/* Hero Fresh & background images */
-.hero-bg-img-wrapper {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  left: -15vw;
-  width: 70vw;
-  max-width: none;
-  transition: left 0.3s, width 0.3s;
-}
-.hero-bg-img {
-  object-position: left bottom !important;
-  transition: object-position 0.3s;
+
+/* styles/globals.css or a module depending on your setup */
+
+/* Allow overflow instead of hidden */
+.carousel.carousel-slider {
+  overflow: initial !important;
 }
 
-
-/* Hero text small screen */
-
-  .neon-green-mobile { color: #39ff14 !important; text-shadow: 0 2px 8px rgba(0,0,0,0.25) !important; }
-
-
-/* Hero image height XL */
-@media (min-width: 1280px) {
-  .hero-img-wrapper {
-    height: 480px !important;
-    min-height: 480px !important;
-    max-height: 480px !important;
-  }
-}
-
-/* Projects title responsive sizes */
-@media (min-width: 1000px) {
-  .projects-title-size { font-size: 79px; letter-spacing: 38px !important; padding-left: 42px; }
-}
-@media (min-width: 1200px) {
-  .projects-title-size { font-size: 85px; letter-spacing: 65px !important; padding-left: 69px; }
-}
-@media (min-width: 1400px) {
-  .projects-title-size { font-size: 89px; letter-spacing: 85px !important; padding-left: 100px; }
+/* Move control dots down */
+.carousel .control-dots {
+  bottom: -32px !important;
 }
 
 

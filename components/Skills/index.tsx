@@ -45,7 +45,7 @@ const Skills = () => {
   return (
     <section
       className="py-16 md:py-0 md:pt-16 md:pb-8"
-      style={{ background: "rgb(245,245,245)", width: "100vw", position: "relative", left: "50%", right: "50%", marginLeft: "-50vw", marginRight: "-50vw" }}
+      style={{ width: "100vw", position: "relative", left: "50%", right: "50%", marginLeft: "-50vw", marginRight: "-50vw" }}
       aria-labelledby="skills-heading"
     >
       <h2 id="skills-heading" className="sr-only">Skills</h2>

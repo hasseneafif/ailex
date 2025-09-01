@@ -11,23 +11,13 @@ const ProjectList = () => {
   return (
     <section
       id="projects"
-      className="py-16 md:py-20 lg:py-28 bg-white"
+      className="py-16 md:py-20 lg:py-28 "
       aria-labelledby="projects-heading"
     >
       <h2 id="projects-heading" className="sr-only">Projects</h2>
       <div className="container">
         <div className="relative w-full">
-          <span
-            className={`hidden lg:inline font-xoireqe projects-title-size text-white font-bold absolute left-1/2 top-[52%] -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none z-30 whitespace-nowrap transition-opacity duration-300 ${hovered !== null ? 'opacity-90' : 'opacity-60'}`}
-            style={{
-              lineHeight: 1,
-              letterSpacing: '0.1em',
-              userSelect: 'none',
-            }}
-            aria-hidden="true"
-          >
-            PROJECTS
-          </span>
+    
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative z-20">
             {projects.map((project, idx) => (
               <div

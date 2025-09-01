@@ -3,7 +3,7 @@ import React from "react";
 
 const Certifs = () => {
   return (
-    <section className="py-8 md:py-16" style={{ background: 'rgb(242,242,242)' }} aria-labelledby="certifs-heading">
+    <section className="py-8 md:py-16"  aria-labelledby="certifs-heading">
       <h2 id="certifs-heading" className="sr-only">Certifications</h2>
       <div className="container mx-auto px-4">
         <div className="flex flex-col items-center">

@@ -7,7 +7,7 @@ import React from "react";
 const Footer = () => {
   return (
     <footer
-      className="wow fadeInUp dark:bg-black relative z-10 bg-white pt-16 md:pt-20 lg:pt-24"
+      className="wow fadeInUp  relative z-10  pt-16 md:pt-20 lg:pt-24"
       data-wow-delay=".1s"
       role="contentinfo"
       aria-labelledby="footer-heading"

@@ -82,12 +82,7 @@ const Header = () => {
 
   return (
     <header
-      className={`header left-0 top-0 z-40 flex w-full items-center transition-all duration-500 ease-in-out
-        ${sticky
-          ? "dark:bg-black dark:shadow-sticky-dark fixed z-[9999] bg-white !bg-opacity-80 shadow-sticky backdrop-blur-sm"
-          : "absolute bg-transparent"
-        }
-        opacity-100 translate-y-0
+      className={`header left-0 top-0 z-40 flex w-full items-center transition-all duration-500 ease-in-out opacity-100 translate-y-0 absolute bg-transparent
       `}
       role="banner"
       aria-label="Main site header"

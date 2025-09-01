@@ -2,9 +2,8 @@
 
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
-import ScrollToTop from "@/components/ScrollToTop";
 import LenisSmoothScroll from "@/components/Common/LenisSmoothScroll";
- import "../styles/index.min.css";
+ import "../styles/index.css";
 // import "../styles/index.css";
 import { phitagate, ubuntu, xoireqe } from "@/fonts/fonts";
 
@@ -50,13 +49,15 @@ export default function RootLayout({
       
       </head>
 
-      <body className={`bg-[#FCFCFC] bg-black`}>
+      <body className={`bg-gradient-to-br from-[#000505] via-black to-[#000404]
+
+
+`}>
         <LenisSmoothScroll />
         <Providers>
           <Header />
           {children}
           <Footer />
-          <ScrollToTop />
         </Providers>
       </body>
     </html>
@@ -64,3 +65,4 @@ export default function RootLayout({
 }
 
 import { Providers } from "./providers";
+
