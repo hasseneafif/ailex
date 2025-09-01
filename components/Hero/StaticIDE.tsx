@@ -16,7 +16,6 @@ import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import projectData from "../Blog/projectData";
 
-// Mock file structure
 const mockFiles = [
   {
     name: "src",
@@ -31,7 +30,6 @@ const mockFiles = [
   { name: "README.md", type: "file", path: "/README.md" },
 ];
 
-// File tree component (desktop)
 const StaticFileTree = ({ data, onSelect, selectedFile }) => {
   if (!data || data.length === 0) return null;
 
@@ -77,11 +75,9 @@ const StaticFileTree = ({ data, onSelect, selectedFile }) => {
   );
 };
 
-// Projects view
 const ProjectsView = () => {
   return (
     <div className="flex flex-col h-full w-full">
-      {/* Desktop grid */}
       <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 p-4 sm:p-6 w-full">
         {projectData.map((p) => (
           <div
@@ -182,7 +178,7 @@ export default AboutMe;`}</code>
       );
     return (
       <pre className="bg-black/20 h-full text-gray-100 p-6 text-sm font-mono leading-relaxed overflow-auto">
-        <code>// {selectedFile.name} content placeholder</code>
+        <code>{selectedFile.name} content placeholder</code>
       </pre>
     );
   };
