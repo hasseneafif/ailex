@@ -22,22 +22,9 @@ html {
 }
 
 /* Fonts utility classes */
-.font-phitagate { font-family: var(--font-phitagate), sans-serif; }
-.font-ubuntu { font-family: var(--font-ubuntu), sans-serif; }
+
 .font-xoireqe { font-family: var(--font-xoireqe), sans-serif; }
 
-
-/* Skill pop hover */
-@media (min-width: 1024px) {
-  .skill-pop {
-    transition: transform 0.25s cubic-bezier(.4,1.5,.5,1), box-shadow 0.25s cubic-bezier(.4,1.5,.5,1);
-    will-change: transform, box-shadow;
-  }
-  .skill-pop:hover {
-    transform: scale(1.18) translateY(-10px);
-    z-index: 2;
-  }
-}
 
 
 /* styles/globals.css or a module depending on your setup */
