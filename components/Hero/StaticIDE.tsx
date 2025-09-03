@@ -5,16 +5,35 @@ import {
   Folder,
   FolderOpen,
   File,
-  Download,
-  ArrowUpRight,
+
   TrendingUp,
   Calendar,
   Sparkles,
+  ExternalLink,
+  X,
+  Minus, Square,
   Bot,
 } from "lucide-react";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import projectData from "../Blog/projectData";
+
+// Smooth teal border flicker animation
+const borderFlickerStyle = `
+@keyframes border-flicker {
+  0%, 100% { border-color: rgba(20, 184, 166, 0.4); }
+  50% { border-color: rgba(20, 184, 166, 1); }
+}
+.animate-border-flicker {
+  animation: border-flicker 1.2s infinite;
+}
+`;
+if (typeof document !== "undefined" && !document.getElementById("border-flicker-style")) {
+  const style = document.createElement("style");
+  style.id = "border-flicker-style";
+  style.innerHTML = borderFlickerStyle;
+  document.head.appendChild(style);
+}
 
 const mockFiles = [
   {
@@ -30,7 +49,7 @@ const mockFiles = [
   { name: "README.md", type: "file", path: "/README.md" },
 ];
 
-const StaticFileTree = ({ data, onSelect, selectedFile }) => {
+const StaticFileTree = ({ data, onSelect, selectedFile, clickedAbout }) => {
   if (!data || data.length === 0) return null;
 
   return (
@@ -51,17 +70,18 @@ const StaticFileTree = ({ data, onSelect, selectedFile }) => {
                   data={item.children || []}
                   onSelect={onSelect}
                   selectedFile={selectedFile}
+                  clickedAbout={clickedAbout}
                 />
               </div>
             </div>
           ) : (
             <div
               onClick={() => onSelect(item)}
-              className={`flex items-center space-x-3 w-full text-left p-2 rounded-lg transition-all duration-200 group cursor-pointer ${
+              className={`flex items-center space-x-3 w-full text-left p-2 rounded-lg transition-all duration-200 group cursor-pointer border ${
                 selectedFile.path === item.path
-                  ? "bg-gradient-to-r from-teal-500/20 to-purple-500/20 border border-teal-400/30"
-                  : "hover:bg-[rgba(177,177,177,0.01)]"
-              }`}
+                  ? "bg-gradient-to-r from-teal-500/20 to-purple-500/20 border-teal-400/30"
+                  : "hover:bg-[rgba(177,177,177,0.01)] border-transparent"
+              } ${!clickedAbout && item.name === "about-me.js" ? "animate-border-flicker" : ""}`}
             >
               <File className="w-4 h-4 text-purple-400" />
               <span className="text-gray-300 group-hover:text-white transition-colors text-sm">
@@ -86,16 +106,21 @@ const ProjectsView = () => {
           >
             <div className="flex justify-between items-center">
               <h3 className="font-semibold text-base">{p.title}</h3>
-              <a href={p.link} target="_blank" rel="noreferrer">
-                <ArrowUpRight className="w-4 h-4 text-gray-400" />
-              </a>
-            </div>
-            <div className="flex gap-2 text-xs mt-1 flex-wrap">
+       {p.link ? (
+  <a href={p.link} target="_blank" rel="noreferrer">
+  <ExternalLink className="w-4 h-4 text-teal-400 animate-pulse-glow" />
+  </a>
+) : (
+  <div className="w-4 h-4"> </div>
+)}
+
+            </div> 
+            <div className="flex gap-2 text-xs mt-1 font-bold  flex-wrap">
               <span className="inline-flex items-center gap-1 bg-white text-black px-2 py-1 rounded-full">
-                <TrendingUp className="w-3 h-3" /> {p.tags[0]}
+               {p.tags[0]}
               </span>
               <span className="inline-flex items-center gap-1 bg-white text-black px-2 py-1 rounded-full">
-                <Calendar className="w-3 h-3" /> {p.tags[1]}
+                 {p.tags[1]}
               </span>
             </div>
             <div className="mt-2 bg-black/40 rounded-xl p-2 border border-gray-700 relative">
@@ -119,7 +144,7 @@ const ProjectsView = () => {
           showThumbs={false}
           autoPlay
           infiniteLoop
-          interval={2000}
+          interval={6000}
           swipeable
           emulateTouch
           stopOnHover={false}
@@ -129,9 +154,13 @@ const ProjectsView = () => {
               <div className="bg-[rgb(7,8,8)] rounded-2xl p-4 shadow-lg flex flex-col gap-2 text-gray-100">
                 <div className="flex justify-between items-center">
                   <h3 className="font-semibold text-sm">{p.title}</h3>
-                  <a href={p.link} target="_blank" rel="noreferrer">
-                    <ArrowUpRight className="w-4 h-4 text-gray-400" />
-                  </a>
+                 {p.link ? (
+  <a href={p.link} target="_blank" rel="noreferrer">
+  <ExternalLink className="w-4 h-4 text-teal-400 animate-pulse-glow" />
+  </a>
+) : (
+  <div className="w-4 h-4"> </div>
+)}
                 </div>
                 <div className="flex gap-2 text-xs mt-1 flex-wrap">
                   <span className="inline-flex items-center gap-1 bg-white text-black px-2 py-1 rounded-full">
@@ -165,17 +194,63 @@ const StaticIDEHero = () => {
     path: "/src/projects.html",
   });
 
+  const [clickedAbout, setClickedAbout] = useState(false);
+
+  const handleSelect = (file) => {
+    if (file.name === "about-me.js") {
+      setClickedAbout(true); // stop flicker after clicking
+    }
+    setSelectedFile(file);
+  };
+
   const renderContent = () => {
     if (selectedFile.name === "projects.html") return <ProjectsView />;
     if (selectedFile.name === "about-me.js")
       return (
-        <pre className="bg-black/20 h-full text-gray-100 p-6 text-sm font-mono leading-relaxed overflow-auto">
-          <code>{`function AboutMe() {
-  return "Hello, I'm a software engineer passionate about AI and full-stack development.";
+<pre className="bg-black/20 h-full text-gray-100 p-6 text-sm font-mono leading-relaxed overflow-auto">
+  <code>{`function AboutMe() {
+
+return "Hey there! I'm an AI Software Engineer with 3 years of experience
+in full-stack and AI development. 
+
+I'm passionate about AI and Data, with
+a proven track record of delivering optimized, innovative solutions across
+multiple projects. 
+
+With my intense full-stack experience, i can take an AI project from idea to a deployed,
+performance/design focused product.";
+
 }
 export default AboutMe;`}</code>
-        </pre>
+</pre>
+
       );
+       if (selectedFile.name === "index.js")
+      return (
+<pre className="bg-black/20 h-full text-gray-100 p-6 text-sm font-mono leading-relaxed overflow-auto">
+  <code>{`function NoIdea() {
+
+return "No idea what to put here.";
+
+}
+export default NoIdea;`}</code>
+</pre>
+
+      );
+
+            if (selectedFile.name === "README.md")
+      return (
+<pre className="bg-black/20 h-full text-gray-100 p-6 text-sm font-mono leading-relaxed overflow-auto">
+  <code>{`function StillNoIdea() {
+
+return "Also no idea what to put here either.";
+
+}
+export default StillNoIdea;`}</code>
+</pre>
+
+      );
+      
     return (
       <pre className="bg-black/20 h-full text-gray-100 p-6 text-sm font-mono leading-relaxed overflow-auto">
         <code>{selectedFile.name} content placeholder</code>
@@ -198,15 +273,16 @@ export default AboutMe;`}</code>
               <div className="overflow-y-auto h-[calc(100%-4rem)] scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
                 <StaticFileTree
                   data={mockFiles}
-                  onSelect={setSelectedFile}
+                  onSelect={handleSelect}
                   selectedFile={selectedFile}
+                  clickedAbout={clickedAbout}
                 />
               </div>
             </div>
           </div>
 
           {/* Code Viewer */}
-          <div className="lg:col-span-3">
+          <div data-lenis-prevent className="lg:col-span-3">
             <div className="bg-[rgba(177,177,177,0.01)] backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden flex flex-col w-full h-[310px] md:h-[70vh]">
               {/* Top Bar */}
               <div className="flex items-center justify-between p-4 border-b border-white/10 bg-[rgba(177,177,177,0.01)] flex-shrink-0">
@@ -217,12 +293,12 @@ export default AboutMe;`}</code>
                       ? item.children.map((child) => (
                           <button
                             key={child.path}
-                            onClick={() => setSelectedFile(child)}
-                            className={`flex items-center gap-2 px-3 py-1 rounded-lg text-sm whitespace-nowrap transition-all ${
+                            onClick={() => handleSelect(child)}
+                            className={`flex items-center gap-2 px-3 py-1 rounded-lg text-sm whitespace-nowrap transition-all border ${
                               selectedFile.path === child.path
-                                ? "bg-gradient-to-r from-teal-500/20 to-purple-500/20 border border-teal-400/30 text-white"
-                                : "bg-white/10 text-gray-300 hover:bg-white/20"
-                            }`}
+                                ? "bg-gradient-to-r from-teal-500/20 to-purple-500/20 border-teal-400/30 text-white"
+                                : "bg-white/10 text-gray-300 hover:bg-white/20 border-transparent"
+                            } ${!clickedAbout && child.name === "about-me.js" ? "animate-border-flicker" : ""}`}
                           >
                             <File className="w-4 h-4 text-purple-400" />
                             {child.name}
@@ -231,7 +307,7 @@ export default AboutMe;`}</code>
                       : [
                           <button
                             key={item.path}
-                            onClick={() => setSelectedFile(item)}
+                            onClick={() => handleSelect(item)}
                             className={`flex items-center gap-2 px-3 py-1 rounded-lg text-sm whitespace-nowrap transition-all ${
                               selectedFile.path === item.path
                                 ? "bg-gradient-to-r from-teal-500/20 to-purple-500/20 border border-teal-400/30 text-white"
@@ -254,11 +330,19 @@ export default AboutMe;`}</code>
                       {selectedFile.path}
                     </span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <div className="p-2 hover:bg-white/10 rounded-lg transition-colors cursor-pointer">
-                      <Download className="w-4 h-4 text-gray-400 hover:text-white" />
-                    </div>
-                  </div>
+                <div className="flex items-center gap-2">
+
+  <div className="p-1 hover:bg-white/10 rounded-full cursor-pointer">
+    <Minus className="w-3 h-3 text-gray-400 hover:text-yellow-500" />
+  </div>
+  <div className="p-1 hover:bg-white/10 rounded-full cursor-pointer">
+    <Square className="w-3 h-3 text-gray-400 hover:text-green-600" />
+  </div>
+    <div className="p-1 hover:bg-white/10 rounded-full cursor-pointer">
+    <X className="w-3 h-3 text-gray-400 hover:text-red-600" />
+  </div>
+</div>
+
                 </div>
               </div>
 

@@ -52,4 +52,23 @@ html {
   bottom: -32px !important;
 }
 
+@keyframes gradient-x {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.animate-gradient-x {
+  background-size: 200% 200%;
+  animation: gradient-x 3s ease infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { transform: scale(1); stroke: rgba(20,184,166,0.7); }
+  50% { transform: scale(1.1); stroke: rgba(20,184,166,1); }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 1.5s infinite ease-in-out;
+}
+
 

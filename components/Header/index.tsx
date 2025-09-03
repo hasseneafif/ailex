@@ -253,7 +253,7 @@ const Header = () => {
                 <div className="relative" ref={desktopDropdownRef}>
                   <button
                     onClick={() => setShowDesktopDropdown(!showDesktopDropdown)}
-                    className="font-xoireqe text-black xl:text-white border border-white bg-white xl:bg-transparent w-[65px] h-[32px] rounded transition-colors duration-300 hover:bg-white hover:text-black text-sm"
+                    className="font-xoireqe text-black  border border-white bg-white  w-[65px] h-[32px] rounded transition-colors duration-300 hover:bg-white hover:text-black text-sm"
                   >
                     CV
                   </button>

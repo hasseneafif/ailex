@@ -1,5 +1,4 @@
 "use client"
-import dynamic from "next/dynamic";
 
 import React, { useRef, useEffect, useState, useMemo, useCallback } from "react";
 import { sendChatMessage } from "../../services/chatService";
@@ -45,8 +44,8 @@ const AboutSectionOne = () => {
   const [chatInput, setChatInput] = useState(""); // Separate input for chat widget
   const [loading, setLoading] = useState(false);
   const [rateLimited, setRateLimited] = useState(false);
-  const [showChatWidget, setShowChatWidget] = useState(false); // Controls chat widget visibility
-  const [isChatMinimized, setIsChatMinimized] = useState(false); // Controls chat widget minimization
+  const [showChatWidget, setShowChatWidget] = useState(true); // Always show chat icon
+  const [isChatMinimized, setIsChatMinimized] = useState(true); // Start minimized
   const [pendingMessage, setPendingMessage] = useState("");
 
   const [speedMultiplier, setSpeedMultiplier] = useState(1.0);
@@ -82,12 +81,24 @@ const AboutSectionOne = () => {
     };
   }, [loading]);
 
-  // Scroll to bottom on new message or loading change
-  useEffect(() => {
+  // Scroll to bottom function
+  const scrollToBottom = () => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
+  };
+
+  // Scroll to bottom on new message or loading change
+  useEffect(() => {
+    scrollToBottom();
   }, [chatHistory, loading]);
+
+  // Scroll to bottom when chat is opened
+  useEffect(() => {
+    if (!isChatMinimized) {
+      setTimeout(scrollToBottom, 0);
+    }
+  }, [isChatMinimized]);
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -129,9 +140,8 @@ const AboutSectionOne = () => {
   const sendMessage = useCallback(async (messageToSend: string, clearInputCallback: () => void) => {
     if (!messageToSend.trim() || rateLimited) return;
 
-    // Show chat widget after first message
-    if (!showChatWidget) {
-      setShowChatWidget(true);
+    // Open chat widget when message is sent from main input
+    if (isChatMinimized) {
       setIsChatMinimized(false);
     }
 
@@ -191,7 +201,7 @@ const AboutSectionOne = () => {
     } finally {
       setLoading(false);
     }
-  }, [rateLimited, token, tokenRequested, chatHistory, fetchToken, showChatWidget]);
+  }, [rateLimited, token, tokenRequested, chatHistory, fetchToken, isChatMinimized]);
 
   // Handle send from main field
   const handleMainSend = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
@@ -282,8 +292,8 @@ const AboutSectionOne = () => {
             <div className="max-w-4xl mx-auto text-center relative">
               
               {/* Flickering background lights */}
-              <div className="absolute -top-32 -left-32 w-64 h-64 bg-teal-500/10 rounded-full blur-3xl animate-pulse"></div>
-              <div className="absolute -top-24 -right-40 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
+              <div className="absolute -top-32 -left-32 w-64 h-64 bg-teal-500/20 rounded-full blur-3xl animate-pulse"></div>
+              <div className="absolute -top-24 -right-40 w-80 h-80 bg-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
               
               <div className="relative z-10">
                 <p className="mb-12 text-lg md:text-xl text-gray-300">
@@ -320,8 +330,14 @@ const AboutSectionOne = () => {
                   </div>
                   
                   {rateLimited && (
-                    <p className="mt-4 text-red-400 text-sm bg-red-900/20 px-4 py-2 rounded-lg border border-red-500/30">
+                    <p className="mt-4 text-blue-400 text-sm bg-blue-900/20 px-4 py-2 rounded-lg border border-red-500/30">
                       You have reached your daily limit. Try again tomorrow.
+                    </p>
+                  )}
+
+                  {tokenLoading && (
+                    <p className="mt-4 text-blue-400 text-sm bg-blue-900/20 px-4 py-2 rounded-lg border border-red-500/30">
+                      Waking server up...
                     </p>
                   )}
                 </form>
