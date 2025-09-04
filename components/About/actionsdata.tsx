@@ -9,6 +9,8 @@ const actionsDataConfig: ActionData[] = [
   { id: 0, responseKey: "responses.downloadCV", keywordsKeys: ["keywords.cv", "keywords.resume", "keywords.CV"] },
   { id: 1, responseKey: "responses.showProjects", keywordsKeys: ["keywords.projects", "keywords.experience"] },
   { id: 2, responseKey: "responses.checkSkills", keywordsKeys: ["keywords.skills"] },
+  { id: 3, responseKey: "responses.openLinkedIn", keywordsKeys: ["keywords.linkedin"] },
+  { id: 4, responseKey: "responses.showContact", keywordsKeys: ["keywords.email", "keywords.phone", "keywords.contact"] },
 ];
 
 // Generate translated actions with the given t()

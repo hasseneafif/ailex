@@ -128,7 +128,7 @@ const ProjectsView = () => {
             <div className="mt-2 bg-black/40 rounded-xl p-2 border border-gray-700 relative">
               <div className="flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-purple-400" />
-                <span className="text-sm">{p.paragraph}</span>
+                <span className="text-[0.70rem]">{p.paragraph}</span>
               </div>
               <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center shadow-sm">
                 <Bot className="w-4 h-4 text-white" />
@@ -262,7 +262,7 @@ export default StillNoIdea;`}</code>
   return (
     <div className="relative overflow-hidden w-full">
       {/* Fluid container for responsive layout */}
-      <div className="max-w-[1200px] lg:w-[1000px] xl:w-[1200px]  px-4 sm:px-6 md:px-8 py-12 mx-auto">
+      <div className="max-w-[1200px] lg:w-[900px] xl:w-[1000px]  px-4 sm:px-6 md:px-8 py-12 mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* File Explorer (desktop only) */}
           <div className="hidden lg:block lg:col-span-1">

@@ -117,7 +117,9 @@
     "responses": {
       "downloadCV": "Sure thing! I'll download the CV for you.",
       "showProjects": "I'll show you my projects.",
-      "checkSkills": "Let's go check the skills."
+      "checkSkills": "Let's go check the skills.",
+      "openLinkedIn": "Here’s my LinkedIn profile, opening it now...",
+      "showContact": "Here are my contact details: hasseneafif@gmail.com | +216 55 039 837"
     },
     "keywords": {
       "cv": "cv",
@@ -125,7 +127,11 @@
       "CV": "CV",
       "projects": "projects",
       "experience": "experience",
-      "skills": "skills"
+      "skills": "skills",
+      "linkedin": "linkedin",
+      "email": "email",
+      "phone": "phone",
+      "contact": "contact"
     }
   }
 }

@@ -49,6 +49,15 @@ export const useActionsLogic = () => {
     scrollToComponent("skills");
   };
 
+    const openLinkedIn = () => {
+    window.open("https://www.linkedin.com/in/hasseneafif/", "_blank");
+  };
+
+  const showContact = () => {
+    // Nothing to do, response comes from translations
+    console.log("Contact info requested");
+  };
+
   const executeAction = async (actionId: number): Promise<void> => {
     switch (actionId) {
       case 0:
@@ -59,6 +68,12 @@ export const useActionsLogic = () => {
         break;
       case 2:
         navigateToHero();
+        break;
+      case 3:
+        openLinkedIn();
+        break;
+      case 4:
+        showContact();
         break;
       default:
         console.warn(`Unknown action ID: ${actionId}`);

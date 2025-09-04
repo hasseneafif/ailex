@@ -119,7 +119,9 @@
     "responses": {
       "downloadCV": "Bien sûr ! Je vais télécharger le CV pour vous.",
       "showProjects": "Je vais vous montrer mes projets.",
-      "checkSkills": "Allons voir les compétences."
+      "checkSkills": "Allons voir les compétences.",
+      "openLinkedIn": "Voici mon profil LinkedIn, ouverture en cours...",
+      "showContact": "Voici mes coordonnées : hasseneafif@gmail.com | +216 55 039 837"
     },
     "keywords": {
       "cv": "cv",
@@ -127,7 +129,11 @@
       "CV": "CV",
       "projects": "projets",
       "experience": "expérience",
-      "skills": "compétences"
+      "skills": "compétences",
+      "linkedin": "linkedin",
+      "email": "email",
+      "phone": "téléphone",
+      "contact": "contact"
     }
   }
 }
