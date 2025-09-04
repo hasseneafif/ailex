@@ -1,5 +1,5 @@
 "use client";
-import React, { use, useState } from "react";
+import React, { use, useState, useEffect } from "react";
 import {
   ChevronRight,
   Folder,
@@ -98,6 +98,20 @@ const StaticFileTree = ({ data, onSelect, selectedFile, clickedAbout }) => {
 };
 
 const ProjectsView = () => {
+  const [isDesktop, setIsDesktop] = useState(false);
+
+useEffect(() => {
+  const checkIsDesktop = () => {
+    const isDesktopDevice = window.matchMedia('(min-width: 1024px)').matches && 
+                           !('ontouchstart' in window || navigator.maxTouchPoints > 0);
+    setIsDesktop(isDesktopDevice);
+  };
+
+  checkIsDesktop();
+  window.addEventListener('resize', checkIsDesktop);
+  
+  return () => window.removeEventListener('resize', checkIsDesktop);
+}, []);
   const tProjects = useTranslations("projects");
   const projectDataa = projectData(tProjects);
   return (
@@ -260,7 +274,20 @@ export default StillNoIdea;`}</code>
       </pre>
     );
   };
+  const [isDesktop, setIsDesktop] = useState(false);
 
+useEffect(() => {
+  const checkIsDesktop = () => {
+    const isDesktopDevice = window.matchMedia('(min-width: 1024px)').matches && 
+                           !('ontouchstart' in window || navigator.maxTouchPoints > 0);
+    setIsDesktop(isDesktopDevice);
+  };
+
+  checkIsDesktop();
+  window.addEventListener('resize', checkIsDesktop);
+  
+  return () => window.removeEventListener('resize', checkIsDesktop);
+}, []);
   return (
     <div className="relative overflow-hidden w-full">
       {/* Fluid container for responsive layout */}
@@ -285,8 +312,13 @@ export default StillNoIdea;`}</code>
           </div>
 
           {/* Code Viewer */}
-          <div data-lenis-prevent onMouseEnter={stopLenisScroll}
-  onMouseLeave={startLenisScroll} id="codeviewer" className="lg:col-span-3">
+          <div data-lenis-prevent 
+           {...(isDesktop && {
+    onMouseEnter: stopLenisScroll,
+    onMouseLeave: startLenisScroll
+  })}
+  
+  id="codeviewer" className="lg:col-span-3">
             <div className="bg-[rgba(177,177,177,0.01)] backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden flex flex-col w-full h-[310px] md:h-[70vh]">
               {/* Top Bar */}
               <div className="flex items-center justify-between p-4 border-b border-white/10 bg-[rgba(177,177,177,0.01)] flex-shrink-0">
