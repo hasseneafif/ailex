@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import {
   ChevronRight,
   Folder,
@@ -17,7 +17,7 @@ import {
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import projectData from "../Blog/projectData";
-
+import { useTranslations } from "next-intl";
 // Smooth teal border flicker animation
 const borderFlickerStyle = `
 @keyframes border-flicker {
@@ -96,10 +96,11 @@ const StaticFileTree = ({ data, onSelect, selectedFile, clickedAbout }) => {
 };
 
 const ProjectsView = () => {
+  const projectDataa = projectData();
   return (
-    <div className="flex flex-col h-full w-full">
+    <div id="projects" className="flex flex-col h-full w-full">
       <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 p-4 sm:p-6 w-full">
-        {projectData.map((p) => (
+        {projectDataa.map((p) => (
           <div
             key={p.tags[0]}
             className="bg-[rgb(7,8,8)] rounded-2xl p-4 shadow-lg flex flex-col gap-2 text-gray-100"
@@ -149,7 +150,7 @@ const ProjectsView = () => {
           emulateTouch
           stopOnHover={false}
         >
-          {projectData.map((p) => (
+          {projectDataa.map((p) => (
             <div key={p.tags[0]} className="px-2">
               <div className="bg-[rgb(7,8,8)] rounded-2xl p-4 shadow-lg flex flex-col gap-2 text-gray-100">
                 <div className="flex justify-between items-center">
@@ -202,7 +203,6 @@ const StaticIDEHero = () => {
     }
     setSelectedFile(file);
   };
-
   const renderContent = () => {
     if (selectedFile.name === "projects.html") return <ProjectsView />;
     if (selectedFile.name === "about-me.js")
@@ -261,7 +261,7 @@ export default StillNoIdea;`}</code>
   return (
     <div className="relative overflow-hidden w-full">
       {/* Fluid container for responsive layout */}
-      <div className="max-w-[1200px] xl:w-[1200px]  px-4 sm:px-6 md:px-8 py-12 mx-auto">
+      <div className="max-w-[1200px] lg:w-[1000px] xl:w-[1200px]  px-4 sm:px-6 md:px-8 py-12 mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* File Explorer (desktop only) */}
           <div className="hidden lg:block lg:col-span-1">
@@ -282,7 +282,7 @@ export default StillNoIdea;`}</code>
           </div>
 
           {/* Code Viewer */}
-          <div data-lenis-prevent className="lg:col-span-3">
+          <div id="codeviewer" className="lg:col-span-3">
             <div className="bg-[rgba(177,177,177,0.01)] backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden flex flex-col w-full h-[310px] md:h-[70vh]">
               {/* Top Bar */}
               <div className="flex items-center justify-between p-4 border-b border-white/10 bg-[rgba(177,177,177,0.01)] flex-shrink-0">

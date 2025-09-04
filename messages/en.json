@@ -1,0 +1,131 @@
+{
+  "pageNotFound": "The page you were looking for appears to have been moved, deleted or does not exist.",
+  "backToHome": "Back to Homepage",
+  "websiteDescription": "Hassene Afif's personal showcase",
+
+  "aboutSectionOne": {
+    "sectionTitle": "About Hass AI Chat",
+    "prompt": {
+      "askAnything": "Ask me anything.",
+      "placeholder": "What's on your mind?",
+      "typeMessage": "Type a message...",
+      "limitReachedPlaceholder": "Limit reached, try again tomorrow."
+    },
+    "roles": {
+      "assistant": "Assistant",
+      "you": "You"
+    },
+    "status": {
+      "waking": "Waking server up...",
+      "responding": "AI is responding..."
+    },
+    "errors": {
+      "limitReached": "You have reached your daily limit. Try again tomorrow.",
+      "limitReachedWithTime": "You have reached your daily limit. Try again after {{timeUntil}}.",
+      "generic": "Error when interacting with the AI."
+    },
+    "aria": {
+      "typeMessage": "Type your message",
+      "sendMessage": "Send message",
+      "openChat": "Open chat",
+      "minimizeChat": "Minimize chat",
+      "closeChat": "Close chat"
+    },
+    "chat": {
+      "initialMessage": "Hey, how can I help you?"
+    }
+  },
+   "projects": {
+    "n8nWorkflows": {
+      "title": "n8n workflows",
+      "paragraph": "Different agent projects including an AI insurance estimation agent, and a loan demand analyzer."
+    },
+    "aiStockPrediction": {
+      "title": "AI Stock prediction",
+      "paragraph": "An AI stock prediction platform that uses AI Models to analyze stock market trends."
+    },
+    "dataGeneration": {
+      "title": "Data generation (Delib)",
+      "paragraph": "A data generation and AI platform for Delib, focusing on creating vast databases."
+    },
+    "aiSecurityAnalyzer": {
+      "title": "AI Software security analyzer",
+      "paragraph": "Analyze.codes is an AI-powered software security analyzer that detects vulnerabilities in code."
+    },
+    "aiSizing": {
+      "title": "AI Sizing (Weefizz)",
+      "paragraph": "An AI-powered sizing platform that helps users find the perfect fit for clothing."
+    },
+    "linkedinAutomation": {
+      "title": "A Linkedin AI Automation tool",
+      "paragraph": "An AI-powered linkedin automation tool that decreases reach time."
+    },
+    "tMobilePartner": {
+      "title": "T-mobile partner (Fliggs)",
+      "paragraph": "An american mobile operator platform partnered with the giant T-Mobile."
+    },
+    "fintechBlockchain": {
+      "title": "Fintech & Blockchain",
+      "paragraph": "Numerous blockchain platforms for trading crypto and stocks."
+    },
+    "tags": {
+      "automation": "Automation",
+      "ai": "AI",
+      "workflows": "Workflows",
+      "stocks": "Stocks",
+      "data": "Data",
+      "generation": "Generation",
+      "clean": "Clean",
+      "security": "Security",
+      "sizing": "Sizing",
+      "linkedin": "Linkedin",
+      "mobile": "Mobile",
+      "operator": "Operator",
+      "finance": "Finance",
+      "crypto": "Crypto"
+    }
+  },
+    "footer": {
+    "title": "Footer",
+    "homeLink": "Go to homepage",
+    "logoBlackAlt": "Hassene Afif logo black",
+    "logoWhiteAlt": "Hassene Afif logo white",
+    "description": "Designed, coded, animated and deployed by yours truly.",
+    "linkedinAria": "LinkedIn profile of Hassene Afif",
+    "emailAria": "Email Hassene Afif",
+    "phoneAria": "Show phone number",
+    "phoneNumber": "+216 55 039 837"
+  },
+
+    "hero": {
+    "title": {
+      "part1": "Where",
+      "ai": "AI",
+      "part2": "innovation meets",
+      "software": "Software",
+      "part3": "excellence."
+    },
+    "subtitle": "Meet Hassene Afif.",
+    "features": {
+      "aiProducts": "AI Products",
+      "fullStack": "Full-Stack Performance",
+      "design": "Unmatched Design"
+    }
+  },
+
+   "actions": {
+    "responses": {
+      "downloadCV": "Sure thing! I'll download the CV for you.",
+      "showProjects": "I'll show you my projects.",
+      "checkSkills": "Let's go check the skills."
+    },
+    "keywords": {
+      "cv": "cv",
+      "resume": "resume",
+      "CV": "CV",
+      "projects": "projects",
+      "experience": "experience",
+      "skills": "skills"
+    }
+  }
+}

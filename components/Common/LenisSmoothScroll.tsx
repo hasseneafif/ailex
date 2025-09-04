@@ -1,6 +1,6 @@
 "use client";
 import { useEffect } from "react";
-import { initSmoothScrolling } from "@/app/smoothscroll";
+import { initSmoothScrolling } from "@/components/Common/smoothscroll";
 
 export default function LenisSmoothScroll() {
   useEffect(() => {

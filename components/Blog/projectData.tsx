@@ -1,78 +1,74 @@
 import { Project } from "@/types/blog";
+import { useTranslations } from "next-intl";
 
-const projectData: Project[] = [
-  {
-    id: 1,
-    title: "n8n workflows",
-    paragraph: "Different agent projects including an AI insurance estimation agent, and a loan demand analyzer.",
-    tags: ["Automation", "AI", "Workflows"],
-    publishDate: "2024-01-01",
-    link: null,
+export const projectData = (): Project[] => {
+  const t = useTranslations("projects");
 
-  },
-  {
-    id: 2,
-    title: "AI Stock prediction",
-    paragraph: "An AI stock prediction platform that uses AI Models to analyze stock market trends.",
-    tags: ["AI", "Stocks"],
-    publishDate: "2024-01-01",
-    link: "https://vestr.pro",
-
-  },
-  {
-    id: 3,
-    title: "Data generation (Delib)",
-    paragraph: "A data generation and AI platform for Delib, focusing on creating vast databases.",
-    tags: ["Data", "Generation", "Clean"],
-    publishDate: "2024-01-01",
-    link: "https://app.delib.pro",
-
-  },
-  {
-    id: 4,
-    title: "AI Software security analyzer",
-    paragraph: "Analyze.codes is an AI-powered software security analyzer that detects vulnerabilities in code.",
-    tags: ["AI", "Security"],
-    publishDate: "2024-01-01",
-    link: "https://analyze.codes",
-
-  },
-  {
-    id: 5,
-    title: "AI Sizing (Weefizz)",
-    paragraph: "An AI-powered sizing platform that helps users find the perfect fit for clothing.",
-    tags: ["AI", "Sizing"],
-    publishDate: "2024-01-01",
-    link: "https://www.weefizz.com",
-
-  },
+  return [
     {
-    id: 6,
-    title: "A Linkedin AI Automation tool",
-    paragraph: "An AI-powered linkedin automation tool that decreases reach time.",
-    tags: ["AI", "Linkedin"],
-    publishDate: "2024-01-01",
-    link: null,
-
-  },
+      id: 1,
+      title: t("n8nWorkflows.title"),
+      paragraph: t("n8nWorkflows.paragraph"),
+      tags: [t("tags.automation"), t("tags.ai"), t("tags.workflows")],
+      publishDate: "2024-01-01",
+      link: null
+    },
     {
-    id: 7,
-    title: "T-mobile partner (Fliggs)",
-    paragraph: "An american mobile operator platform partnered with the giant T-Mobile.",
-    tags: ["Mobile", "Operator"],
-    publishDate: "2024-01-01",
-    link: "https://fliggsmobile.com",
-
-  },
-  {
-    id: 8,
-    title: "Fintech & Blockchain",
-    paragraph: "Numerous blockchain platforms for trading crypto and stocks",
-    tags: ["Finance", "Crypto", ""],
-    publishDate: "2024-01-01",
-    link: null,
-
-  },
-];
-
+      id: 2,
+      title: t("aiStockPrediction.title"),
+      paragraph: t("aiStockPrediction.paragraph"),
+      tags: [t("tags.ai"), t("tags.stocks")],
+      publishDate: "2024-01-01",
+      link: "https://vestr.pro"
+    },
+    {
+      id: 3,
+      title: t("dataGeneration.title"),
+      paragraph: t("dataGeneration.paragraph"),
+      tags: [t("tags.data"), t("tags.generation"), t("tags.clean")],
+      publishDate: "2024-01-01",
+      link: "https://app.delib.pro"
+    },
+    {
+      id: 4,
+      title: t("aiSecurityAnalyzer.title"),
+      paragraph: t("aiSecurityAnalyzer.paragraph"),
+      tags: [t("tags.ai"), t("tags.security")],
+      publishDate: "2024-01-01",
+      link: "https://analyze.codes"
+    },
+    {
+      id: 5,
+      title: t("aiSizing.title"),
+      paragraph: t("aiSizing.paragraph"),
+      tags: [t("tags.ai"), t("tags.sizing")],
+      publishDate: "2024-01-01",
+      link: "https://www.weefizz.com"
+    },
+    {
+      id: 6,
+      title: t("linkedinAutomation.title"),
+      paragraph: t("linkedinAutomation.paragraph"),
+      tags: [t("tags.ai"), t("tags.linkedin")],
+      publishDate: "2024-01-01",
+      link: null
+    },
+    {
+      id: 7,
+      title: t("tMobilePartner.title"),
+      paragraph: t("tMobilePartner.paragraph"),
+      tags: [t("tags.mobile"), t("tags.operator")],
+      publishDate: "2024-01-01",
+      link: "https://fliggsmobile.com"
+    },
+    {
+      id: 8,
+      title: t("fintechBlockchain.title"),
+      paragraph: t("fintechBlockchain.paragraph"),
+      tags: [t("tags.finance"), t("tags.crypto")],
+      publishDate: "2024-01-01",
+      link: null
+    }
+  ];
+};
 export default projectData;

@@ -1,26 +1,30 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-
 import React from "react";
+import { useTranslations } from "next-intl";
 
 const Footer = () => {
+  const t = useTranslations("footer");
+
   return (
     <footer
-      className="wow fadeInUp  relative z-10  pt-16 md:pt-20 lg:pt-24"
+      className="wow fadeInUp relative z-10 pt-16 md:pt-20 lg:pt-24"
       data-wow-delay=".1s"
       role="contentinfo"
       aria-labelledby="footer-heading"
     >
-      <h2 id="footer-heading" className="sr-only">Footer</h2>
+      <h2 id="footer-heading" className="sr-only">
+        {t("title")}
+      </h2>
       <div className="container">
         <div className="-mx-4 flex flex-wrap">
           <div className="w-full px-4 md:w-1/2 lg:w-4/12 xl:w-5/12">
             <div className="mb-12 lg:mb-16">
-              <Link href="/" className="mb-8 w-40 inline-block" aria-label="Go to homepage">
+              <Link href="/" className="mb-8 w-40 inline-block" aria-label={t("homeLink")}>
                 <Image
                   src="/images/logo/logo-black.svg"
-                  alt="Hassene Afif logo black"
+                  alt={t("logoBlackAlt")}
                   className="w-[100px] dark:hidden"
                   width={48}
                   height={20}
@@ -28,7 +32,7 @@ const Footer = () => {
                 />
                 <Image
                   src="/images/logo/logo-white.svg"
-                  alt="Hassene Afif logo white"
+                  alt={t("logoWhiteAlt")}
                   className="hidden w-[100px] dark:block"
                   width={48}
                   height={20}
@@ -38,19 +42,18 @@ const Footer = () => {
 
               {/* Description */}
               <p className="dark:text-body-color-dark mb-6 text-base leading-relaxed text-body-color max-w-[360px]">
-                Designed, coded, animated and deployed by yours truly.
+                {t("description")}
               </p>
 
-              {/* Bottom row: icons - copyright - empty */}
+              {/* Bottom row: icons */}
               <div className="flex flex-col md:flex-row items-center md:justify-between w-full gap-4 pb-6">
-                {/* Left: Icons */}
                 <div className="flex items-center gap-6">
                   {/* LinkedIn */}
                   <a
                     href="https://www.linkedin.com/in/hasseneafif"
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label="LinkedIn profile of Hassene Afif"
+                    aria-label={t("linkedinAria")}
                     className="dark:text-body-color-dark text-body-color duration-300 hover:text-primary dark:hover:text-primary"
                   >
                     <svg
@@ -71,7 +74,7 @@ const Footer = () => {
                   {/* Email */}
                   <a
                     href="mailto:hasseneafif@gmail.com"
-                    aria-label="Email Hassene Afif"
+                    aria-label={t("emailAria")}
                     className="dark:text-body-color-dark text-body-color duration-300 hover:text-primary dark:hover:text-primary"
                   >
                     <svg
@@ -89,11 +92,11 @@ const Footer = () => {
                     </svg>
                   </a>
 
-                  {/* Phone with tooltip */}
+                  {/* Phone */}
                   <div className="relative group">
                     <button
                       type="button"
-                      aria-label="Show phone number"
+                      aria-label={t("phoneAria")}
                       className="dark:text-body-color-dark text-body-color duration-300 hover:text-primary dark:hover:text-primary focus:outline-none"
                       tabIndex={0}
                     >
@@ -112,17 +115,10 @@ const Footer = () => {
                       </svg>
                     </button>
                     <span className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-max px-3 py-1 rounded bg-gray-800 text-white text-xs opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-20">
-                      +216 55 039 837
+                      {t("phoneNumber")}
                     </span>
                   </div>
                 </div>
-
-                {/* <div className="text-center flex-1 align-start align-self-start">
-                  <span className="text-xs text-gray-500 dark:text-gray-400 float-left">
-                    &copy; 2025 Hassene Afif
-                  </span>
-                </div> */}
-
               </div>
             </div>
           </div>

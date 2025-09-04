@@ -1,0 +1,133 @@
+{
+  "pageNotFound": "La page que vous recherchez semble avoir été déplacée, supprimée ou n'existe pas.",
+  "backToHome": "Retour à l'accueil",
+  "websiteDescription": "Vitrine personnelle de Hassene Afif",
+
+  "aboutSectionOne": {
+    "sectionTitle": "À propos de Hass AI Chat",
+    "prompt": {
+      "askAnything": "Demandez-moi n'importe quoi.",
+      "placeholder": "À quoi pensez-vous ?",
+      "typeMessage": "Tapez un message...",
+      "limitReachedPlaceholder": "Limite atteinte, réessayez demain."
+    },
+    "roles": {
+      "assistant": "Assistant",
+      "you": "Vous"
+    },
+    "status": {
+      "waking": "Réveil du serveur...",
+      "responding": "L'IA répond..."
+    },
+    "errors": {
+      "limitReached": "Vous avez atteint votre limite quotidienne. Réessayez demain.",
+      "limitReachedWithTime": "Vous avez atteint votre limite quotidienne. Réessayez après {{timeUntil}}.",
+      "generic": "Erreur lors de l'interaction avec l'IA."
+    },
+    "aria": {
+      "typeMessage": "Tapez votre message",
+      "sendMessage": "Envoyer le message",
+      "openChat": "Ouvrir le chat",
+      "minimizeChat": "Réduire le chat",
+      "closeChat": "Fermer le chat"
+    },
+    "chat": {
+      "initialMessage": "Salut, comment puis-je vous aider ?"
+    }
+  },
+
+  "projects": {
+    "n8nWorkflows": {
+      "title": "Flux de travail n8n",
+      "paragraph": "Différents projets d'agents incluant un agent d'estimation d'assurance IA et un analyseur de demandes de prêt."
+    },
+    "aiStockPrediction": {
+      "title": "Prédiction boursière IA",
+      "paragraph": "Une plateforme de prédiction boursière utilisant des modèles IA pour analyser les tendances du marché."
+    },
+    "dataGeneration": {
+      "title": "Génération de données (Delib)",
+      "paragraph": "Une plateforme de génération de données et d'IA pour Delib, axée sur la création de vastes bases de données."
+    },
+    "aiSecurityAnalyzer": {
+      "title": "Analyseur de sécurité logicielle IA",
+      "paragraph": "Analyze.codes est un analyseur de sécurité logicielle alimenté par l'IA qui détecte les vulnérabilités dans le code."
+    },
+    "aiSizing": {
+      "title": "Taillage IA (Weefizz)",
+      "paragraph": "Une plateforme de taillage alimentée par l'IA qui aide les utilisateurs à trouver la taille parfaite pour les vêtements."
+    },
+    "linkedinAutomation": {
+      "title": "Outil d'automatisation LinkedIn IA",
+      "paragraph": "Un outil d'automatisation LinkedIn alimenté par l'IA qui réduit le temps de portée."
+    },
+    "tMobilePartner": {
+      "title": "Partenaire T-Mobile (Fliggs)",
+      "paragraph": "Une plateforme d'opérateur mobile américain en partenariat avec le géant T-Mobile."
+    },
+    "fintechBlockchain": {
+      "title": "Fintech & Blockchain",
+      "paragraph": "De nombreuses plateformes blockchain pour le trading de crypto et d'actions."
+    },
+    "tags": {
+      "automation": "Automatisation",
+      "ai": "IA",
+      "workflows": "Flux de travail",
+      "stocks": "Actions",
+      "data": "Données",
+      "generation": "Génération",
+      "clean": "Propre",
+      "security": "Sécurité",
+      "sizing": "Taillage",
+      "linkedin": "LinkedIn",
+      "mobile": "Mobile",
+      "operator": "Opérateur",
+      "finance": "Finance",
+      "crypto": "Crypto"
+    }
+  },
+
+  "footer": {
+    "title": "Pied de page",
+    "homeLink": "Aller à l'accueil",
+    "logoBlackAlt": "Logo noir de Hassene Afif",
+    "logoWhiteAlt": "Logo blanc de Hassene Afif",
+    "description": "Conçu, codé, animé et déployé par Hassene.",
+    "linkedinAria": "Profil LinkedIn de Hassene Afif",
+    "emailAria": "Envoyer un email à Hassene Afif",
+    "phoneAria": "Afficher le numéro de téléphone",
+    "phoneNumber": "+216 55 039 837"
+  },
+
+  "hero": {
+    "title": {
+      "part1": "Où l'innovation",
+      "ai": "IA",
+      "part2": "rencontre l'excellence",
+      "software": "logicielle",
+      "part3": ""
+    },
+    "subtitle": "Découvrez Hassene Afif.",
+    "features": {
+      "aiProducts": "Produits IA",
+      "fullStack": "Performance Full-Stack",
+      "design": "Design inégalé"
+    }
+  },
+
+   "actions": {
+    "responses": {
+      "downloadCV": "Bien sûr ! Je vais télécharger le CV pour vous.",
+      "showProjects": "Je vais vous montrer mes projets.",
+      "checkSkills": "Allons voir les compétences."
+    },
+    "keywords": {
+      "cv": "cv",
+      "resume": "curriculum",
+      "CV": "CV",
+      "projects": "projets",
+      "experience": "expérience",
+      "skills": "compétences"
+    }
+  }
+}
