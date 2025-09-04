@@ -1,8 +1,7 @@
 import { Project } from "@/types/blog";
 import { useTranslations } from "next-intl";
 
-export const projectData = (): Project[] => {
-  const t = useTranslations("projects");
+export const projectData =  (t: any): Project[] => {
 
   return [
     {

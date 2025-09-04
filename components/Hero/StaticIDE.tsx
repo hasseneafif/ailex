@@ -96,7 +96,8 @@ const StaticFileTree = ({ data, onSelect, selectedFile, clickedAbout }) => {
 };
 
 const ProjectsView = () => {
-  const projectDataa = projectData();
+  const tProjects = useTranslations("projects");
+  const projectDataa = projectData(tProjects);
   return (
     <div id="projects" className="flex flex-col h-full w-full">
       <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 p-4 sm:p-6 w-full">

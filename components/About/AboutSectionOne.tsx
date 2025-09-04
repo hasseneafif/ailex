@@ -213,7 +213,7 @@ const AboutSectionOne = () => {
         setLoading(false);
       }
     },
-    [rateLimited, token, tokenRequested, chatHistory, fetchToken, isChatMinimized, t, executeAction, findMatchingAction]
+    [rateLimited, token, tokenRequested, chatHistory, fetchToken, isChatMinimized, t, executeAction, findMatchingAction, tActions]
   );
 
   const handleMainSend = useCallback(
