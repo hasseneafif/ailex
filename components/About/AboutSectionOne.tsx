@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useEffect, useState, useMemo, useCallback } from "react";
-import { sendChatMessage } from "../../services/chatService";
+import { sendChatMessage, sendActionMessage } from "../../services/chatService";
 import { Bot, User, Send, Loader2, MessageSquare, X, Minimize2 } from "lucide-react";
 import { useTranslations } from 'next-intl';
 import { findMatchingAction } from './actionsdata';
@@ -17,6 +17,20 @@ const AboutSectionOne = () => {
   const [tokenLoading, setTokenLoading] = useState(false);
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  const [sessionId, setSessionId] = useState<string | null>(null);
+
+useEffect(() => {
+  let storedId = localStorage.getItem("chatSessionId");
+  if (!storedId) {
+    storedId = crypto.randomUUID(); // modern browsers
+    localStorage.setItem("chatSessionId", storedId);
+  }
+  setSessionId(storedId);
+}, []);
+
+
+
+
 
   useEffect(() => {
     fetch(`${apiUrl}chat/ping`)
@@ -154,6 +168,7 @@ const AboutSectionOne = () => {
       setTimeout(async () => {
         try {
           await executeAction(matchingAction.id);
+          await sendActionMessage(messageToSend, matchingAction.response, sessionId!, token);
           setChatHistory(prev => [...prev, { role: "assistant", content: matchingAction.response }]);
         } catch {
           setChatHistory(prev => [...prev, { role: "assistant", content: "Error executing action." }]);
@@ -190,7 +205,7 @@ const AboutSectionOne = () => {
 
       try {
         const response = await sendChatMessage({
-          sessionId: "demo-session-id",
+          sessionId ,         
           message: messageToSend,
           history: newHistory,
           token: authToken!,
@@ -198,7 +213,7 @@ const AboutSectionOne = () => {
 
         if (response.retryAfter) {
           const timeUntil = new Date(response.retryAfter).toLocaleTimeString();
-          const errorMsg = t("errors.limitReachedWithTime", { timeUntil });
+          const errorMsg = t("errors.limitReachedWithTime") + timeUntil + ".";
           setChatHistory(prev => [...prev, { role: "assistant", content: errorMsg }]);
           setRateLimited(true);
           return;

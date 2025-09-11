@@ -21,7 +21,7 @@
     },
     "errors": {
       "limitReached": "You have reached your daily limit. Try again tomorrow.",
-      "limitReachedWithTime": "You have reached your daily limit. Try again after {{timeUntil}}.",
+      "limitReachedWithTime": "You have reached your daily limit. Try again after ",
       "generic": "Error when interacting with the AI."
     },
     "aria": {
