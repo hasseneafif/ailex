@@ -7,6 +7,8 @@ import { useTranslations, useLocale  } from 'next-intl';
 import { findMatchingAction } from './actionsdata';
 import { useActionsLogic } from './actionsLogic';
 import ReactMarkdown from "react-markdown";
+import { AI_MODELS } from "./aiModels";
+
 
 
 const AboutSectionOne = () => {
@@ -21,6 +23,10 @@ const AboutSectionOne = () => {
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const [sessionId, setSessionId] = useState<string | null>(null);
+  const [selectedModel, setSelectedModel] = useState(AI_MODELS[0]); 
+  const [isModelSwitching, setIsModelSwitching] = useState(false);
+
+
 
 useEffect(() => {
   let storedId = localStorage.getItem("sessionIdPHA");
@@ -395,10 +401,14 @@ const displayedHistory = [initialMessage, ...chatHistory];
       {showChatWidget && (
         <div className="fixed bottom-6 right-6 z-50">
           <div
-            className={`bg-[rgba(177,177,177,0.01)] backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl transition-all duration-300 ${
-              isChatMinimized ? "w-16 h-16" : "w-80 sm:w-96 h-[500px]"
-            }`}
-          >
+  className={`bg-[rgba(177,177,177,0.01)] backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl transition-all duration-300 ${
+    isChatMinimized ? "w-16 h-16" : "w-80 sm:w-96 h-[500px]"
+  } ${
+    isModelSwitching 
+      ? "animate-pulse border-teal-400/50 shadow-[0_0_30px_rgba(20,184,166,0.3)]" 
+      : ""
+  }`}
+>
             {isChatMinimized ? (
               <button
                 onClick={() => setIsChatMinimized(false)}
@@ -444,6 +454,46 @@ const displayedHistory = [initialMessage, ...chatHistory];
                   aria-live="polite"
                   aria-atomic="false"
                 >
+                    {/* === MODEL SELECTOR === */}
+{/* === MODEL SELECTOR === */}
+<div className="flex justify-center mb-4">
+  <div className="flex items-center gap-2 group">
+    <span className="text-gray-400 text-sm">This model uses</span>
+    <div className="relative">
+      <div className="absolute -inset-0.5 bg-gradient-to-r from-teal-400/20 to-purple-500/20 rounded-xl blur opacity-20 group-hover:opacity-40 transition duration-300"></div>
+      <select
+        value={selectedModel.value}
+        onChange={(e) => {
+          const model = AI_MODELS.find(m => m.value === e.target.value);
+          if (model) {
+            // Trigger the animation
+            setIsModelSwitching(true);
+            setSelectedModel(model);
+            // Reset animation after duration
+            setTimeout(() => setIsModelSwitching(false), 1500);
+          }
+        }}
+        className="relative bg-[rgba(177,177,177,0.05)] backdrop-blur-xl text-gray-200 text-sm px-3 py-2 rounded-xl border border-white/20 focus:outline-none focus:border-white/40 focus:bg-[rgba(177,177,177,0.08)] hover:bg-[rgba(177,177,177,0.08)] hover:border-white/30 transition-all duration-300 cursor-pointer appearance-none pr-8 min-w-[140px]"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
+          backgroundPosition: 'right 0.5rem center',
+          backgroundRepeat: 'no-repeat',
+          backgroundSize: '1rem 1rem',
+        }}
+      >
+        {AI_MODELS.map(model => (
+          <option 
+            key={model.value} 
+            value={model.value}
+            className="bg-gray-800 text-gray-200"
+          >
+            {model.label}
+          </option>
+        ))}
+      </select>
+    </div>
+  </div>
+</div>
                   {ChatBubbles}
                 </div>
 
