@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import StaticIDEHero from "./StaticIDE";
 import AnimatedBackground from "../Common/AnimatedBackground";
 import { useTranslations } from "next-intl";
-
+import Data from "./getData";
 const HeroFresh: React.FC = () => {
   const t = useTranslations("hero");
 
@@ -13,6 +13,7 @@ const HeroFresh: React.FC = () => {
       id="hero"
       className="relative z-10 overflow-hidden min-h-[90vh] md:min-h-[100vh] h-full flex items-center justify-center"
     >
+      <Data />
       <div className="flex flex-col pt-[110px] md:pt-[140px]">
         <AnimatedBackground />
 
@@ -22,7 +23,7 @@ const HeroFresh: React.FC = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="font-bold text-4xl md:text-5xl lg:text-6xl leading-tight mb-6 text-white"
+            className="font-bold text-4xl md:text-4xl lg:text-5xl leading-tight mb-6 text-white"
           >
             {t("title.part1")}{" "}
             <span className="bg-gradient-to-r from-teal-300 to-purple-300 bg-clip-text text-transparent animate-gradient-x">

@@ -3,12 +3,15 @@
 import React, { useRef, useEffect, useState, useMemo, useCallback } from "react";
 import { sendChatMessage, sendActionMessage } from "../../services/chatService";
 import { Bot, User, Send, Loader2, MessageSquare, X, Minimize2 } from "lucide-react";
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale  } from 'next-intl';
 import { findMatchingAction } from './actionsdata';
 import { useActionsLogic } from './actionsLogic';
+import ReactMarkdown from "react-markdown";
+
 
 const AboutSectionOne = () => {
   const t = useTranslations("aboutSectionOne");
+  const locale = useLocale();
   const { executeAction } = useActionsLogic();
   const tActions = useTranslations("actions");
 
@@ -20,24 +23,14 @@ const AboutSectionOne = () => {
   const [sessionId, setSessionId] = useState<string | null>(null);
 
 useEffect(() => {
-  let storedId = localStorage.getItem("chatSessionId");
+  let storedId = localStorage.getItem("sessionIdPHA");
   if (!storedId) {
-    storedId = crypto.randomUUID(); // modern browsers
-    localStorage.setItem("chatSessionId", storedId);
+    storedId = crypto.randomUUID(); 
+    localStorage.setItem("sessionIdPHA", storedId);
   }
   setSessionId(storedId);
 }, []);
 
-
-
-
-
-  useEffect(() => {
-    fetch(`${apiUrl}chat/ping`)
-      .then(res => res.json())
-      .then(data => console.log("Ping success:", data))
-      .catch(err => console.error("Ping failed:", err));
-  }, [apiUrl]);
 
   useEffect(() => {
     let resizeTimeout: NodeJS.Timeout;
@@ -58,9 +51,10 @@ useEffect(() => {
     };
   }, []);
 
-  const [chatHistory, setChatHistory] = useState([
-    { role: "assistant", content: t("chat.initialMessage") },
-  ]);
+  const initialMessage = { role: "assistant", content: t("chat.initialMessage") };
+const [chatHistory, setChatHistory] = useState([]); 
+const displayedHistory = [initialMessage, ...chatHistory];
+
   const [input, setInput] = useState("");
   const [chatInput, setChatInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -209,11 +203,13 @@ useEffect(() => {
           message: messageToSend,
           history: newHistory,
           token: authToken!,
+          language: locale,
+
         });
 
         if (response.retryAfter) {
           const timeUntil = new Date(response.retryAfter).toLocaleTimeString();
-          const errorMsg = t("errors.limitReachedWithTime") + timeUntil + ".";
+          const errorMsg = t("errors.limitReachedWithTime") +  timeUntil + ".";
           setChatHistory(prev => [...prev, { role: "assistant", content: errorMsg }]);
           setRateLimited(true);
           return;
@@ -250,7 +246,7 @@ useEffect(() => {
   const ChatBubbles = useMemo(
     () => (
       <>
-        {chatHistory.map((msg, idx) =>
+        {displayedHistory.map((msg, idx) =>
           msg.role === "assistant" ? (
             <div
               key={idx}
@@ -261,7 +257,14 @@ useEffect(() => {
               </div>
               <div className="flex-1 space-y-1">
                 <div className="text-xs text-gray-400 font-medium">{t("roles.assistant")}</div>
-                <div className="text-gray-100 text-sm leading-relaxed">{msg.content}</div>
+<div className="text-gray-100 text-sm leading-relaxed">
+  {msg.content.split('\n').map((line, idx) => (
+    <React.Fragment key={idx}>
+      <ReactMarkdown>{line}</ReactMarkdown>
+      <br />
+    </React.Fragment>
+  ))}
+</div>
               </div>
             </div>
           ) : (
@@ -274,7 +277,14 @@ useEffect(() => {
               </div>
               <div className="flex-1 space-y-1">
                 <div className="text-xs text-gray-400 font-medium">{t("roles.you")}</div>
-                <div className="text-gray-100 text-sm leading-relaxed">{msg.content}</div>
+<div className="text-gray-100 text-sm leading-relaxed">
+  {msg.content.split('\n').map((line, idx) => (
+    <React.Fragment key={idx}>
+      <ReactMarkdown>{line}</ReactMarkdown>
+      <br />
+    </React.Fragment>
+  ))}
+</div>
               </div>
             </div>
           )

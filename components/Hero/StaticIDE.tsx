@@ -119,7 +119,7 @@ useEffect(() => {
       <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 p-4 sm:p-6 w-full">
         {projectDataa.map((p) => (
           <div
-            key={p.tags[0]}
+            key={p.id}
             className="bg-[rgb(7,8,8)] rounded-2xl p-4 shadow-lg flex flex-col gap-2 text-gray-100"
           >
             <div className="flex justify-between items-center">
@@ -168,7 +168,7 @@ useEffect(() => {
           stopOnHover={false}
         >
           {projectDataa.map((p) => (
-            <div key={p.tags[0]} className="px-2">
+            <div key={p.id} className="px-2">
               <div className="bg-[rgb(7,8,8)] rounded-2xl p-4 shadow-lg flex flex-col gap-2 text-gray-100">
                 <div className="flex justify-between items-center">
                   <h3 className="font-semibold text-sm">{p.title}</h3>

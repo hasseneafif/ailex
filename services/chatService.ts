@@ -2,12 +2,16 @@ export async function sendChatMessage({
   sessionId,
   message,
   history,
-  token
+  token,
+    language,
+
 }: {
   sessionId?: string;
   message: string;
   history: { role: string; content: string }[];
   token?: string;
+    language?: string;
+
 }) {
   const headers: Record<string, string> = { "Content-Type": "application/json", "x-session-id": sessionId };
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -16,7 +20,7 @@ export async function sendChatMessage({
   const res = await fetch(`${apiUrl}chat/convo`, {
     method: "POST",
     headers,
-    body: JSON.stringify({ sessionId, message, history }),
+    body: JSON.stringify({ sessionId, message, history, language  }),
   });
 
   if (!res.ok && res.status != 429) throw new Error("Failed to fetch chat response");

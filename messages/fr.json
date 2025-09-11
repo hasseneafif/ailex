@@ -21,7 +21,7 @@
     },
     "errors": {
       "limitReached": "Vous avez atteint votre limite quotidienne. Réessayez demain.",
-      "limitReachedWithTime": "Vous avez atteint votre limite quotidienne. Réessayez après {{timeUntil}}.",
+      "limitReachedWithTime": "Vous avez atteint votre limite quotidienne. Réessayez après ",
       "generic": "Erreur lors de l'interaction avec l'IA."
     },
     "aria": {
