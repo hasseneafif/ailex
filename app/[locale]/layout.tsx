@@ -1,10 +1,9 @@
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
-import LenisSmoothScroll from "@/components/Common/LenisSmoothScroll";
+// import LenisSmoothScroll from "@/components/Common/LenisSmoothScroll";
 import "@/styles/index.min.css";
 import { notFound } from "next/navigation";
 import { Providers } from "./providers";
-import Script from "next/script"; // <-- import Script
 
 export default async function RootLayout({
   children,
@@ -25,7 +24,7 @@ export default async function RootLayout({
   
 
       <body className="bg-gradient-to-br from-[#000505] via-black to-[#000404]">
-        <LenisSmoothScroll />
+        {/* <LenisSmoothScroll /> */}
         <Providers locale={locale} messages={messages}>
           <Header />
           {children}
