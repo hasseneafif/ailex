@@ -24,7 +24,7 @@ const HeroFresh: React.FC = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="font-bold text-4xl md:text-4xl lg:text-5xl leading-tight mb-6 text-white"
+            className="font-bold text-3xl md:text-4xl lg:text-5xl leading-tight mb-6 text-white"
           >
             {t("title.part1")}{" "}
             <span className="bg-gradient-to-r from-teal-300 to-purple-300 bg-clip-text text-transparent animate-gradient-x">

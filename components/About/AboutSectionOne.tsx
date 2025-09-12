@@ -421,7 +421,7 @@ const AboutSectionOne = () => {
       <div
         className="absolute inset-0 rounded-2xl p-[2px]"
         style={{
-          background: `linear-gradient(90deg, transparent, transparent, #3bf6edb7, #a882ffc4, transparent, transparent)`,
+          background: `linear-gradient(90deg, transparent, transparent, #8a5cf686,  transparent, transparent)`,
           backgroundSize: "300% 300%",
           animation: "smooth-border 3s ease-in-out infinite",
         }}
