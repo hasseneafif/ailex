@@ -24,20 +24,20 @@ export const initSmoothScrolling = () => {
   // Make globally accessible
   (window).lenis = lenis;
 
-  if (isLowEndDevice()) {
-    // Use requestAnimationFrame for low-end devices
-    const rafLoop = (time) => {
-      lenis.raf(time);
-      requestAnimationFrame(rafLoop);
-    };
-    requestAnimationFrame(rafLoop);
-  } else {
+
+
+
+
+
     // Use GSAP ticker on desktop for syncing animations
     gsap.ticker.add(time => {
       lenis.raf(time * 1000); // GSAP uses seconds, Lenis needs ms
     });
     gsap.ticker.lagSmoothing(0);
-  }
+
+
+
+
 };
 
 // Stop / Start utility functions
