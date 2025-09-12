@@ -79,6 +79,25 @@ const Header = () => {
   }, [showDesktopDropdown, handleDesktopClickOutside]);
 
   const usePathName = usePathname();
+// Define the SVG once
+const CvIcon = (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 25.26 9.01"
+    className="w-8 h-auto"
+  >
+    <g>
+      <path
+        fill="#231f20"
+        d="M2.3,2.24v4.46h10.31v2.23H2.92c-.46,0-.84-.06-1.16-.19s-.63-.34-.94-.65c-.27-.28-.48-.56-.61-.83-.14-.28-.2-.59-.2-.95v-3.01c0-.62.06-1.12.19-1.49.16-.46.44-.85.85-1.19.33-.26.69-.44,1.08-.53.26-.06.68-.08,1.24-.08h9.25v2.23H2.3Z"
+      />
+      <path
+        fill="#231f20"
+        d="M22.72,0h2.54l-3.78,7.24c-.3.57-.6.99-.92,1.26-.4.34-.86.52-1.39.52-.58,0-1.1-.2-1.54-.61-.34-.31-.68-.8-1.02-1.48L13.03.04h2.58l3.52,6.66,3.59-6.7Z"
+      />
+    </g>
+  </svg>
+);
 
   return (
     <header
@@ -213,12 +232,13 @@ const Header = () => {
                     {/* CV Button for Mobile - Inside hamburger menu */}
                     <li className="group relative lg:hidden">
                       <div className="relative" ref={mobileDropdownRef}>
-                        <button
-                          onClick={() => setShowMobileDropdown(!showMobileDropdown)}
-                          className="font-xoireqe text-black bg-white rounded transition-colors duration-300 hover:bg-gray-100 text-sm mt-2"
-                        >
-                          CV
-                        </button>
+                      <button
+  onClick={() => setShowMobileDropdown(!showMobileDropdown)}
+  className="bg-white rounded transition-colors duration-300 hover:bg-gray-100  mt-2 flex items-center justify-center"
+>
+{CvIcon}
+</button>
+
                         {showMobileDropdown && (
                           <div
                             className="absolute left-0 mt-2 w-[130px] bg-black border border-white rounded shadow-lg flex flex-col z-20"
@@ -251,12 +271,14 @@ const Header = () => {
               {/* CV Button for Desktop - Far right */}
               <div className="hidden lg:block">
                 <div className="relative" ref={desktopDropdownRef}>
-                  <button
-                    onClick={() => setShowDesktopDropdown(!showDesktopDropdown)}
-                    className="font-xoireqe text-black  border border-white bg-white  w-[65px] h-[32px] rounded transition-colors duration-300 hover:bg-white hover:text-black text-sm"
-                  >
-                    CV
-                  </button>
+                <button
+  onClick={() => setShowDesktopDropdown(!showDesktopDropdown)}
+  className="bg-white rounded transition-colors duration-300 hover:bg-gray-100 p-2 flex items-center justify-center w-[65px] h-[32px]"
+>
+{CvIcon}
+
+</button>
+
                   {showDesktopDropdown && (
                     <div
                       className="absolute right-0 mt-2 w-[130px] bg-black border border-white rounded shadow-lg flex flex-col z-20"

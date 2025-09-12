@@ -1,8 +1,4 @@
 
-/* Local font faces */
-
-
-/* Tailwind layers */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -20,11 +16,6 @@ html, body {
 html {
   scroll-behavior: smooth;
 }
-
-/* Fonts utility classes */
-
-.font-xoireqe { font-family: var(--font-xoireqe), sans-serif; }
-
 
 
 /* styles/globals.css or a module depending on your setup */

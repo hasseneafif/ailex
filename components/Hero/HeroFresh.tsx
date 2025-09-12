@@ -2,9 +2,10 @@
 import React, { memo } from "react";
 import { motion } from "framer-motion";
 import StaticIDEHero from "./StaticIDE";
-import AnimatedBackground from "../Common/AnimatedBackground";
-import { useTranslations } from "next-intl";
+const AnimatedBackground = dynamic(() => import("../Common/AnimatedBackground"), { ssr: false });
 import Data from "./getData";
+import dynamic from "next/dynamic";
+import { useTranslations } from "next-intl";
 const HeroFresh: React.FC = () => {
   const t = useTranslations("hero");
 

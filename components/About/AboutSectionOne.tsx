@@ -2,12 +2,13 @@
 
 import React, { useRef, useEffect, useState, useMemo, useCallback } from "react";
 import { sendChatMessage, sendActionMessage } from "../../services/chatService";
-import { Bot, User, Send, Loader2, MessageSquare, X, Minimize2, Cpu, Zap, Brain, Sparkles, MessageCircle } from "lucide-react";
-import { useTranslations, useLocale  } from 'next-intl';
+import { Bot, User, Send, Loader2, X, Minimize2 } from "lucide-react";
+import { useTranslations, useLocale } from 'next-intl';
 import { findMatchingAction } from './actionsdata';
 import { useActionsLogic } from './actionsLogic';
-import ReactMarkdown from "react-markdown";
 
+// Lazy load heavy components
+const LazyReactMarkdown = React.lazy(() => import("react-markdown"));
 
 const AboutSectionOne = () => {
   const t = useTranslations("aboutSectionOne");
@@ -15,45 +16,42 @@ const AboutSectionOne = () => {
   const { executeAction } = useActionsLogic();
   const tActions = useTranslations("actions");
 
-  const chartRef = useRef(null);
-  const [chartWidth, setChartWidth] = useState(400);
   const [tokenLoading, setTokenLoading] = useState(false);
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const [sessionId, setSessionId] = useState<string | null>(null);
 
-useEffect(() => {
-  let storedId = localStorage.getItem("sessionIdPHA");
-  if (!storedId) {
-    storedId = crypto.randomUUID(); 
-    localStorage.setItem("sessionIdPHA", storedId);
-  }
-  setSessionId(storedId);
-}, []);
-
-
+  // Optimized session ID initialization
   useEffect(() => {
-    let resizeTimeout: NodeJS.Timeout;
-    function updateWidth() {
-      if (chartRef.current) {
-        setChartWidth(chartRef.current.offsetWidth);
+    const initializeSession = () => {
+      let storedId = localStorage.getItem("sessionIdPHA");
+      if (!storedId) {
+        storedId = crypto.randomUUID();
+        localStorage.setItem("sessionIdPHA", storedId);
       }
-    }
-    function handleResize() {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(updateWidth, 100);
-    }
-    updateWidth();
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      clearTimeout(resizeTimeout);
+      setSessionId(storedId);
     };
+
+    // Use requestIdleCallback if available for non-critical initialization
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(initializeSession);
+    } else {
+      setTimeout(initializeSession, 0);
+    }
   }, []);
 
-  const initialMessage = { role: "assistant", content: t("chat.initialMessage") };
-const [chatHistory, setChatHistory] = useState([]); 
-const displayedHistory = [initialMessage, ...chatHistory];
+
+
+  const initialMessage = useMemo(() => 
+    ({ role: "assistant", content: t("chat.initialMessage") }), 
+    [t]
+  );
+  
+  const [chatHistory, setChatHistory] = useState([]);
+  const displayedHistory = useMemo(() => 
+    [initialMessage, ...chatHistory], 
+    [initialMessage, chatHistory]
+  );
 
   const [input, setInput] = useState("");
   const [chatInput, setChatInput] = useState("");
@@ -62,25 +60,35 @@ const displayedHistory = [initialMessage, ...chatHistory];
   const [showChatWidget, setShowChatWidget] = useState(true);
   const [isChatMinimized, setIsChatMinimized] = useState(true);
   const [pendingMessage, setPendingMessage] = useState("");
-
   const [speedMultiplier, setSpeedMultiplier] = useState(1.0);
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const [token, setToken] = useState<string | null>(null);
   const [tokenRequested, setTokenRequested] = useState(false);
 
+  // Optimized animation with reduced frequency
   useEffect(() => {
+    if (!loading && speedMultiplier === 1.0) return;
+
     const targetSpeed = loading ? 5.0 : 1.0;
     let animationFrame: number;
+    let lastUpdate = 0;
+    const updateInterval = 16; // ~60fps
 
-    const animate = () => {
+    const animate = (timestamp: number) => {
+      if (timestamp - lastUpdate < updateInterval) {
+        animationFrame = requestAnimationFrame(animate);
+        return;
+      }
+      
+      lastUpdate = timestamp;
       setSpeedMultiplier(currentSpeed => {
         const diff = targetSpeed - currentSpeed;
         if (Math.abs(diff) < 0.1) {
-          if (animationFrame) cancelAnimationFrame(animationFrame);
           return targetSpeed;
         }
         return currentSpeed + diff * 0.1;
       });
+      
       animationFrame = requestAnimationFrame(animate);
     };
 
@@ -91,21 +99,21 @@ const displayedHistory = [initialMessage, ...chatHistory];
     };
   }, [loading]);
 
-  const scrollToBottom = () => {
+  const scrollToBottom = useCallback(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
-  };
+  }, []);
 
   useEffect(() => {
     scrollToBottom();
-  }, [chatHistory, loading]);
+  }, [chatHistory, loading, scrollToBottom]);
 
   useEffect(() => {
     if (!isChatMinimized) {
       setTimeout(scrollToBottom, 0);
     }
-  }, [isChatMinimized]);
+  }, [isChatMinimized, scrollToBottom]);
 
   const fetchToken = useCallback(async () => {
     try {
@@ -114,7 +122,7 @@ const displayedHistory = [initialMessage, ...chatHistory];
       const data = await res.json();
       if (data.token) setToken(data.token);
     } catch {
-      //
+      // Silent catch
     } finally {
       setTokenLoading(false);
     }
@@ -151,28 +159,28 @@ const displayedHistory = [initialMessage, ...chatHistory];
       clearInputCallback();
       setPendingMessage(messageToSend);
       setLoading(true);
-    const matchingAction = findMatchingAction(messageToSend, tActions);
+      
+      const matchingAction = findMatchingAction(messageToSend, tActions);
 
-    if (matchingAction) {
-      const newHistory = [...chatHistory, { role: "user", content: messageToSend }];
-      setChatHistory(newHistory);
-      setPendingMessage("");
-
+      if (matchingAction) {
+        const newHistory = [...chatHistory, { role: "user", content: messageToSend }];
+        setChatHistory(newHistory);
+        setPendingMessage("");
       // simulate AI thinking
-      setTimeout(async () => {
-        try {
-          await executeAction(matchingAction.id);
-          await sendActionMessage(messageToSend, matchingAction.response, sessionId!, token);
-          setChatHistory(prev => [...prev, { role: "assistant", content: matchingAction.response }]);
-        } catch {
-          setChatHistory(prev => [...prev, { role: "assistant", content: "Error executing action." }]);
-        } finally {
-          setLoading(false);
-        }
-      }, 1000);
+        setTimeout(async () => {
+          try {
+            await executeAction(matchingAction.id);
+            await sendActionMessage(messageToSend, matchingAction.response, sessionId!, token);
+            setChatHistory(prev => [...prev, { role: "assistant", content: matchingAction.response }]);
+          } catch {
+            setChatHistory(prev => [...prev, { role: "assistant", content: "Error executing action." }]);
+          } finally {
+            setLoading(false);
+          }
+           }, 1000);
 
-      return;
-    }
+        return;
+      }
 
       // Original API logic for non-matching messages
       if (!token) {
@@ -180,11 +188,19 @@ const displayedHistory = [initialMessage, ...chatHistory];
           setTokenRequested(true);
           fetchToken();
         }
-        for (let i = 0; i < 50; i++) {
-          if (token) break;
-          await new Promise(res => setTimeout(res, 100));
-        }
-        if (!token) {
+        
+        // Use exponential backoff for token waiting
+        let attempts = 0;
+        const checkToken = async () => {
+          if (token) return true;
+          if (attempts >= 5) return false;
+          
+          attempts++;
+          await new Promise(res => setTimeout(res, Math.min(100 * Math.pow(2, attempts), 1000)));
+          return checkToken();
+        };
+        
+        if (!await checkToken()) {
           setLoading(false);
           setPendingMessage("");
           return;
@@ -199,12 +215,11 @@ const displayedHistory = [initialMessage, ...chatHistory];
 
       try {
         const response = await sendChatMessage({
-          sessionId ,         
+          sessionId,         
           message: messageToSend,
           history: newHistory,
           token: authToken!,
           language: locale,
-
         });
 
         if (response.retryAfter) {
@@ -224,7 +239,7 @@ const displayedHistory = [initialMessage, ...chatHistory];
         setLoading(false);
       }
     },
-    [rateLimited, token, tokenRequested, chatHistory, fetchToken, isChatMinimized, t, executeAction, findMatchingAction, tActions]
+    [rateLimited, token, tokenRequested, chatHistory, fetchToken, isChatMinimized, t, executeAction, sessionId, locale, tActions]
   );
 
   const handleMainSend = useCallback(
@@ -243,83 +258,84 @@ const displayedHistory = [initialMessage, ...chatHistory];
     [chatInput, sendMessage]
   );
 
-  const ChatBubbles = useMemo(
-    () => (
-      <>
-        {displayedHistory.map((msg, idx) =>
-          msg.role === "assistant" ? (
-            <div
-              key={idx}
-              className="flex items-start gap-3 group hover:bg-white/[0.02] p-3 rounded-xl transition-all duration-200"
-            >
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-teal-400 to-transparent flex items-center justify-center flex-shrink-0 shadow-lg">
-                <Bot className="w-4 h-4 text-white" />
-              </div>
-              <div className="flex-1 space-y-1">
-                <div className="text-xs text-gray-400 font-medium">{t("roles.assistant")}</div>
-<div className="text-gray-100 text-sm leading-relaxed">
-  {msg.content.split('\n').map((line, idx) => (
-    <React.Fragment key={idx}>
-      <ReactMarkdown>{line}</ReactMarkdown>
-      <br />
-    </React.Fragment>
-  ))}
-</div>
+  const ChatBubbles = useMemo(() => (
+    <>
+      {displayedHistory.map((msg, idx) =>
+        msg.role === "assistant" ? (
+          <div
+            key={idx}
+            className="flex items-start gap-3 group hover:bg-white/[0.02] p-3 rounded-xl transition-all duration-200"
+          >
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-teal-400 to-transparent flex items-center justify-center flex-shrink-0 shadow-lg">
+              <Bot className="w-4 h-4 text-white" />
+            </div>
+            <div className="flex-1 space-y-1">
+              <div className="text-xs text-gray-400 font-medium">{t("roles.assistant")}</div>
+              <div className="text-gray-100 text-sm leading-relaxed">
+                {msg.content.split('\n').map((line, idx) => (
+                  <React.Fragment key={idx}>
+                    <React.Suspense fallback={<span>{line}</span>}>
+                      <LazyReactMarkdown>{line}</LazyReactMarkdown>
+                    </React.Suspense>
+                    <br />
+                  </React.Fragment>
+                ))}
               </div>
             </div>
-          ) : (
-            <div
-              key={idx}
-              className="flex items-start gap-3 group hover:bg-white/[0.02] p-3 rounded-xl transition-all duration-200"
-            >
-              <div className="w-8 h-8 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center flex-shrink-0">
-                <User className="w-4 h-4 text-gray-300" />
-              </div>
-              <div className="flex-1 space-y-1">
-                <div className="text-xs text-gray-400 font-medium">{t("roles.you")}</div>
-<div className="text-gray-100 text-sm leading-relaxed">
-  {msg.content.split('\n').map((line, idx) => (
-    <React.Fragment key={idx}>
-      <ReactMarkdown>{line}</ReactMarkdown>
-      <br />
-    </React.Fragment>
-  ))}
-</div>
-              </div>
-            </div>
-          )
-        )}
-
-        {pendingMessage && (
-          <div className="flex items-start gap-3 group p-3 rounded-xl opacity-60">
+          </div>
+        ) : (
+          <div
+            key={idx}
+            className="flex items-start gap-3 group hover:bg-white/[0.02] p-3 rounded-xl transition-all duration-200"
+          >
             <div className="w-8 h-8 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center flex-shrink-0">
               <User className="w-4 h-4 text-gray-300" />
             </div>
             <div className="flex-1 space-y-1">
               <div className="text-xs text-gray-400 font-medium">{t("roles.you")}</div>
-              <div className="text-gray-300 text-sm leading-relaxed animate-pulse">{pendingMessage}</div>
-            </div>
-          </div>
-        )}
-
-        {(loading || tokenLoading) && (
-          <div className="flex items-start gap-3 group p-3 rounded-xl">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-400 to-transparent flex items-center justify-center flex-shrink-0 shadow-lg animate-pulse">
-              <Bot className="w-4 h-4 text-white" />
-            </div>
-            <div className="flex-1 space-y-1">
-              <div className="text-xs text-gray-400 font-medium">{t("roles.assistant")}</div>
-              <div className="text-gray-300 text-sm leading-relaxed italic flex items-center gap-2">
-                <Loader2 className="w-3 h-3 animate-spin" />
-                {tokenLoading ? t("status.waking") : t("status.responding")}
+              <div className="text-gray-100 text-sm leading-relaxed">
+                {msg.content.split('\n').map((line, idx) => (
+                  <React.Fragment key={idx}>
+                    <React.Suspense fallback={<span>{line}</span>}>
+                      <LazyReactMarkdown>{line}</LazyReactMarkdown>
+                    </React.Suspense>
+                    <br />
+                  </React.Fragment>
+                ))}
               </div>
             </div>
           </div>
-        )}
-      </>
-    ),
-    [chatHistory, loading, tokenLoading, pendingMessage, t]
-  );
+        )
+      )}
+
+      {pendingMessage && (
+        <div className="flex items-start gap-3 group p-3 rounded-xl opacity-60">
+          <div className="w-8 h-8 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center flex-shrink-0">
+            <User className="w-4 h-4 text-gray-300" />
+          </div>
+          <div className="flex-1 space-y-1">
+            <div className="text-xs text-gray-400 font-medium">{t("roles.you")}</div>
+            <div className="text-gray-300 text-sm leading-relaxed animate-pulse">{pendingMessage}</div>
+          </div>
+        </div>
+      )}
+
+      {(loading || tokenLoading) && (
+        <div className="flex items-start gap-3 group p-3 rounded-xl">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-400 to-transparent flex items-center justify-center flex-shrink-0 shadow-lg animate-pulse">
+            <Bot className="w-4 h-4 text-white" />
+          </div>
+          <div className="flex-1 space-y-1">
+            <div className="text-xs text-gray-400 font-medium">{t("roles.assistant")}</div>
+            <div className="text-gray-300 text-sm leading-relaxed italic flex items-center gap-2">
+              <Loader2 className="w-3 h-3 animate-spin" />
+              {tokenLoading ? t("status.waking") : t("status.responding")}
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  ), [displayedHistory, t, pendingMessage, loading, tokenLoading]);
 
   return (
     <>
@@ -400,25 +416,24 @@ const displayedHistory = [initialMessage, ...chatHistory];
             }`}
           >
             {isChatMinimized ? (
- <button
-    onClick={() => setIsChatMinimized(false)}
-    className="w-full h-full flex items-center justify-center text-white hover:bg-white/10 rounded-2xl transition-colors duration-200 relative overflow-hidden group"
-    aria-label={t("aria.openChat")}
-  >
-    {/* Moving gradient border */}
-    <div 
-      className="absolute inset-0 rounded-2xl p-[2px]"
-     style={{
-    background: `linear-gradient(90deg, transparent, transparent, #3b82f6, #8b5cf6, #3b82f6, transparent, transparent)`,
-    backgroundSize: '300% 300%',
-    animation: 'smooth-border 3s ease-in-out infinite' // Note the 'ease-in-out'
-  }}
-    >
-      <div className="w-full h-full rounded-2xl bg-black/80 backdrop-blur-sm flex items-center justify-center">
-        <Bot className="w-6 h-6 text-white group-hover:scale-110 transition-transform duration-200" />
-      </div>
-    </div>
-  </button>
+              <button
+                onClick={() => setIsChatMinimized(false)}
+                className="w-full h-full flex items-center justify-center text-white hover:bg-white/10 rounded-2xl transition-colors duration-200 relative overflow-hidden group"
+                aria-label={t("aria.openChat")}
+              >
+                <div 
+                  className="absolute inset-0 rounded-2xl p-[2px]"
+                  style={{
+                    background: `linear-gradient(90deg, transparent, transparent, #3b82f6, #8b5cf6, #3b82f6, transparent, transparent)`,
+                    backgroundSize: '300% 300%',
+                    animation: 'smooth-border 3s ease-in-out infinite'
+                  }}
+                >
+                  <div className="w-full h-full rounded-2xl bg-black/80 backdrop-blur-sm flex items-center justify-center">
+                    <Bot className="w-6 h-6 text-white group-hover:scale-110 transition-transform duration-200" />
+                  </div>
+                </div>
+              </button>
             ) : (
               <div className="flex flex-col h-full">
                 <div className="flex items-center justify-between p-4 border-b border-white/10 bg-[rgba(177,177,177,0.01)] flex-shrink-0">

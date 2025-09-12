@@ -16,11 +16,11 @@ const ErrorPage = () => {
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center bg-black">
       <div className="w-full max-w-md mx-auto text-center px-6 py-12">
-        <h1 className="font-xoireqe text-white text-4xl md:text-5xl mb-6 tracking-wide">404 - Not Found</h1>
+        <h1 className="font-bold text-white text-4xl md:text-5xl mb-6 tracking-wide">404 - Not Found</h1>
         <p className="text-white/80 mb-10 text-lg">{t('pageNotFound')}</p>
         <Link
           href="/"
-          className="inline-block font-xoireqe border border-white text-white text-lg px-8 py-3 rounded transition-colors duration-300 hover:bg-white hover:text-black focus:outline-none"
+          className="inline-block font-bold border border-white text-white text-lg px-8 py-3 rounded transition-colors duration-300 hover:bg-white hover:text-black focus:outline-none"
         >
           {t('backToHome')}
         </Link>
