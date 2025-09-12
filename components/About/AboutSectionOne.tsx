@@ -2,13 +2,11 @@
 
 import React, { useRef, useEffect, useState, useMemo, useCallback } from "react";
 import { sendChatMessage, sendActionMessage } from "../../services/chatService";
-import { Bot, User, Send, Loader2, MessageSquare, X, Minimize2 } from "lucide-react";
+import { Bot, User, Send, Loader2, MessageSquare, X, Minimize2, Cpu, Zap, Brain, Sparkles, MessageCircle } from "lucide-react";
 import { useTranslations, useLocale  } from 'next-intl';
 import { findMatchingAction } from './actionsdata';
 import { useActionsLogic } from './actionsLogic';
 import ReactMarkdown from "react-markdown";
-import { AI_MODELS } from "./aiModels";
-
 
 
 const AboutSectionOne = () => {
@@ -23,10 +21,6 @@ const AboutSectionOne = () => {
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const [sessionId, setSessionId] = useState<string | null>(null);
-  const [selectedModel, setSelectedModel] = useState(AI_MODELS[0]); 
-  const [isModelSwitching, setIsModelSwitching] = useState(false);
-
-
 
 useEffect(() => {
   let storedId = localStorage.getItem("sessionIdPHA");
@@ -401,22 +395,30 @@ const displayedHistory = [initialMessage, ...chatHistory];
       {showChatWidget && (
         <div className="fixed bottom-6 right-6 z-50">
           <div
-  className={`bg-[rgba(177,177,177,0.01)] backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl transition-all duration-300 ${
-    isChatMinimized ? "w-16 h-16" : "w-80 sm:w-96 h-[500px]"
-  } ${
-    isModelSwitching 
-      ? "animate-pulse border-teal-400/50 shadow-[0_0_30px_rgba(20,184,166,0.3)]" 
-      : ""
-  }`}
->
+            className={`bg-[rgba(177,177,177,0.01)] backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl transition-all duration-300 ${
+              isChatMinimized ? "w-16 h-16" : "w-80 sm:w-96 h-[500px]"
+            }`}
+          >
             {isChatMinimized ? (
-              <button
-                onClick={() => setIsChatMinimized(false)}
-                className="w-full h-full flex items-center justify-center text-white hover:bg-white/10 rounded-2xl transition-colors duration-200"
-                aria-label={t("aria.openChat")}
-              >
-                <MessageSquare className="w-6 h-6" />
-              </button>
+ <button
+    onClick={() => setIsChatMinimized(false)}
+    className="w-full h-full flex items-center justify-center text-white hover:bg-white/10 rounded-2xl transition-colors duration-200 relative overflow-hidden group"
+    aria-label={t("aria.openChat")}
+  >
+    {/* Moving gradient border */}
+    <div 
+      className="absolute inset-0 rounded-2xl p-[2px]"
+     style={{
+    background: `linear-gradient(90deg, transparent, transparent, #3b82f6, #8b5cf6, #3b82f6, transparent, transparent)`,
+    backgroundSize: '300% 300%',
+    animation: 'smooth-border 3s ease-in-out infinite' // Note the 'ease-in-out'
+  }}
+    >
+      <div className="w-full h-full rounded-2xl bg-black/80 backdrop-blur-sm flex items-center justify-center">
+        <Bot className="w-6 h-6 text-white group-hover:scale-110 transition-transform duration-200" />
+      </div>
+    </div>
+  </button>
             ) : (
               <div className="flex flex-col h-full">
                 <div className="flex items-center justify-between p-4 border-b border-white/10 bg-[rgba(177,177,177,0.01)] flex-shrink-0">
@@ -454,46 +456,6 @@ const displayedHistory = [initialMessage, ...chatHistory];
                   aria-live="polite"
                   aria-atomic="false"
                 >
-                    {/* === MODEL SELECTOR === */}
-{/* === MODEL SELECTOR === */}
-<div className="flex justify-center mb-4">
-  <div className="flex items-center gap-2 group">
-    <span className="text-gray-400 text-sm">This model uses</span>
-    <div className="relative">
-      <div className="absolute -inset-0.5 bg-gradient-to-r from-teal-400/20 to-purple-500/20 rounded-xl blur opacity-20 group-hover:opacity-40 transition duration-300"></div>
-      <select
-        value={selectedModel.value}
-        onChange={(e) => {
-          const model = AI_MODELS.find(m => m.value === e.target.value);
-          if (model) {
-            // Trigger the animation
-            setIsModelSwitching(true);
-            setSelectedModel(model);
-            // Reset animation after duration
-            setTimeout(() => setIsModelSwitching(false), 1500);
-          }
-        }}
-        className="relative bg-[rgba(177,177,177,0.05)] backdrop-blur-xl text-gray-200 text-sm px-3 py-2 rounded-xl border border-white/20 focus:outline-none focus:border-white/40 focus:bg-[rgba(177,177,177,0.08)] hover:bg-[rgba(177,177,177,0.08)] hover:border-white/30 transition-all duration-300 cursor-pointer appearance-none pr-8 min-w-[140px]"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
-          backgroundPosition: 'right 0.5rem center',
-          backgroundRepeat: 'no-repeat',
-          backgroundSize: '1rem 1rem',
-        }}
-      >
-        {AI_MODELS.map(model => (
-          <option 
-            key={model.value} 
-            value={model.value}
-            className="bg-gray-800 text-gray-200"
-          >
-            {model.label}
-          </option>
-        ))}
-      </select>
-    </div>
-  </div>
-</div>
                   {ChatBubbles}
                 </div>
 
