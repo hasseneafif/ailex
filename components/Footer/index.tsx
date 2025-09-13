@@ -79,7 +79,7 @@ const Footer = () => {
               </Link>
 
               {/* Description */}
-              <p className="dark:text-body-color-dark mb-6 text-base leading-relaxed text-body-color max-w-[360px]">
+              <p className="text-white mb-6 text-base leading-relaxed  max-w-[360px]">
                 {t("description")}
               </p>
 

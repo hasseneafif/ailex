@@ -101,7 +101,7 @@ const CvIcon = (
 
   return (
     <header
-      className={`header left-0 top-0 z-40 flex w-full items-center  fixed bg-transparent
+      className={`header left-0 top-0 z-40 flex w-full items-center  absolute bg-transparent
       `}
       role="banner"
       aria-label="Main site header"
