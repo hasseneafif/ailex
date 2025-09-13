@@ -61,3 +61,24 @@ html {
   }
 }
 
+
+::-webkit-scrollbar {
+  width: 12px; /* scrollbar thickness */
+}
+
+::-webkit-scrollbar-track {
+  background: #0f0f0f; /* dark track */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #4b5563; /* dark gray thumb */
+  border-radius: 9999px;     /* rounded pill */
+  border: 3px solid #0f0f0f; /* space between thumb & track */
+}
+
+/* Works in Firefox */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #4b5563 #0f0f0f; /* thumb track */
+}
+
