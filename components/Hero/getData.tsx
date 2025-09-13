@@ -13,30 +13,30 @@ function getDeviceType() {
 const Data: React.FC = () => {
   const [sessionId, setSessionId] = useState<string>("");
 
-  useEffect(() => {
-    // Session ID
-    let storedId = localStorage.getItem("sessionIdPHA");
-    if (!storedId) {
-      storedId = crypto.randomUUID();
-      localStorage.setItem("sessionIdPHA", storedId);
-    }
-    setSessionId(storedId);
+  // useEffect(() => {
+  //   // Session ID
+  //   let storedId = localStorage.getItem("sessionIdPHA");
+  //   if (!storedId) {
+  //     storedId = crypto.randomUUID();
+  //     localStorage.setItem("sessionIdPHA", storedId);
+  //   }
+  //   setSessionId(storedId);
 
-    const deviceType = getDeviceType();
-    const userAgent = navigator.userAgent;
-    const language = navigator.language || "unknown";
-    const referrer = document.referrer || null;
-    const pageLoadTime = performance.now() / 1000; 
+  //   const deviceType = getDeviceType();
+  //   const userAgent = navigator.userAgent;
+  //   const language = navigator.language || "unknown";
+  //   const referrer = document.referrer || null;
+  //   const pageLoadTime = performance.now() / 1000; 
 
-    sendPing({
-      sessionId: storedId,
-      deviceType,
-      userAgent,
-      language,
-      referrer,
-      pageLoadTime,
-    });
-  }, []);
+  //   sendPing({
+  //     sessionId: storedId,
+  //     deviceType,
+  //     userAgent,
+  //     language,
+  //     referrer,
+  //     pageLoadTime,
+  //   });
+  // }, []);
 
   return null;
 };

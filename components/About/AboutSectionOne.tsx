@@ -352,8 +352,8 @@ const AboutSectionOne = () => {
         <div className="relative w-full">
           <div className="max-w-[1200px] xl:w-[1200px] px-4 sm:px-6 md:px-8 py-12 mx-auto">
             <div className="max-w-4xl mx-auto text-center relative">
-              <div className="absolute -top-32 -left-32 w-64 h-64 bg-teal-500/20 rounded-full blur-3xl animate-pulse"></div>
-              <div className="absolute -top-24 -right-40 w-80 h-80 bg-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
+              {/* <div className="absolute -top-32 -left-32 w-64 h-64 bg-teal-500/20 rounded-full blur-3xl animate-pulse"></div>
+              <div className="absolute -top-24 -right-40 w-80 h-80 bg-purple-500/20 rounded-full blur-3xl animate-pulse"></div> */}
 
               <div className="relative z-10">
                 <p className="mb-12 text-lg md:text-xl text-gray-300">{t("prompt.askAnything")}</p>

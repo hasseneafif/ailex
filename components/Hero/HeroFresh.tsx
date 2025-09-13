@@ -2,9 +2,9 @@
 import React, { memo } from "react";
 import { motion } from "framer-motion";
 import StaticIDEHero from "./StaticIDE";
-const AnimatedBackground = dynamic(() => import("../Common/AnimatedBackground"), { ssr: false });
+// const AnimatedBackground = dynamic(() => import("../Common/AnimatedBackground"), { ssr: false });
 import Data from "./getData";
-import dynamic from "next/dynamic";
+// import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
 const HeroFresh: React.FC = () => {
   const t = useTranslations("hero");
@@ -16,7 +16,7 @@ const HeroFresh: React.FC = () => {
     >
       <Data />
       <div className="flex flex-col pt-[110px] md:pt-[140px]">
-        <AnimatedBackground />
+        {/* <AnimatedBackground /> */}
 
         {/* Main content */}
         <div className="flex flex-col items-center justify-center text-center relative px-6 max-w-4xl mx-auto mb-12">
