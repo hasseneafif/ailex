@@ -5,10 +5,10 @@ const AnimatedBackground: React.FC = () => {
   return (
     <div className="absolute pb-[600px] inset-0 -z-20 flex items-center justify-center overflow-hidden pointer-events-none">
       {/* Teal Circle (left) */}
-      <div className="absolute w-[200px] h-[200px] md:w-[500px] md:h-[500px] rounded-full opacity-20 md:opacity-30 blur-3xl animate-float-left bg-teal-400/30" />
+      <div className="absolute w-[250px] h-[250px] md:w-[500px] md:h-[500px] rounded-full opacity-30 md:opacity-30 blur-3xl animate-float-left bg-teal-400/30" />
 
       {/* Purple Circle (right) */}
-      <div className="absolute w-[200px] h-[200px] md:w-[500px] md:h-[500px] rounded-full opacity-30 md:opacity-30 blur-3xl animate-float-right bg-teal-300/30" />
+      <div className="absolute w-[250px] h-[250px] md:w-[500px] md:h-[500px] rounded-full opacity-30 md:opacity-30 blur-3xl animate-float-right bg-teal-300/30" />
 
       <style jsx>{`
         @keyframes float-left {
