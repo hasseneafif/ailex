@@ -18,7 +18,7 @@ import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import projectData from "../Blog/projectData";
 import { useTranslations } from "next-intl";
-import { stopLenisScroll, startLenisScroll } from "@/components/Common/smoothscroll";
+// import { stopLenisScroll, startLenisScroll } from "@/components/Common/smoothscroll";
 
 // Smooth teal border flicker animation
 const borderFlickerStyle = `
@@ -312,11 +312,7 @@ useEffect(() => {
           </div>
 
           {/* Code Viewer */}
-          <div data-lenis-prevent 
-           {...(isDesktop && {
-    onMouseEnter: stopLenisScroll,
-    onMouseLeave: startLenisScroll
-  })}
+          <div 
   
   id="codeviewer" className="lg:col-span-3">
             <div className="bg-[rgba(177,177,177,0.01)] backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden flex flex-col w-full h-[310px] md:h-[70vh]">
