@@ -56,6 +56,10 @@
       "title": "AI Sizing (Weefizz)",
       "paragraph": "An AI-powered sizing platform that helps users find the perfect fit for clothing."
     },
+      "aiPerformanceCheck": {
+      "title": "AI Performance Check NPM package",
+      "paragraph": "An AI powered performance check overlay for your web apps.(npm i @hasseneafif/ai-performance-check)"
+    },
     "linkedinAutomation": {
       "title": "A Linkedin AI Automation tool",
       "paragraph": "An AI-powered linkedin automation tool that decreases reach time."

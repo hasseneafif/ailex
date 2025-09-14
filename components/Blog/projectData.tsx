@@ -44,8 +44,16 @@ export const projectData =  (t: any): Project[] => {
       publishDate: "2024-01-01",
       link: "https://www.weefizz.com"
     },
-    {
+      {
       id: 6,
+      title: t("aiPerformanceCheck.title"),
+      paragraph: t("aiSecurityAnalyzer.paragraph"),
+      tags: [t("tags.ai"), t("tags.generation")],
+      publishDate: "2024-01-01",
+      link: "https://www.npmjs.com/package/@hasseneafif/ai-performance-check"
+    },
+    {
+      id: 7,
       title: t("linkedinAutomation.title"),
       paragraph: t("linkedinAutomation.paragraph"),
       tags: [t("tags.ai"), t("tags.linkedin")],
@@ -53,7 +61,7 @@ export const projectData =  (t: any): Project[] => {
       link: null
     },
     {
-      id: 7,
+      id: 8,
       title: t("tMobilePartner.title"),
       paragraph: t("tMobilePartner.paragraph"),
       tags: [t("tags.mobile"), t("tags.operator")],
@@ -61,7 +69,7 @@ export const projectData =  (t: any): Project[] => {
       link: "https://fliggsmobile.com"
     },
     {
-      id: 8,
+      id: 9,
       title: t("fintechBlockchain.title"),
       paragraph: t("fintechBlockchain.paragraph"),
       tags: [t("tags.finance"), t("tags.crypto")],

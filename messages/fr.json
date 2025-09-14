@@ -2,7 +2,6 @@
   "pageNotFound": "La page que vous recherchez semble avoir été déplacée, supprimée ou n'existe pas.",
   "backToHome": "Retour à l'accueil",
   "websiteDescription": "Vitrine personnelle de Hassene Afif",
-
   "aboutSectionOne": {
     "sectionTitle": "À propos de Hass AI Chat",
     "prompt": {
@@ -35,7 +34,6 @@
       "initialMessage": "Salut, comment puis-je vous aider ?"
     }
   },
-
   "projects": {
     "n8nWorkflows": {
       "title": "Flux de travail n8n",
@@ -56,6 +54,10 @@
     "aiSizing": {
       "title": "Taillage IA (Weefizz)",
       "paragraph": "Une plateforme de taillage alimentée par l'IA qui aide les utilisateurs à trouver la taille parfaite pour les vêtements."
+    },
+    "aiPerformanceCheck": {
+      "title": "Package NPM de vérification des performances par IA",
+      "paragraph": "Un overlay de vérification des performances alimenté par l’IA pour vos apps web. (npm i @hasseneafif/ai-performance-check)"
     },
     "linkedinAutomation": {
       "title": "Outil d'automatisation LinkedIn IA",
@@ -86,7 +88,6 @@
       "crypto": "Crypto"
     }
   },
-
   "footer": {
     "title": "Pied de page",
     "homeLink": "Aller à l'accueil",
@@ -98,7 +99,6 @@
     "phoneAria": "Afficher le numéro de téléphone",
     "phoneNumber": "+216 55 039 837"
   },
-
   "hero": {
     "title": {
       "part1": "Où l'innovation",
@@ -114,8 +114,7 @@
       "design": "Design inégalé"
     }
   },
-
-   "actions": {
+  "actions": {
     "responses": {
       "downloadCV": "Bien sûr ! Je vais télécharger le CV pour vous.",
       "showProjects": "Je vais vous montrer mes projets.",
