@@ -80,7 +80,7 @@ const Footer = () => {
 
               {/* Description */}
               <p className="text-white mb-6 text-base leading-relaxed  max-w-[360px]">
-                {t("description")}
+                How can i accept a limited definable self, when i feel limitless?
               </p>
 
               {/* Bottom row: icons */}
