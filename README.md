@@ -1,6 +1,6 @@
-# 📈 Hass
+# 📈 Ailex
 
-**Hass** is a design focused portfolio for Hassene Afif with an integrated AI Chatbot to answer questions.
+**Ailex** is a EU AI Law Expert.
 
 
 
