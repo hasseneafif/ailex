@@ -4,15 +4,18 @@ import { useState, useEffect, lazy, Suspense } from 'react';
 import Link from 'next/link';
 
 // Lazy load icons to reduce initial bundle
-const MessageCircle = lazy(() => import('lucide-react').then(m => ({ default: m.MessageCircle })));
-const FileText = lazy(() => import('lucide-react').then(m => ({ default: m.FileText })));
-const ChevronRight = lazy(() => import('lucide-react').then(m => ({ default: m.ChevronRight })));
-const Moon = lazy(() => import('lucide-react').then(m => ({ default: m.Moon })));
-const Sun = lazy(() => import('lucide-react').then(m => ({ default: m.Sun })));
-const Sparkles = lazy(() => import('lucide-react').then(m => ({ default: m.Sparkles })));
-const Zap = lazy(() => import('lucide-react').then(m => ({ default: m.Zap })));
-const Shield = lazy(() => import('lucide-react').then(m => ({ default: m.Shield })));
-const Clock = lazy(() => import('lucide-react').then(m => ({ default: m.Clock })));
+import { 
+  MessageCircle, 
+  FileText, 
+  ChevronRight, 
+  Moon, 
+  Sun, 
+  Sparkles, 
+  Zap, 
+  Shield, 
+  Clock 
+} from "lucide-react";
+
 
 function parseHighlight(text: string, isDark: boolean) {
   const regex = /{(.*?)}/g;

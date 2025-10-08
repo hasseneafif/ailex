@@ -2,8 +2,9 @@
 
 import { useState, ChangeEvent, useCallback, lazy, Suspense } from 'react';
 import Link from 'next/link';
-import { pdfService } from '../../lib/api';
+import { ApiError, pdfService } from '../../lib/api';
 import { useToken } from '../hooks/useToken';
+import { Bot } from 'lucide-react';
 
 // Lazy load lucide icons
 const ArrowLeft = lazy(() => import('lucide-react').then(m => ({ default: m.ArrowLeft })));
@@ -73,10 +74,15 @@ export default function PdfAnalyzerPage() {
     try {
       const response = await pdfService.analyzePdf(file, token);
       setIssues(response.issues || []);
-    } catch (error) {
-      console.error('PDF analysis error:', error);
-      setError("Failed to analyze PDF. Please try again.");
-    } finally {
+    } catch (err) {
+  console.error('PDF analysis error:', err);
+
+  if (err instanceof ApiError && err.status === 429) {
+    setError("⚠️ Daily limit exceeded. Try again tomorrow.");
+  } else {
+    setError("Failed to analyze PDF. Please try again.");
+  }
+}finally {
       setIsAnalyzing(false);
     }
   };
@@ -95,13 +101,37 @@ export default function PdfAnalyzerPage() {
 
   // Show loading state while fetching token
   if (tokenLoading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <div className="w-16 h-16 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 flex items-center justify-center animate-pulse">
-            <Suspense fallback={<span>🛡️</span>}><Shield size={28} className="text-white" /></Suspense>
+return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center relative overflow-hidden">
+        {/* Animated background circles */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-700"></div>
+        </div>
+        
+        <div className="text-center space-y-6 relative z-10">
+          {/* Animated bot icon with rotating ring */}
+          <div className="relative inline-block">
+            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 blur-xl opacity-50 animate-pulse"></div>
+            <div className="relative w-20 h-20 rounded-full bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 flex items-center justify-center">
+              <Bot size={32} className="text-white animate-pulse" />
+            </div>
+            {/* Rotating ring */}
+            <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-blue-400 border-r-purple-400 animate-spin"></div>
           </div>
-          <p className="text-slate-300">Connecting...</p>
+          
+          {/* Loading text with animation */}
+          <div className="space-y-2">
+            <h2 className="text-2xl font-semibold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-pulse">
+              Waking AI up
+            </h2>
+            <div className="flex justify-center items-center space-x-1">
+              <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce"></div>
+              <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce delay-100"></div>
+              <div className="w-2 h-2 bg-pink-400 rounded-full animate-bounce delay-200"></div>
+            </div>
+          </div>
+          
         </div>
       </div>
     );
@@ -220,8 +250,13 @@ export default function PdfAnalyzerPage() {
                           disabled={!file || isAnalyzing || !token}
                           className="px-4 py-2 rounded-lg font-medium bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg hover:from-purple-700 hover:to-blue-700 hover:scale-105 transition-all disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100"
                         >
-                          {tokenError ? 'Limit Reached' : isAnalyzing ? 'Analyzing...' : 'Analyze'}
-                        </button>
+{tokenError
+  ? tokenError.status === 429
+    ? 'Limit Exceeded'
+    : 'AI Unavailable'
+  : isAnalyzing
+    ? 'Analyzing...'
+    : 'Analyze'}                        </button>
                       )}
                       <button
                         onClick={() => { setFile(null); setIssues([]); setError(null); }}

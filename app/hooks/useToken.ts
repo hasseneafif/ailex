@@ -1,7 +1,7 @@
 // hooks/useToken.ts
 import { useEffect } from 'react';
 import { useTokenStore } from '../../lib/store';
-import { tokenService } from '../../lib/api';
+import { ApiError, tokenService } from '../../lib/api';
 
 export const useToken = () => {
   const { token, isLoading, error, setToken, setLoading, setError, clearToken } = useTokenStore();
@@ -21,10 +21,16 @@ export const useToken = () => {
         const response = await tokenService.getToken();
         console.log('Token fetched successfully');
         setToken(response.token);
-      } catch (error) {
-        console.error('Failed to fetch token:', error);
-        setError(error instanceof Error ? error.message : 'Failed to fetch token');
-      }
+      }catch (err) {
+  console.error('Failed to fetch token:', err);
+
+  if (err instanceof ApiError) {
+    setError({ message: err.message, status: err.status });
+  } else {
+    setError({ message: 'Failed to fetch token' });
+  }
+}
+
     };
 
     fetchToken();

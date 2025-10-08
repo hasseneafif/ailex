@@ -1,13 +1,18 @@
 // lib/store.ts
 import { create } from 'zustand';
 
+interface TokenError {
+  message: string;
+  status?: number;
+}
+
 interface TokenStore {
   token: string | null;
   isLoading: boolean;
-  error: string | null;
+  error: TokenError | null;
   setToken: (token: string) => void;
   setLoading: (loading: boolean) => void;
-  setError: (error: string | null) => void;
+  setError: (error: TokenError | null) => void;
   clearToken: () => void;
 }
 

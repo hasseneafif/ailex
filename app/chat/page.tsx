@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, FormEvent } from 'react';
 import Link from 'next/link';
-import { chatService } from '../../lib/api';
+import { ApiError, chatService } from '../../lib/api';
 import { useToken } from '../hooks/useToken';
 import dynamic from 'next/dynamic';
 
@@ -58,13 +58,33 @@ export default function ChatPage() {
         ...prev,
         { type: 'ai', content: response.answer, risks: response.risks || [] },
       ]);
-    } catch (error) {
-      console.error('Chat error:', error);
-      setMessages(prev => [
-        ...prev,
-        { type: 'error', content: 'Sorry, an error occurred. Please try again.' },
-      ]);
-    } finally {
+    } catch (err) {
+  console.error('Chat error:', err);
+
+  if (err instanceof ApiError && err.status === 429) {
+    // Block input immediately by updating the token store
+    refetch(); // or setError({ message: 'Limit exceeded', status: 429 }) if you expose setError in your hook
+
+    // Show a clear system-like message in chat
+    setMessages(prev => [
+      ...prev,
+      {
+        type: 'error',
+        content: '⚠️ Daily limit exceeded. Please try again tomorrow.'
+      },
+    ]);
+  } else {
+    setMessages(prev => [
+      ...prev,
+      {
+        type: 'error',
+        content: '❌ Sorry, an error occurred. Please try again later.'
+      },
+    ]);
+  }
+}
+    
+    finally {
       setIsLoading(false);
     }
   };
@@ -90,13 +110,37 @@ export default function ChatPage() {
 
   // Show loading state while fetching token
   if (tokenLoading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <div className="w-16 h-16 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center animate-pulse">
-            <Bot size={28} className="text-white" />
+return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center relative overflow-hidden">
+        {/* Animated background circles */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-700"></div>
+        </div>
+        
+        <div className="text-center space-y-6 relative z-10">
+          {/* Animated bot icon with rotating ring */}
+          <div className="relative inline-block">
+            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 blur-xl opacity-50 animate-pulse"></div>
+            <div className="relative w-20 h-20 rounded-full bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 flex items-center justify-center">
+              <Bot size={32} className="text-white animate-pulse" />
+            </div>
+            {/* Rotating ring */}
+            <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-blue-400 border-r-purple-400 animate-spin"></div>
           </div>
-          <p className="text-slate-300">Connecting...</p>
+          
+          {/* Loading text with animation */}
+          <div className="space-y-2">
+            <h2 className="text-2xl font-semibold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-pulse">
+              Waking AI up
+            </h2>
+            <div className="flex justify-center items-center space-x-1">
+              <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce"></div>
+              <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce delay-100"></div>
+              <div className="w-2 h-2 bg-pink-400 rounded-full animate-bounce delay-200"></div>
+            </div>
+          </div>
+          
         </div>
       </div>
     );
@@ -284,7 +328,13 @@ export default function ChatPage() {
                     type="text"
                     value={inputMessage}
                     onChange={e => setInputMessage(e.target.value)}
-                    placeholder={tokenError ? 'Limit reached. Try again tomorrow.' : 'Type your message...'}
+placeholder={
+  tokenError
+    ? tokenError.status === 429
+      ? 'Limit exceeded. Try again tomorrow.'
+      : 'AI unavailable, try again later.'
+    : 'Type your message...'
+}
                     className="w-full rounded-2xl px-6 py-4 pr-12 bg-slate-700/50 border border-slate-600 text-white placeholder-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
                     disabled={isLoading}
                   />
