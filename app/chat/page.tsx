@@ -187,7 +187,7 @@ return (
               <Bot size={16} className="animate-pulse" />
               <span className="text-sm font-medium">AI Legal Assistant</span>
             </div>
-            <h1 className="text-3xl md:text-4xl font-bold mb-2 text-white">
+<h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 text-white">
               EU Law Compliance Chat
             </h1>
             <p className="text-lg text-slate-300">
@@ -201,7 +201,7 @@ return (
       <section className="relative z-10 px-4 sm:px-6 lg:px-8 pb-20">
         <div className="max-w-4xl mx-auto">
           <div className="rounded-3xl shadow-2xl border border-slate-600/50 bg-slate-800/50 backdrop-blur-md overflow-hidden">
-            <div className="h-[500px] overflow-y-auto p-6 space-y-6">
+<div className="h-[60vh] sm:h-[500px] overflow-y-auto p-4 sm:p-6 space-y-4 sm:space-y-6">
               {messages.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-full text-center space-y-6 animate-fade-in">
                   <div className="w-16 h-16 rounded-full flex items-center justify-center shadow-lg bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold text-lg">
@@ -217,7 +217,7 @@ return (
                         <button
                           key={i}
                           onClick={() => setInputMessage(q)}
-                          className="group p-4 text-left text-sm rounded-xl border border-slate-600 bg-slate-700/50 text-slate-300 hover:bg-slate-600/50 hover:border-blue-500/50 hover:scale-105 hover:-translate-y-1 transition-all duration-200"
+  className="group p-2 sm:p-4 text-left text-xs sm:text-sm rounded-xl border border-slate-600 bg-slate-700/50 text-slate-300 hover:bg-slate-600/50 hover:border-blue-500/50 hover:scale-105 hover:-translate-y-1 transition-all duration-200"
                         >
                           <Lightbulb
                             size={14}
@@ -335,7 +335,7 @@ placeholder={
       : 'AI unavailable, try again later.'
     : 'Type your message...'
 }
-                    className="w-full rounded-2xl px-6 py-4 pr-12 bg-slate-700/50 border border-slate-600 text-white placeholder-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+  className="w-full text-sm rounded-2xl px-3 py-2 sm:px-6 sm:py-4 pr-10 bg-slate-700/50 border border-slate-600 text-white placeholder-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
                     disabled={isLoading}
                   />
                   {inputMessage && (
@@ -345,7 +345,7 @@ placeholder={
                 <button
                   type="submit"
                   disabled={!inputMessage.trim() || isLoading || !token}
-                  className="px-6 py-4 rounded-2xl shadow-lg bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 transition-all duration-300 hover:scale-105 disabled:cursor-not-allowed disabled:opacity-50 disabled:scale-100"
+  className="px-3 py-2 sm:px-6 sm:py-4 rounded-2xl shadow-lg bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 transition-all duration-300 hover:scale-105 disabled:cursor-not-allowed disabled:opacity-50 disabled:scale-100"
                 >
                   {isLoading ? (
                     <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
