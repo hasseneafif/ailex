@@ -6,6 +6,7 @@ import { ApiError, pdfService } from '../../lib/api';
 import { useToken } from '../hooks/useToken';
 import { Bot } from 'lucide-react';
 
+// Lazy load icons for performance
 const ArrowLeft = lazy(() => import('lucide-react').then(m => ({ default: m.ArrowLeft })));
 const FileText = lazy(() => import('lucide-react').then(m => ({ default: m.FileText })));
 const CheckCircle = lazy(() => import('lucide-react').then(m => ({ default: m.CheckCircle })));
@@ -28,6 +29,39 @@ export default function PdfAnalyzerPage() {
 
   const { token, isLoading: tokenLoading, error: tokenError, refetch } = useToken();
 
+  const handleDrag = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(e.type === "dragenter" || e.type === "dragover");
+  }, []);
+
+  const handleDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      const droppedFile = e.dataTransfer.files[0];
+      if (droppedFile.type === 'application/pdf') {
+        setFile(droppedFile);
+        setError(null);
+      } else {
+        setError('Please upload a PDF file only.');
+      }
+    }
+  }, []);
+
+  const handleFileSelect = (e: ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files?.[0] ?? null;
+    if (selectedFile && selectedFile.type === 'application/pdf') {
+      setFile(selectedFile);
+      setError(null);
+    } else {
+      setError('Please select a valid PDF file.');
+      setFile(null);
+    }
+  };
+
   const analyzePdf = async () => {
     if (!file || !token) {
       setError(!token ? 'Authentication token not available. Please refresh the page.' : 'No file selected.');
@@ -40,14 +74,14 @@ export default function PdfAnalyzerPage() {
       const response = await pdfService.analyzePdf(file, token);
       setIssues(response.issues || []);
     } catch (err) {
-      console.error('PDF analysis error:', err);
+  console.error('PDF analysis error:', err);
 
-      if (err instanceof ApiError && err.status === 429) {
-        setError("⚠️ Daily limit exceeded. Try again tomorrow.");
-      } else {
-        setError("Failed to analyze PDF. Please try again.");
-      }
-    } finally {
+  if (err instanceof ApiError && err.status === 429) {
+    setError("⚠️ Daily limit exceeded. Try again tomorrow.");
+  } else {
+    setError("Failed to analyze PDF. Please try again.");
+  }
+}finally {
       setIsAnalyzing(false);
     }
   };
@@ -65,13 +99,13 @@ export default function PdfAnalyzerPage() {
     ({ low: '✅', medium: '⚠️', high: '🚨' }[severity]);
 
   if (tokenLoading) {
-    return (
+return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center relative overflow-hidden">
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
           <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-700"></div>
         </div>
-
+        
         <div className="text-center space-y-6 relative z-10">
           <div className="relative inline-block">
             <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 blur-xl opacity-50 animate-pulse"></div>
@@ -80,7 +114,7 @@ export default function PdfAnalyzerPage() {
             </div>
             <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-blue-400 border-r-purple-400 animate-spin"></div>
           </div>
-
+          
           <div className="space-y-2">
             <h2 className="text-2xl font-semibold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-pulse">
               Waking AI up
@@ -91,7 +125,7 @@ export default function PdfAnalyzerPage() {
               <div className="w-2 h-2 bg-pink-400 rounded-full animate-bounce delay-200"></div>
             </div>
           </div>
-
+          
         </div>
       </div>
     );
@@ -130,14 +164,18 @@ export default function PdfAnalyzerPage() {
       <section className="relative z-10 pt-24 pb-8">
         <div className="px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-4 backdrop-blur-md bg-slate-800/50 text-blue-400">
-              <Bot size={16} className="animate-pulse" />
-              <span className="text-sm font-medium">AI Legal Assistant</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-4 backdrop-blur-md bg-slate-800/50 text-purple-400">
+              <Suspense fallback={<span>🛡️</span>}><Shield size={16} className="animate-pulse" /></Suspense>
+              <span className="text-sm font-medium">AI Contract Analyzer</span>
             </div>
-            <h1 className="text-3xl md:text-4xl font-bold mb-2 text-white"> EU Law Compliance Chat </h1>
-            <p className="text-lg text-slate-300"> Get instant expert guidance on European labor law </p>
-          </div> </div>
+            <h1 className="text-3xl md:text-4xl font-bold mb-2 text-white">AI PDF Analyzer</h1>
+            <p className="text-lg text-slate-300">
+              Upload employment contracts to detect potential EU labor law compliance issues.
+            </p>
+          </div>
+        </div>
       </section>
+
       <section className="relative z-10 px-4 sm:px-6 lg:px-8 pb-20">
         <div className="max-w-4xl mx-auto">
           <div className="rounded-3xl shadow-2xl border overflow-hidden backdrop-blur-md p-6 space-y-6 bg-slate-800/50 border-slate-600/50">
@@ -145,24 +183,33 @@ export default function PdfAnalyzerPage() {
             <div className="space-y-4">
               {!file ? (
                 <div
-                  className={`relative border-2 border-dashed rounded-2xl transition-all duration-300 p-4 sm:p-8 ${dragActive
-                    ? 'border-purple-500 bg-purple-900/20'
-                    : 'border-slate-600 hover:border-slate-500 bg-slate-800/30'
+                  className={`relative border-2 border-dashed rounded-2xl transition-all duration-300 p-8 ${dragActive
+                      ? 'border-purple-500 bg-purple-900/20'
+                      : 'border-slate-600 hover:border-slate-500 bg-slate-800/30'
                     }`}
+                  onDragEnter={handleDrag}
+                  onDragLeave={handleDrag}
+                  onDragOver={handleDrag}
+                  onDrop={handleDrop}
                 >
                   <div className="text-center space-y-4">
-                    <div className="mx-auto w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center bg-gradient-to-r from-purple-600 to-blue-600 shadow-lg">
-                      <Suspense fallback={<span>↑</span>}><Upload className="text-white" size={24} /></Suspense>
+                    <div className="mx-auto w-16 h-16 rounded-full flex items-center justify-center bg-gradient-to-r from-purple-600 to-blue-600 shadow-lg">
+                      <Suspense fallback={<span>↑</span>}><Upload className="text-white" size={28} /></Suspense>
                     </div>
-                    <h3 className="text-lg sm:text-xl font-semibold mb-1 sm:mb-2 text-white">Upload Your Contract</h3>
-                    <p className="text-xs sm:text-sm text-slate-300">Drag and drop a PDF file here, or click to browse</p>
-                    <label
-                      htmlFor="file-upload"
-                      className="inline-flex items-center gap-2 px-4 py-2 sm:px-6 sm:py-3 rounded-xl font-medium cursor-pointer bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg hover:from-purple-700 hover:to-blue-700 hover:scale-105 transition-all"
-                    >
-                      <Suspense fallback={<span>📄</span>}><FileText size={18} /></Suspense>
-                      Choose PDF File
-                    </label>
+                    <div>
+                      <h3 className="text-xl font-semibold mb-2 text-white">Upload Your Contract</h3>
+                      <p className="text-sm text-slate-300">Drag and drop a PDF file here, or click to browse</p>
+                    </div>
+                    <div className="space-y-4">
+                      <input type="file" accept=".pdf" onChange={handleFileSelect} className="hidden" id="file-upload" />
+                      <label
+                        htmlFor="file-upload"
+                        className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-medium cursor-pointer bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg hover:from-purple-700 hover:to-blue-700 hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                      >
+                        <Suspense fallback={<span>📄</span>}><FileText size={20} /></Suspense>
+                        Choose PDF File
+                      </label>
+                    </div>
                   </div>
                 </div>
               ) : (
@@ -187,13 +234,13 @@ export default function PdfAnalyzerPage() {
                           disabled={!file || isAnalyzing || !token}
                           className="px-4 py-2 rounded-lg font-medium bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg hover:from-purple-700 hover:to-blue-700 hover:scale-105 transition-all disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100"
                         >
-                          {tokenError
-                            ? tokenError.status === 429
-                              ? 'Limit Exceeded'
-                              : 'AI Unavailable'
-                            : isAnalyzing
-                              ? 'Analyzing...'
-                              : 'Analyze'}                        </button>
+{tokenError
+  ? tokenError.status === 429
+    ? 'Limit Exceeded'
+    : 'AI Unavailable'
+  : isAnalyzing
+    ? 'Analyzing...'
+    : 'Analyze'}                        </button>
                       )}
                       <button
                         onClick={() => { setFile(null); setIssues([]); setError(null); }}
@@ -246,10 +293,10 @@ export default function PdfAnalyzerPage() {
                   {issues.length} issue{issues.length > 1 ? 's' : ''} detected
                 </h2>
                 {issues.map((issue, i) => (
-                  <div key={i} className="border rounded-xl p-3 sm:p-4 transition-all hover:shadow-lg hover:-translate-y-1 bg-slate-700/50 border-slate-600/50 hover:bg-slate-700/70">
+                  <div key={i} className="border rounded-xl p-4 transition-all hover:shadow-lg hover:-translate-y-1 bg-slate-700/50 border-slate-600/50 hover:bg-slate-700/70">
                     <div className="flex justify-between mb-2">
                       <div>
-                        <h3 className="font-medium text-sm sm:text-base text-white">{issue.issue}</h3>
+                        <h3 className="font-medium text-white">{issue.issue}</h3>
                         <p className="text-sm text-purple-400">{issue.law_reference}</p>
                       </div>
                       <span className={`px-3 py-1 rounded-full text-xs flex items-center gap-1 ${getSeverityBadge(issue.severity)}`}>
