@@ -44,7 +44,6 @@ export const useToken = () => {
     refetch: () => {
       console.log('Manual refetch triggered');
       clearToken();
-      // This will trigger the useEffect to run again since token becomes null
     }
   };
 };

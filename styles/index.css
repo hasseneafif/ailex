@@ -28,23 +28,22 @@
 }
 
 
-/* For modern browsers */
+
 ::-webkit-scrollbar {
-  width: 8px;  /* width of vertical scrollbar */
-  height: 8px; /* height of horizontal scrollbar */
+  width: 8px;  
+  height: 8px; 
 }
 
 ::-webkit-scrollbar-track {
-  background: #f0f0f0; /* light track */
+  background: #f0f0f0; 
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #c0c0c0; /* light thumb */
+  background-color: #c0c0c0; 
   border-radius: 4px;
-  border: 2px solid #f0f0f0; /* padding around thumb */
+  border: 2px solid #f0f0f0; 
 }
 
-/* Firefox */
 * {
   scrollbar-width: thin;
   scrollbar-color: #c0c0c0 #f0f0f0;
