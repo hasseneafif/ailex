@@ -26,7 +26,6 @@ export default function ChatPage() {
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Simple token hook
   const { token, isLoading: tokenLoading, error: tokenError, refetch } = useToken();
 
   useEffect(() => {
@@ -37,7 +36,6 @@ export default function ChatPage() {
     e.preventDefault();
     if (!inputMessage.trim() || isLoading || tokenLoading) return;
 
-    // Check if token is available
     if (!token) {
       setMessages(prev => [...prev, {
         type: 'error',
@@ -59,31 +57,29 @@ export default function ChatPage() {
         { type: 'ai', content: response.answer, risks: response.risks || [] },
       ]);
     } catch (err) {
-  console.error('Chat error:', err);
+      console.error('Chat error:', err);
 
-  if (err instanceof ApiError && err.status === 429) {
-    // Block input immediately by updating the token store
-    refetch(); // or setError({ message: 'Limit exceeded', status: 429 }) if you expose setError in your hook
+      if (err instanceof ApiError && err.status === 429) {
+        refetch(); 
 
-    // Show a clear system-like message in chat
-    setMessages(prev => [
-      ...prev,
-      {
-        type: 'error',
-        content: '⚠️ Daily limit exceeded. Please try again tomorrow.'
-      },
-    ]);
-  } else {
-    setMessages(prev => [
-      ...prev,
-      {
-        type: 'error',
-        content: '❌ Sorry, an error occurred. Please try again later.'
-      },
-    ]);
-  }
-}
-    
+        setMessages(prev => [
+          ...prev,
+          {
+            type: 'error',
+            content: '⚠️ Daily limit exceeded. Please try again tomorrow.'
+          },
+        ]);
+      } else {
+        setMessages(prev => [
+          ...prev,
+          {
+            type: 'error',
+            content: '❌ Sorry, an error occurred. Please try again later.'
+          },
+        ]);
+      }
+    }
+
     finally {
       setIsLoading(false);
     }
@@ -108,28 +104,23 @@ export default function ChatPage() {
     'How to handle workplace discrimination complaints?',
   ];
 
-  // Show loading state while fetching token
   if (tokenLoading) {
-return (
+    return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center relative overflow-hidden">
-        {/* Animated background circles */}
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
           <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-700"></div>
         </div>
-        
+
         <div className="text-center space-y-6 relative z-10">
-          {/* Animated bot icon with rotating ring */}
           <div className="relative inline-block">
             <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 blur-xl opacity-50 animate-pulse"></div>
             <div className="relative w-20 h-20 rounded-full bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 flex items-center justify-center">
               <Bot size={32} className="text-white animate-pulse" />
             </div>
-            {/* Rotating ring */}
             <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-blue-400 border-r-purple-400 animate-spin"></div>
           </div>
-          
-          {/* Loading text with animation */}
+
           <div className="space-y-2">
             <h2 className="text-2xl font-semibold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-pulse">
               Waking AI up
@@ -140,7 +131,7 @@ return (
               <div className="w-2 h-2 bg-pink-400 rounded-full animate-bounce delay-200"></div>
             </div>
           </div>
-          
+
         </div>
       </div>
     );
@@ -148,13 +139,10 @@ return (
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 transition-all duration-500 relative">
-      {/* Full Page Animated Background */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden bg-gradient-to-br from-slate-900 via-blue-900/20 to-slate-900">
-        {/* Background Elements */}
         <div className="absolute left-[-48px] top-[-48px] w-[192px] h-[192px] rounded-full blur-3xl bg-gradient-to-br from-blue-500/20 to-purple-500/30" />
         <div className="absolute bottom-[-24px] right-[-24px] w-[128px] h-[128px] rounded-full blur-3xl bg-gradient-to-br from-purple-500/20 to-pink-500/20" />
 
-        {/* Floating Particles */}
         {[...Array(10)].map((_, i) => (
           <div
             key={i}
@@ -169,7 +157,6 @@ return (
         ))}
       </div>
 
-      {/* Back Button */}
       <div className="absolute top-6 left-6 z-20">
         <Link
           href="/"
@@ -179,7 +166,6 @@ return (
         </Link>
       </div>
 
-      {/* Header Section */}
       <section className="relative z-10 pt-24 pb-8">
         <div className="px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
@@ -197,7 +183,6 @@ return (
         </div>
       </section>
 
-      {/* Chat Section */}
       <section className="relative z-10 px-4 sm:px-6 lg:px-8 pb-20">
         <div className="max-w-4xl mx-auto">
           <div className="rounded-3xl shadow-2xl border border-slate-600/50 bg-slate-800/50 backdrop-blur-md overflow-hidden">
@@ -317,7 +302,6 @@ return (
               )}
             </div>
 
-            {/* Input */}
             <form
               onSubmit={sendMessage}
               className="border-t border-slate-600/50 bg-slate-800/30 p-6 backdrop-blur-md"
@@ -355,7 +339,6 @@ placeholder={
                 </button>
               </div>
 
-              {/* Quick Actions */}
               {messages.length === 0 && (
                 <div className="mt-4 flex flex-wrap gap-2 justify-center">
                   {['GDPR', 'Employment', 'Contracts', 'Discrimination'].map(topic => (

@@ -6,7 +6,6 @@ import { ApiError, pdfService } from '../../lib/api';
 import { useToken } from '../hooks/useToken';
 import { Bot } from 'lucide-react';
 
-// Lazy load lucide icons
 const ArrowLeft = lazy(() => import('lucide-react').then(m => ({ default: m.ArrowLeft })));
 const FileText = lazy(() => import('lucide-react').then(m => ({ default: m.FileText })));
 const CheckCircle = lazy(() => import('lucide-react').then(m => ({ default: m.CheckCircle })));
@@ -27,41 +26,7 @@ export default function PdfAnalyzerPage() {
   const [error, setError] = useState<string | null>(null);
   const [dragActive, setDragActive] = useState(false);
 
-  // Use the simplified token hook
   const { token, isLoading: tokenLoading, error: tokenError, refetch } = useToken();
-
-  const handleDrag = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(e.type === "dragenter" || e.type === "dragover");
-  }, []);
-
-  const handleDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(false);
-
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      const droppedFile = e.dataTransfer.files[0];
-      if (droppedFile.type === 'application/pdf') {
-        setFile(droppedFile);
-        setError(null);
-      } else {
-        setError('Please upload a PDF file only.');
-      }
-    }
-  }, []);
-
-  const handleFileSelect = (e: ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = e.target.files?.[0] ?? null;
-    if (selectedFile && selectedFile.type === 'application/pdf') {
-      setFile(selectedFile);
-      setError(null);
-    } else {
-      setError('Please select a valid PDF file.');
-      setFile(null);
-    }
-  };
 
   const analyzePdf = async () => {
     if (!file || !token) {
@@ -99,28 +64,23 @@ export default function PdfAnalyzerPage() {
   const getSeverityIcon = (severity: Severity) =>
     ({ low: '✅', medium: '⚠️', high: '🚨' }[severity]);
 
-  // Show loading state while fetching token
   if (tokenLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center relative overflow-hidden">
-        {/* Animated background circles */}
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
           <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-700"></div>
         </div>
 
         <div className="text-center space-y-6 relative z-10">
-          {/* Animated bot icon with rotating ring */}
           <div className="relative inline-block">
             <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 blur-xl opacity-50 animate-pulse"></div>
             <div className="relative w-20 h-20 rounded-full bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 flex items-center justify-center">
               <Bot size={32} className="text-white animate-pulse" />
             </div>
-            {/* Rotating ring */}
             <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-blue-400 border-r-purple-400 animate-spin"></div>
           </div>
 
-          {/* Loading text with animation */}
           <div className="space-y-2">
             <h2 className="text-2xl font-semibold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-pulse">
               Waking AI up
@@ -139,13 +99,10 @@ export default function PdfAnalyzerPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 transition-all duration-500 relative">
-      {/* Full Page Animated Background */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden bg-gradient-to-br from-slate-900 via-purple-900/20 to-slate-900">
-        {/* Background Elements */}
         <div className="absolute left-[-48px] top-[-48px] w-[192px] h-[192px] rounded-full blur-3xl bg-gradient-to-br from-purple-500/20 to-blue-500/30" />
         <div className="absolute bottom-[-24px] right-[-24px] w-[128px] h-[128px] rounded-full blur-3xl bg-gradient-to-br from-blue-500/20 to-pink-500/20" />
 
-        {/* Floating Particles */}
         {[...Array(10)].map((_, i) => (
           <div
             key={i}
@@ -160,7 +117,6 @@ export default function PdfAnalyzerPage() {
         ))}
       </div>
 
-      {/* Back Button */}
       <div className="absolute top-6 left-6 z-20">
         <Link
           href="/"
@@ -171,7 +127,6 @@ export default function PdfAnalyzerPage() {
         </Link>
       </div>
 
-      {/* Header Section */}
       <section className="relative z-10 pt-24 pb-8"> 
         <div className="px-4 sm:px-6 lg:px-8"> 
           <div className="max-w-4xl mx-auto text-center"> 
@@ -183,12 +138,10 @@ export default function PdfAnalyzerPage() {
              <p className="text-lg text-slate-300"> Get instant expert guidance on European labor law </p> 
              </div> </div>
               </section>
-      {/* Main Section */}
       <section className="relative z-10 px-4 sm:px-6 lg:px-8 pb-20">
         <div className="max-w-4xl mx-auto">
           <div className="rounded-3xl shadow-2xl border overflow-hidden backdrop-blur-md p-6 space-y-6 bg-slate-800/50 border-slate-600/50">
 
-            {/* File Upload Section */}
             <div className="space-y-4">
               {!file ? (
                 <div
@@ -215,13 +168,11 @@ export default function PdfAnalyzerPage() {
               ) : (
                 <div className="p-4 rounded-xl border bg-slate-700/50 border-slate-600/50 shadow-sm transition-all">
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                    {/* File info */}
                     <div className="flex items-center gap-3 min-w-0">
                       <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-red-900/30 shrink-0">
                         <Suspense fallback={<span>📄</span>}><FileText className="text-red-500" size={20} /></Suspense>
                       </div>
                       <div className="min-w-0">
-                        {/* ✅ truncate long file names */}
                         <p className="font-medium text-white truncate max-w-[200px] sm:max-w-xs md:max-w-sm lg:max-w-md">
                           Selected: {file.name}
                         </p>
@@ -229,7 +180,6 @@ export default function PdfAnalyzerPage() {
                       </div>
                     </div>
 
-                    {/* Actions */}
                     <div className="flex items-center gap-2 shrink-0">
                       {!isAnalyzing && issues.length === 0 && (
                         <button
@@ -265,7 +215,6 @@ export default function PdfAnalyzerPage() {
               )}
             </div>
 
-            {/* Analyzing State */}
             {isAnalyzing && (
               <div className="text-center space-y-4 py-8">
                 <div className="mx-auto w-16 h-16 rounded-full flex items-center justify-center bg-gradient-to-r from-purple-600 to-blue-600 shadow-lg animate-pulse">
@@ -291,7 +240,6 @@ export default function PdfAnalyzerPage() {
               </div>
             )}
 
-            {/* Results */}
             {!isAnalyzing && issues.length > 0 && (
               <div className="space-y-4 animate-fade-in">
                 <h2 className="text-lg font-semibold text-white">
@@ -323,7 +271,6 @@ export default function PdfAnalyzerPage() {
               </div>
             )}
 
-            {/* No Issues */}
             {!isAnalyzing && issues.length === 0 && file && (
               <div className="text-center space-y-3 animate-fade-in">
                 <Suspense fallback={<span>✔</span>}><CheckCircle className="mx-auto w-12 h-12 text-green-400" /></Suspense>
@@ -332,7 +279,6 @@ export default function PdfAnalyzerPage() {
               </div>
             )}
 
-            {/* Default State */}
             {!isAnalyzing && !file && (
               <div className="text-center space-y-6 py-12">
                 <div className="mx-auto w-20 h-20 rounded-full flex items-center justify-center bg-slate-700/50 shadow-lg">

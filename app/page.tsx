@@ -3,7 +3,6 @@
 import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 
-// Icons
 import {
   MessageCircle,
   FileText,
@@ -71,7 +70,6 @@ export default function Home() {
           : 'bg-gradient-to-br from-gray-50 via-white to-gray-100'
       }`}
     >
-      {/* Theme Toggle */}
       <div className="fixed top-4 right-4 z-50">
         <button
           onClick={() => setIsDark(!isDark)}
@@ -85,7 +83,6 @@ export default function Home() {
         </button>
       </div>
 
-      {/* Hero Section */}
       <section
         className={`relative overflow-hidden min-h-screen flex flex-col justify-center ${
           isDark
@@ -93,14 +90,12 @@ export default function Home() {
             : 'bg-gradient-to-br from-blue-50 via-cyan-50 to-teal-50'
         }`}
       >
-        {/* Background Circles */}
         <div className={`absolute inset-0 ${isDark ? 'opacity-20' : 'opacity-30'}`}>
           <div className="absolute top-1/4 left-1/4 w-48 h-48 sm:w-72 sm:h-72 bg-blue-400 rounded-full blur-3xl opacity-30 animate-pulse"></div>
           <div className="absolute top-1/3 right-1/4 w-48 h-48 sm:w-72 sm:h-72 bg-purple-400 rounded-full blur-3xl opacity-30 animate-pulse delay-1000"></div>
           <div className="absolute bottom-1/4 left-1/3 w-48 h-48 sm:w-72 sm:h-72 bg-cyan-400 rounded-full blur-3xl opacity-30 animate-pulse delay-2000"></div>
         </div>
 
-        {/* Content */}
         <div className="relative mx-auto px-4 sm:px-6 xl:px-12 z-10 flex flex-col justify-center items-center py-16 sm:py-20">
           <div className="text-center mb-8">
             <h1
@@ -119,7 +114,6 @@ export default function Home() {
             </p>
           </div>
 
-          {/* Stats */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mt-10 w-full max-w-5xl">
             {heroData.stats.map((stat, idx) => {
               const Icon = stat.icon;
@@ -168,9 +162,7 @@ export default function Home() {
             })}
           </div>
 
-          {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-10 w-full sm:w-auto">
-            {/* Chat Button */}
             <Link
               href="/chat"
               className="group relative overflow-hidden bg-gradient-to-r from-orange-500 to-pink-500 text-white font-semibold rounded-xl sm:rounded-2xl px-4 py-3 sm:px-8 sm:py-4 flex items-center justify-center gap-2 sm:gap-3 shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 w-full sm:w-auto"
@@ -181,7 +173,6 @@ export default function Home() {
               <ChevronRight size={14} className="relative z-10 group-hover:translate-x-1 transition-transform duration-300" />
             </Link>
 
-            {/* PDF Analyzer */}
             <Link
               href="/pdf-analyzer"
               className={`group relative font-semibold rounded-xl sm:rounded-2xl px-4 py-3 sm:px-8 sm:py-4 flex items-center justify-center gap-2 sm:gap-3 shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 border-2 w-full sm:w-auto ${

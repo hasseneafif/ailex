@@ -16,7 +16,6 @@ const handleResponse = async (response: Response) => {
   return response.json();
 };
 
-// Token service
 export const tokenService = {
   async getToken(): Promise<{ token: string }> {
     const response = await fetch(`${API_BASE_URL}/api/auth/meta`, {
