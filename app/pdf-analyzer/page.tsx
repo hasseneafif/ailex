@@ -127,17 +127,17 @@ export default function PdfAnalyzerPage() {
         </Link>
       </div>
 
-      <section className="relative z-10 pt-24 pb-8"> 
-        <div className="px-4 sm:px-6 lg:px-8"> 
-          <div className="max-w-4xl mx-auto text-center"> 
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-4 backdrop-blur-md bg-slate-800/50 text-blue-400"> 
-            <Bot size={16} className="animate-pulse" /> 
-            <span className="text-sm font-medium">AI Legal Assistant</span> 
+      <section className="relative z-10 pt-24 pb-8">
+        <div className="px-4 sm:px-6 lg:px-8">
+          <div className="max-w-4xl mx-auto text-center">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-4 backdrop-blur-md bg-slate-800/50 text-blue-400">
+              <Bot size={16} className="animate-pulse" />
+              <span className="text-sm font-medium">AI Legal Assistant</span>
             </div>
-             <h1 className="text-3xl md:text-4xl font-bold mb-2 text-white"> EU Law Compliance Chat </h1> 
-             <p className="text-lg text-slate-300"> Get instant expert guidance on European labor law </p> 
-             </div> </div>
-              </section>
+            <h1 className="text-3xl md:text-4xl font-bold mb-2 text-white"> EU Law Compliance Chat </h1>
+            <p className="text-lg text-slate-300"> Get instant expert guidance on European labor law </p>
+          </div> </div>
+      </section>
       <section className="relative z-10 px-4 sm:px-6 lg:px-8 pb-20">
         <div className="max-w-4xl mx-auto">
           <div className="rounded-3xl shadow-2xl border overflow-hidden backdrop-blur-md p-6 space-y-6 bg-slate-800/50 border-slate-600/50">
@@ -146,8 +146,8 @@ export default function PdfAnalyzerPage() {
               {!file ? (
                 <div
                   className={`relative border-2 border-dashed rounded-2xl transition-all duration-300 p-4 sm:p-8 ${dragActive
-                      ? 'border-purple-500 bg-purple-900/20'
-                      : 'border-slate-600 hover:border-slate-500 bg-slate-800/30'
+                    ? 'border-purple-500 bg-purple-900/20'
+                    : 'border-slate-600 hover:border-slate-500 bg-slate-800/30'
                     }`}
                 >
                   <div className="text-center space-y-4">

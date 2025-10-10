@@ -21,15 +21,15 @@ export const useToken = () => {
         const response = await tokenService.getToken();
         console.log('Token fetched successfully');
         setToken(response.token);
-      }catch (err) {
-  console.error('Failed to fetch token:', err);
+      } catch (err) {
+        console.error('Failed to fetch token:', err);
 
-  if (err instanceof ApiError) {
-    setError({ message: err.message, status: err.status });
-  } else {
-    setError({ message: 'Failed to fetch token' });
-  }
-}
+        if (err instanceof ApiError) {
+          setError({ message: err.message, status: err.status });
+        } else {
+          setError({ message: 'Failed to fetch token' });
+        }
+      }
 
     };
 
