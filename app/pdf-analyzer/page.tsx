@@ -4,6 +4,8 @@ import { useState, ChangeEvent, useCallback, lazy, Suspense } from 'react';
 import Link from 'next/link';
 import { ApiError, pdfService } from '../../lib/api';
 import { useToken } from '../hooks/useToken';
+import { useLanguage } from '@/lib/language-context';
+import { LanguageToggle } from '../components/LanguageToggle';
 import { Bot } from 'lucide-react';
 
 // Lazy load icons for performance
@@ -26,6 +28,7 @@ export default function PdfAnalyzerPage() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [dragActive, setDragActive] = useState(false);
+  const { t } = useLanguage();
 
   const { token, isLoading: tokenLoading, error: tokenError, refetch } = useToken();
 
@@ -46,7 +49,7 @@ export default function PdfAnalyzerPage() {
         setFile(droppedFile);
         setError(null);
       } else {
-        setError('Please upload a PDF file only.');
+        setError(t.pdf.upload.errorInvalidFile);
       }
     }
   }, []);
@@ -57,14 +60,14 @@ export default function PdfAnalyzerPage() {
       setFile(selectedFile);
       setError(null);
     } else {
-      setError('Please select a valid PDF file.');
+      setError(t.pdf.upload.errorSelectValid);
       setFile(null);
     }
   };
 
   const analyzePdf = async () => {
     if (!file || !token) {
-      setError(!token ? 'Authentication token not available. Please refresh the page.' : 'No file selected.');
+      setError(!token ? t.pdf.errors.tokenUnavailable : t.pdf.errors.noFile);
       return;
     }
 
@@ -77,9 +80,9 @@ export default function PdfAnalyzerPage() {
       console.error('PDF analysis error:', err);
 
       if (err instanceof ApiError && err.status === 429) {
-        setError("⚠️ Daily limit exceeded. Try again tomorrow.");
+        setError(t.pdf.errors.limitExceeded);
       } else {
-        setError("Failed to analyze PDF. Please try again.");
+        setError(t.pdf.errors.analysisFailed);
       }
     } finally {
       setIsAnalyzing(false);
@@ -117,7 +120,7 @@ export default function PdfAnalyzerPage() {
 
           <div className="space-y-2">
             <h2 className="text-2xl font-semibold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-pulse">
-              Waking AI up
+              {t.pdf.loading}
             </h2>
             <div className="flex justify-center items-center space-x-1">
               <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce"></div>
@@ -157,8 +160,12 @@ export default function PdfAnalyzerPage() {
           className="flex items-center space-x-2 px-4 py-2 backdrop-blur-md rounded-xl shadow-lg border bg-slate-800/80 border-slate-600 text-slate-300 hover:text-purple-400 hover:bg-slate-700/80 hover:scale-105 transition-all"
         >
           <Suspense fallback={<span>←</span>}><ArrowLeft size={16} /></Suspense>
-          <span className="text-sm font-medium">Back</span>
+          <span className="text-sm font-medium">{t.back}</span>
         </Link>
+      </div>
+
+      <div className="absolute top-6 right-6 z-20">
+        <LanguageToggle isDark={true} />
       </div>
 
       <section className="relative z-10 pt-24 pb-8">
@@ -166,11 +173,11 @@ export default function PdfAnalyzerPage() {
           <div className="max-w-4xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-4 backdrop-blur-md bg-slate-800/50 text-purple-400">
               <Suspense fallback={<span>🛡️</span>}><Shield size={16} className="animate-pulse" /></Suspense>
-              <span className="text-sm font-medium">AI Contract Analyzer</span>
+              <span className="text-sm font-medium">{t.pdf.badge}</span>
             </div>
-            <h1 className="text-3xl md:text-4xl font-bold mb-2 text-white">AI PDF Analyzer</h1>
+            <h1 className="text-3xl md:text-4xl font-bold mb-2 text-white">{t.pdf.title}</h1>
             <p className="text-lg text-slate-300">
-              Upload employment contracts to detect potential EU labor law compliance issues.
+              {t.pdf.subtitle}
             </p>
           </div>
         </div>
@@ -197,8 +204,8 @@ export default function PdfAnalyzerPage() {
                       <Suspense fallback={<span>↑</span>}><Upload className="text-white" size={28} /></Suspense>
                     </div>
                     <div>
-                      <h3 className="text-xl font-semibold mb-2 text-white">Upload Your Contract</h3>
-                      <p className="text-sm text-slate-300">Drag and drop a PDF file here, or click to browse</p>
+                      <h3 className="text-xl font-semibold mb-2 text-white">{t.pdf.upload.title}</h3>
+                      <p className="text-sm text-slate-300">{t.pdf.upload.description}</p>
                     </div>
                     <div className="space-y-4">
                       <input type="file" accept=".pdf" onChange={handleFileSelect} className="hidden" id="file-upload" />
@@ -207,7 +214,7 @@ export default function PdfAnalyzerPage() {
                         className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-medium cursor-pointer bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg hover:from-purple-700 hover:to-blue-700 hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                       >
                         <Suspense fallback={<span>📄</span>}><FileText size={20} /></Suspense>
-                        Choose PDF File
+                        {t.pdf.upload.button}
                       </label>
                     </div>
                   </div>
@@ -221,7 +228,7 @@ export default function PdfAnalyzerPage() {
                       </div>
                       <div className="min-w-0">
                         <p className="font-medium text-white truncate max-w-[200px] sm:max-w-xs md:max-w-sm lg:max-w-md">
-                          Selected: {file.name}
+                          {t.pdf.upload.selected} {file.name}
                         </p>
                         <p className="text-sm text-slate-400">({(file.size / 1024 / 1024).toFixed(2)} MB)</p>
                       </div>
@@ -236,11 +243,11 @@ export default function PdfAnalyzerPage() {
                         >
                           {tokenError
                             ? tokenError.status === 429
-                              ? 'Limit Exceeded'
-                              : 'AI Unavailable'
+                              ? t.pdf.analyze.limitExceeded
+                              : t.pdf.analyze.unavailable
                             : isAnalyzing
-                              ? 'Analyzing...'
-                              : 'Analyze'}                        </button>
+                              ? t.pdf.analyze.analyzing
+                              : t.pdf.analyze.button}                        </button>
                       )}
                       <button
                         onClick={() => { setFile(null); setIssues([]); setError(null); }}
@@ -270,15 +277,15 @@ export default function PdfAnalyzerPage() {
                 <div>
                   <div className="flex justify-center items-center gap-2 text-lg font-semibold mb-2 text-white">
                     <Suspense fallback={<span>⏳</span>}><Loader2 className="w-5 h-5 animate-spin text-purple-400" /></Suspense>
-                    Analyzing contract...
+                    {t.pdf.analyze.title}
                   </div>
-                  <p className="text-sm text-slate-300">Our AI is reviewing your document for EU law compliance</p>
+                  <p className="text-sm text-slate-300">{t.pdf.analyze.subtitle}</p>
                 </div>
                 <div className="max-w-md mx-auto mt-6">
                   <div className="flex justify-between text-xs mb-2 text-slate-400">
-                    <span>Extracting text...</span>
-                    <span>Analyzing clauses...</span>
-                    <span>Checking compliance...</span>
+                    <span>{t.pdf.analyze.steps.extracting}</span>
+                    <span>{t.pdf.analyze.steps.analyzing}</span>
+                    <span>{t.pdf.analyze.steps.checking}</span>
                   </div>
                   <div className="w-full h-2 rounded-full bg-slate-700">
                     <div className="h-full bg-gradient-to-r from-purple-500 to-blue-500 rounded-full animate-pulse" style={{ width: '60%' }}></div>
@@ -290,7 +297,9 @@ export default function PdfAnalyzerPage() {
             {!isAnalyzing && issues.length > 0 && (
               <div className="space-y-4 animate-fade-in">
                 <h2 className="text-lg font-semibold text-white">
-                  {issues.length} issue{issues.length > 1 ? 's' : ''} detected
+                  {t.pdf.results.issuesDetected
+                    .replace('{count}', issues.length.toString())
+                    .replace('{plural}', issues.length > 1 ? 's' : '')}
                 </h2>
                 {issues.map((issue, i) => (
                   <div key={i} className="border rounded-xl p-4 transition-all hover:shadow-lg hover:-translate-y-1 bg-slate-700/50 border-slate-600/50 hover:bg-slate-700/70">
@@ -307,7 +316,7 @@ export default function PdfAnalyzerPage() {
                       <div className="border rounded-lg p-3 mb-2 bg-slate-800/50 border-slate-600/50">
                         <div className="flex items-center gap-2 mb-2">
                           <Suspense fallback={<span>👁</span>}><Eye size={16} className="text-purple-400" /></Suspense>
-                          <p className="text-sm font-medium text-slate-300">Problematic Clause:</p>
+                          <p className="text-sm font-medium text-slate-300">{t.pdf.results.problematicClause}</p>
                         </div>
                         <p className="text-sm italic text-slate-400">"{issue.clause}"</p>
                       </div>
@@ -321,8 +330,8 @@ export default function PdfAnalyzerPage() {
             {!isAnalyzing && issues.length === 0 && file && (
               <div className="text-center space-y-3 animate-fade-in">
                 <Suspense fallback={<span>✔</span>}><CheckCircle className="mx-auto w-12 h-12 text-green-400" /></Suspense>
-                <h3 className="text-lg font-semibold text-white">No issues detected</h3>
-                <p className="text-slate-300">The contract appears compliant with EU labor law.</p>
+                <h3 className="text-lg font-semibold text-white">{t.pdf.results.noIssues}</h3>
+                <p className="text-slate-300">{t.pdf.results.noIssuesDescription}</p>
               </div>
             )}
 
@@ -332,8 +341,8 @@ export default function PdfAnalyzerPage() {
                   <Suspense fallback={<span>📄</span>}><FileText className="text-slate-400" size={32} /></Suspense>
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold mb-2 text-white">Ready to Analyze</h3>
-                  <p className="text-slate-300">Upload a PDF contract to start the analysis.</p>
+                  <h3 className="text-xl font-semibold mb-2 text-white">{t.pdf.results.ready}</h3>
+                  <p className="text-slate-300">{t.pdf.results.readyDescription}</p>
                 </div>
               </div>
             )}

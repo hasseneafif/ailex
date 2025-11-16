@@ -2,6 +2,8 @@
 
 import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
+import { useLanguage } from '@/lib/language-context';
+import { LanguageToggle } from './components/LanguageToggle';
 
 import {
   MessageCircle,
@@ -44,18 +46,18 @@ function parseHighlight(text: string, isDark: boolean) {
 export default function Home() {
   const [isDark, setIsDark] = useState(true);
   const [mounted, setMounted] = useState(false);
+  const { t } = useLanguage();
 
   useEffect(() => setMounted(true), []);
 
   const heroData = {
-    title: 'Get {Expert} AI Help\nfor EU Law Compliance',
-    description:
-      'Navigate European labor and compliance law with confidence. Our advanced AI platform ensures your practices follow the latest EU regulations with unprecedented accuracy.',
+    title: t.home.title,
+    description: t.home.description,
     stats: [
-      { value: '99.8%', label: 'Accuracy Rate', icon: Shield },
-      { value: '24/7', label: 'AI Availability', icon: Clock },
-      { value: 'LIVE', label: 'Real-Time Law', icon: Zap },
-      { value: 'EU', label: 'Law Compliant', icon: Sparkles },
+      { value: '99.8%', label: t.home.stats.accuracy, icon: Shield },
+      { value: '24/7', label: t.home.stats.availability, icon: Clock },
+      { value: 'LIVE', label: t.home.stats.realTime, icon: Zap },
+      { value: 'EU', label: t.home.stats.compliant, icon: Sparkles },
     ],
   };
 
@@ -68,7 +70,8 @@ export default function Home() {
           : 'bg-gradient-to-br from-gray-50 via-white to-gray-100'
         }`}
     >
-      <div className="fixed top-4 right-4 z-50">
+      <div className="fixed top-4 right-4 z-50 flex gap-2">
+        <LanguageToggle isDark={isDark} />
         <button
           onClick={() => setIsDark(!isDark)}
           className={`p-2 sm:p-3 rounded-full shadow-lg border backdrop-blur-md transition-all duration-300 hover:scale-110 ${isDark
@@ -159,7 +162,7 @@ export default function Home() {
             >
               <div className="absolute inset-0 bg-gradient-to-r from-orange-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               <MessageCircle size={18} className="relative z-10 group-hover:rotate-12 transition-transform duration-300" />
-              <span className="relative z-10 text-sm sm:text-base">Start AI Chat</span>
+              <span className="relative z-10 text-sm sm:text-base">{t.home.buttons.startChat}</span>
               <ChevronRight size={14} className="relative z-10 group-hover:translate-x-1 transition-transform duration-300" />
             </Link>
 
@@ -175,7 +178,7 @@ export default function Home() {
                   }`}
               />
               <FileText size={18} className="relative z-10 group-hover:-rotate-12 transition-transform duration-300" />
-              <span className="relative z-10 text-sm sm:text-base">Document Analyzer</span>
+              <span className="relative z-10 text-sm sm:text-base">{t.home.buttons.documentAnalyzer}</span>
               <ChevronRight size={14} className="relative z-10 group-hover:translate-x-1 transition-transform duration-300" />
             </Link>
           </div>

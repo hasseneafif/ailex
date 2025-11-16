@@ -4,6 +4,8 @@ import { useState, useRef, useEffect, FormEvent } from 'react';
 import Link from 'next/link';
 import { ApiError, chatService } from '../../lib/api';
 import { useToken } from '../hooks/useToken';
+import { useLanguage } from '@/lib/language-context';
+import { LanguageToggle } from '../components/LanguageToggle';
 import dynamic from 'next/dynamic';
 
 const ArrowLeft = dynamic(() => import('lucide-react').then(m => m.ArrowLeft), { ssr: false });
@@ -25,6 +27,7 @@ export default function ChatPage() {
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const { t } = useLanguage();
 
   const { token, isLoading: tokenLoading, error: tokenError, refetch } = useToken();
 
@@ -39,7 +42,7 @@ export default function ChatPage() {
     if (!token) {
       setMessages(prev => [...prev, {
         type: 'error',
-        content: 'Authentication token not available. Please refresh the page.'
+        content: t.chat.errors.tokenUnavailable
       }]);
       return;
     }
@@ -66,7 +69,7 @@ export default function ChatPage() {
           ...prev,
           {
             type: 'error',
-            content: '⚠️ Daily limit exceeded. Please try again tomorrow.'
+            content: t.chat.errors.limitExceeded
           },
         ]);
       } else {
@@ -74,7 +77,7 @@ export default function ChatPage() {
           ...prev,
           {
             type: 'error',
-            content: '❌ Sorry, an error occurred. Please try again later.'
+            content: t.chat.errors.generalError
           },
         ]);
       }
@@ -97,12 +100,7 @@ export default function ChatPage() {
   const getSeverityIcon = (severity: Severity) =>
     ({ low: '✅', medium: '⚠️', high: '🚨' }[severity]);
 
-  const exampleQuestions = [
-    'Is it legal to ask about age in interviews?',
-    'What are GDPR requirements for employee data?',
-    'Can we enforce mandatory overtime?',
-    'How to handle workplace discrimination complaints?',
-  ];
+  const exampleQuestions = t.chat.exampleQuestions;
 
   if (tokenLoading) {
     return (
@@ -123,7 +121,7 @@ export default function ChatPage() {
 
           <div className="space-y-2">
             <h2 className="text-2xl font-semibold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-pulse">
-              Waking AI up
+              {t.chat.loading}
             </h2>
             <div className="flex justify-center items-center space-x-1">
               <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce"></div>
@@ -162,8 +160,12 @@ export default function ChatPage() {
           href="/"
           className="flex items-center space-x-2 px-4 py-2 backdrop-blur-md rounded-xl shadow-lg border border-slate-600 bg-slate-800/80 text-slate-300 hover:text-blue-400 hover:bg-slate-700/80 hover:scale-105 transition-all duration-200"
         >
-          <ArrowLeft size={16} /> <span className="text-sm font-medium">Back</span>
+          <ArrowLeft size={16} /> <span className="text-sm font-medium">{t.back}</span>
         </Link>
+      </div>
+
+      <div className="absolute top-6 right-6 z-20">
+        <LanguageToggle isDark={true} />
       </div>
 
       <section className="relative z-10 pt-24 pb-8">
@@ -171,13 +173,13 @@ export default function ChatPage() {
           <div className="max-w-4xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-4 backdrop-blur-md bg-slate-800/50 text-blue-400">
               <Bot size={16} className="animate-pulse" />
-              <span className="text-sm font-medium">AI Legal Assistant</span>
+              <span className="text-sm font-medium">{t.chat.badge}</span>
             </div>
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 text-white">
-              EU Law Compliance Chat
+              {t.chat.title}
             </h1>
             <p className="text-lg text-slate-300">
-              Get instant expert guidance on European labor law
+              {t.chat.subtitle}
             </p>
           </div>
         </div>
@@ -193,10 +195,10 @@ export default function ChatPage() {
                     <Bot size={28} />
                   </div>
                   <h3 className="text-xl font-semibold text-white">
-                    Hello! Ask me your EU law questions
+                    {t.chat.greeting}
                   </h3>
                   <div className="w-full max-w-2xl">
-                    <p className="text-sm mb-4 text-slate-400">Examples:</p>
+                    <p className="text-sm mb-4 text-slate-400">{t.chat.examples}</p>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       {exampleQuestions.map((q, i) => (
                         <button
@@ -291,7 +293,7 @@ export default function ChatPage() {
                                 />
                               ))}
                             </div>
-                            <span className="text-sm text-slate-300">Analyzing...</span>
+                            <span className="text-sm text-slate-300">{t.chat.analyzing}</span>
                           </div>
                         </div>
                       </div>
@@ -315,9 +317,9 @@ export default function ChatPage() {
                     placeholder={
                       tokenError
                         ? tokenError.status === 429
-                          ? 'Limit exceeded. Try again tomorrow.'
-                          : 'AI unavailable, try again later.'
-                        : 'Type your message...'
+                          ? t.chat.placeholderLimitExceeded
+                          : t.chat.placeholderUnavailable
+                        : t.chat.placeholder
                     }
                     className="w-full text-sm rounded-2xl px-3 py-2 sm:px-6 sm:py-4 pr-10 bg-slate-700/50 border border-slate-600 text-white placeholder-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
                     disabled={isLoading}
@@ -341,10 +343,10 @@ export default function ChatPage() {
 
               {messages.length === 0 && (
                 <div className="mt-4 flex flex-wrap gap-2 justify-center">
-                  {['GDPR', 'Employment', 'Contracts', 'Discrimination'].map(topic => (
+                  {t.chat.topics.map(topic => (
                     <button
                       key={topic}
-                      onClick={() => setInputMessage(`Tell me about ${topic} regulations in EU law`)}
+                      onClick={() => setInputMessage(t.chat.topicPrompt.replace('{topic}', topic))}
                       disabled={!token}
                       className="px-3 py-1 rounded-full text-xs border border-slate-600 bg-slate-700/50 text-slate-300 hover:bg-slate-600/50 hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:hover:scale-100"
                     >
