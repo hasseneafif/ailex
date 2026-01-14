@@ -1,5 +1,3 @@
-
-// import LenisSmoothScroll from "@/components/Common/LenisSmoothScroll";
 import "@/styles/index.css";
 import { Metadata } from "next";
 import { LanguageProvider } from "@/lib/language-context";
@@ -8,18 +6,17 @@ export const metadata: Metadata = {
   title: "Ailex - EU",
   description: "Ailex : Your AI-Powered EU Law Expert",
 };
-export default async function RootLayout({
+
+export default function RootLayout({
   children,
+}: {
+  children: React.ReactNode;
 }) {
-
-
   return (
-    <html >
-      <body className="bg-white min-h-screen">
+    <html lang="en">
+      <body className="bg-black min-h-screen antialiased">
         <LanguageProvider>
-          <div className="min-h-screen bg-gradient-to-br from-white to-blue-50">
-            {children}
-          </div>
+          {children}
         </LanguageProvider>
       </body>
     </html>

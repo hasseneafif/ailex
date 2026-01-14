@@ -9,14 +9,10 @@ export function LanguageToggle({ isDark = true }: { isDark?: boolean }) {
   return (
     <button
       onClick={() => setLanguage(language === 'en' ? 'fr' : 'en')}
-      className={`flex items-center gap-2 px-3 py-2 rounded-full shadow-lg border backdrop-blur-md transition-all duration-300 hover:scale-110 ${
-        isDark
-          ? 'bg-slate-800/80 border-slate-600 text-slate-300 hover:bg-slate-700/80'
-          : 'bg-white/80 border-gray-200 text-gray-600 hover:bg-white'
-      }`}
-      title={language === 'en' ? 'Switch to French' : 'Passer à l\'anglais'}
+      className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/10 hover:bg-white/15 border border-white/20 hover:border-white/30 backdrop-blur-md transition-all duration-300 hover:scale-105 text-white"
+      title={language === 'en' ? 'Switch to French' : "Passer à l'anglais"}
     >
-      <Languages size={16} />
+      <Languages size={16} className="text-slate-400" />
       <span className="text-sm font-medium uppercase">{language}</span>
     </button>
   );

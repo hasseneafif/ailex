@@ -6,14 +6,16 @@ import { ApiError, chatService } from '../../lib/api';
 import { useToken } from '../hooks/useToken';
 import { useLanguage } from '@/lib/language-context';
 import { LanguageToggle } from '../components/LanguageToggle';
-import dynamic from 'next/dynamic';
-
-const ArrowLeft = dynamic(() => import('lucide-react').then(m => m.ArrowLeft), { ssr: false });
-const Send = dynamic(() => import('lucide-react').then(m => m.Send), { ssr: false });
-const Lightbulb = dynamic(() => import('lucide-react').then(m => m.Lightbulb), { ssr: false });
-const Bot = dynamic(() => import('lucide-react').then(m => m.Bot), { ssr: false });
-const User = dynamic(() => import('lucide-react').then(m => m.User), { ssr: false });
-const Sparkles = dynamic(() => import('lucide-react').then(m => m.Sparkles), { ssr: false });
+import {
+  ArrowLeft,
+  Send,
+  Lightbulb,
+  Bot,
+  User,
+  Sparkles,
+  MessageCircle,
+  AlertTriangle,
+} from 'lucide-react';
 
 type Severity = 'low' | 'medium' | 'high';
 type Risk = { type: string; severity: Severity; law_reference: string; explanation: string };
@@ -40,17 +42,13 @@ export default function ChatPage() {
     if (!inputMessage.trim() || isLoading || tokenLoading) return;
 
     if (!token) {
-      setMessages(prev => [...prev, {
-        type: 'error',
-        content: t.chat.errors.tokenUnavailable
-      }]);
+      setMessages(prev => [...prev, { type: 'error', content: t.chat.errors.tokenUnavailable }]);
       return;
     }
 
     const userMessage = inputMessage.trim();
     setInputMessage('');
     setIsLoading(true);
-
     setMessages(prev => [...prev, { type: 'user', content: userMessage }]);
 
     try {
@@ -61,29 +59,13 @@ export default function ChatPage() {
       ]);
     } catch (err) {
       console.error('Chat error:', err);
-
       if (err instanceof ApiError && err.status === 429) {
         refetch();
-
-        setMessages(prev => [
-          ...prev,
-          {
-            type: 'error',
-            content: t.chat.errors.limitExceeded
-          },
-        ]);
+        setMessages(prev => [...prev, { type: 'error', content: t.chat.errors.limitExceeded }]);
       } else {
-        setMessages(prev => [
-          ...prev,
-          {
-            type: 'error',
-            content: t.chat.errors.generalError
-          },
-        ]);
+        setMessages(prev => [...prev, { type: 'error', content: t.chat.errors.generalError }]);
       }
-    }
-
-    finally {
+    } finally {
       setIsLoading(false);
     }
   };
@@ -104,112 +86,89 @@ export default function ChatPage() {
 
   if (tokenLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center relative overflow-hidden">
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-700"></div>
-        </div>
-
+      <section className="min-h-screen relative overflow-hidden bg-black flex items-center justify-center">
+        <div className="absolute inset-0 bg-gradient-to-t from-cyan-900/10 via-black to-purple-900/10" />
         <div className="text-center space-y-6 relative z-10">
           <div className="relative inline-block">
-            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 blur-xl opacity-50 animate-pulse"></div>
-            <div className="relative w-20 h-20 rounded-full bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 flex items-center justify-center">
-              <Bot size={32} className="text-white animate-pulse" />
+            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-500 to-purple-500 blur-xl opacity-50 animate-pulse" />
+            <div className="relative w-20 h-20 rounded-full bg-white/10 border border-white/20 flex items-center justify-center backdrop-blur-md">
+              <Bot size={32} className="text-cyan-400 animate-pulse" />
             </div>
-            <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-blue-400 border-r-purple-400 animate-spin"></div>
           </div>
-
           <div className="space-y-2">
-            <h2 className="text-2xl font-semibold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-pulse">
-              {t.chat.loading}
-            </h2>
-            <div className="flex justify-center items-center space-x-1">
-              <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce"></div>
-              <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce delay-100"></div>
-              <div className="w-2 h-2 bg-pink-400 rounded-full animate-bounce delay-200"></div>
+            <h2 className="text-2xl font-semibold text-white">{t.chat.loading}</h2>
+            <div className="flex justify-center items-center space-x-2">
+              <div className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce" />
+              <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+              <div className="w-2 h-2 bg-pink-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
             </div>
           </div>
-
         </div>
-      </div>
+      </section>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 transition-all duration-500 relative">
-      <div className="fixed inset-0 pointer-events-none overflow-hidden bg-gradient-to-br from-slate-900 via-blue-900/20 to-slate-900">
-        <div className="absolute left-[-48px] top-[-48px] w-[192px] h-[192px] rounded-full blur-3xl bg-gradient-to-br from-blue-500/20 to-purple-500/30" />
-        <div className="absolute bottom-[-24px] right-[-24px] w-[128px] h-[128px] rounded-full blur-3xl bg-gradient-to-br from-purple-500/20 to-pink-500/20" />
+    <section className="min-h-screen relative overflow-hidden bg-black">
+      <div className="absolute inset-0 bg-gradient-to-t from-cyan-900/10 via-black to-purple-900/10" />
 
-        {[...Array(10)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute w-1 h-1 rounded-full opacity-40 bg-blue-400"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 3}s`,
-              animation: `float ${3 + Math.random() * 4}s ease-in-out infinite alternate`,
-            }}
-          />
-        ))}
-      </div>
-
-      <div className="absolute top-6 left-6 z-20">
+      {/* Navigation */}
+      <div className="fixed top-6 left-6 z-50">
         <Link
           href="/"
-          className="flex items-center space-x-2 px-4 py-2 backdrop-blur-md rounded-xl shadow-lg border border-slate-600 bg-slate-800/80 text-slate-300 hover:text-blue-400 hover:bg-slate-700/80 hover:scale-105 transition-all duration-200"
+          className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/15 border border-white/20 hover:border-white/30 rounded-xl backdrop-blur-md transition-all duration-300 group"
         >
-          <ArrowLeft size={16} /> <span className="text-sm font-medium">{t.back}</span>
+          <ArrowLeft size={16} className="text-slate-400 group-hover:text-cyan-400 transition-colors" />
+          <span className="text-sm font-medium text-white">{t.back}</span>
         </Link>
       </div>
 
-      <div className="absolute top-6 right-6 z-20">
+      <div className="fixed top-6 right-6 z-50">
         <LanguageToggle isDark={true} />
       </div>
 
-      <section className="relative z-10 pt-24 pb-8">
-        <div className="px-4 sm:px-6 lg:px-8">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-4 backdrop-blur-md bg-slate-800/50 text-blue-400">
-              <Bot size={16} className="animate-pulse" />
-              <span className="text-sm font-medium">{t.chat.badge}</span>
+      <div className="min-h-screen flex flex-col items-center pt-24 pb-8 px-4 sm:px-6 relative z-10">
+        <div className="max-w-4xl w-full">
+          {/* Service Error Banner */}
+          {tokenError && (
+            <div className="mb-6 p-4 rounded-xl bg-amber-900/20 border border-amber-500/30 flex items-center gap-3 text-amber-400 animate-fade-in">
+              <AlertTriangle size={20} className="shrink-0" />
+              <span>{tokenError.status === 429 ? t.limitExceededError : t.serviceError}</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 text-white">
-              {t.chat.title}
-            </h1>
-            <p className="text-lg text-slate-300">
-              {t.chat.subtitle}
-            </p>
-          </div>
-        </div>
-      </section>
+          )}
 
-      <section className="relative z-10 px-4 sm:px-6 lg:px-8 pb-20">
-        <div className="max-w-4xl mx-auto">
-          <div className="rounded-3xl shadow-2xl border border-slate-600/50 bg-slate-800/50 backdrop-blur-md overflow-hidden">
-            <div className="h-[60vh] sm:h-[500px] overflow-y-auto p-4 sm:p-6 space-y-4 sm:space-y-6">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 backdrop-blur-md mb-4">
+              <MessageCircle className="w-4 h-4 text-cyan-400 animate-pulse" />
+              <span className="text-sm font-medium text-white">{t.chat.badge}</span>
+            </div>
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2">
+              <span className="text-white">{t.chat.title}</span>
+            </h1>
+            <p className="text-slate-400 text-base md:text-lg">{t.chat.subtitle}</p>
+          </div>
+
+          {/* Chat Container */}
+          <div className="bg-white/5 border border-white/10 rounded-2xl backdrop-blur-md overflow-hidden">
+            {/* Messages Area */}
+            <div className="h-[55vh] sm:h-[500px] overflow-y-auto p-4 sm:p-6 space-y-4">
               {messages.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-full text-center space-y-6 animate-fade-in">
-                  <div className="w-16 h-16 rounded-full flex items-center justify-center shadow-lg bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold text-lg">
-                    <Bot size={28} />
+                  <div className="w-16 h-16 rounded-full bg-white/10 border border-white/20 flex items-center justify-center">
+                    <Bot size={28} className="text-cyan-400" />
                   </div>
-                  <h3 className="text-xl font-semibold text-white">
-                    {t.chat.greeting}
-                  </h3>
+                  <h3 className="text-xl font-semibold text-white">{t.chat.greeting}</h3>
                   <div className="w-full max-w-2xl">
                     <p className="text-sm mb-4 text-slate-400">{t.chat.examples}</p>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      {exampleQuestions.map((q, i) => (
+                      {exampleQuestions.map((q: string, i: number) => (
                         <button
                           key={i}
                           onClick={() => setInputMessage(q)}
-                          className="group p-2 sm:p-4 text-left text-xs sm:text-sm rounded-xl border border-slate-600 bg-slate-700/50 text-slate-300 hover:bg-slate-600/50 hover:border-blue-500/50 hover:scale-105 hover:-translate-y-1 transition-all duration-200"
+                          className="group p-3 sm:p-4 text-left text-xs sm:text-sm rounded-xl bg-white/5 hover:bg-cyan-500/10 border border-white/10 hover:border-cyan-400/50 text-slate-300 transition-all duration-300 hover:scale-[1.02]"
                         >
-                          <Lightbulb
-                            size={14}
-                            className="inline mr-2 text-slate-400 group-hover:text-blue-400 transition-colors"
-                          />
+                          <Lightbulb size={14} className="inline mr-2 text-slate-500 group-hover:text-cyan-400 transition-colors" />
                           "{q}"
                         </button>
                       ))}
@@ -223,18 +182,18 @@ export default function ChatPage() {
                       {m.type === 'user' && (
                         <div className="flex justify-end">
                           <div className="flex items-start gap-3 max-w-[80%]">
-                            <div className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-2xl px-6 py-4 shadow-lg">
+                            <div className="bg-gradient-to-r from-cyan-500 to-purple-500 text-white rounded-2xl px-5 py-3">
                               {m.content}
                             </div>
-                            <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                              <User size={16} className="text-white" />
+                            <div className="w-8 h-8 bg-white/10 border border-white/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                              <User size={14} className="text-white" />
                             </div>
                           </div>
                         </div>
                       )}
                       {m.type === 'error' && (
                         <div className="flex justify-start">
-                          <div className="px-6 py-4 rounded-2xl border bg-red-900/20 text-red-400 border-red-500/30">
+                          <div className="px-5 py-3 rounded-2xl bg-red-900/20 text-red-400 border border-red-500/30">
                             ❌ {m.content}
                           </div>
                         </div>
@@ -242,29 +201,25 @@ export default function ChatPage() {
                       {m.type === 'ai' && (
                         <div className="flex justify-start">
                           <div className="flex items-start gap-3 max-w-[85%]">
-                            <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-1 bg-gradient-to-r from-blue-600 to-purple-600">
-                              <Bot size={16} className="text-white" />
+                            <div className="w-8 h-8 bg-white/10 border border-cyan-400/50 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                              <Bot size={14} className="text-cyan-400" />
                             </div>
-                            <div className="px-6 py-4 rounded-2xl shadow-lg border border-slate-600/50 bg-slate-700/50 text-slate-200">
+                            <div className="bg-white/5 border border-white/10 rounded-2xl px-5 py-3 text-slate-200">
                               <p>{m.content}</p>
                               {m.risks?.length > 0 && (
                                 <div className="mt-4 space-y-3">
                                   {m.risks.map((r, j) => (
                                     <div
                                       key={j}
-                                      className="border border-slate-600/50 bg-slate-800/50 rounded-xl p-4 hover:shadow-md transition-all duration-200"
+                                      className="bg-white/5 border border-white/10 rounded-xl p-4 hover:bg-white/10 transition-all duration-200"
                                     >
                                       <div className="flex items-center justify-between">
-                                        <h5 className="font-medium text-slate-200">{r.type}</h5>
-                                        <span
-                                          className={`px-3 py-1 rounded-full text-xs ${getSeverityBadge(
-                                            r.severity,
-                                          )}`}
-                                        >
+                                        <h5 className="font-medium text-white">{r.type}</h5>
+                                        <span className={`px-3 py-1 rounded-full text-xs ${getSeverityBadge(r.severity)}`}>
                                           {getSeverityIcon(r.severity)} {r.severity}
                                         </span>
                                       </div>
-                                      <p className="text-xs mt-2 text-blue-400">{r.law_reference}</p>
+                                      <p className="text-xs mt-2 text-cyan-400">{r.law_reference}</p>
                                       <p className="text-sm mt-1 text-slate-300">{r.explanation}</p>
                                     </div>
                                   ))}
@@ -279,21 +234,21 @@ export default function ChatPage() {
                   {isLoading && (
                     <div className="flex justify-start animate-fade-in">
                       <div className="flex items-start gap-3">
-                        <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-1 bg-gradient-to-r from-blue-600 to-purple-600">
-                          <Bot size={16} className="text-white animate-pulse" />
+                        <div className="w-8 h-8 bg-white/10 border border-cyan-400/50 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                          <Bot size={14} className="text-cyan-400 animate-pulse" />
                         </div>
-                        <div className="px-6 py-4 rounded-2xl shadow-lg border border-slate-600/50 bg-slate-700/50">
+                        <div className="bg-white/5 border border-white/10 rounded-2xl px-5 py-3">
                           <div className="flex items-center gap-2">
                             <div className="flex gap-1">
                               {[0, 150, 300].map(delay => (
                                 <div
                                   key={delay}
-                                  className="w-2 h-2 rounded-full animate-bounce bg-blue-400"
+                                  className="w-2 h-2 rounded-full bg-cyan-400 animate-bounce"
                                   style={{ animationDelay: `${delay}ms` }}
                                 />
                               ))}
                             </div>
-                            <span className="text-sm text-slate-300">{t.chat.analyzing}</span>
+                            <span className="text-sm text-slate-400">{t.chat.analyzing}</span>
                           </div>
                         </div>
                       </div>
@@ -304,11 +259,9 @@ export default function ChatPage() {
               )}
             </div>
 
-            <form
-              onSubmit={sendMessage}
-              className="border-t border-slate-600/50 bg-slate-800/30 p-6 backdrop-blur-md"
-            >
-              <div className="flex space-x-4">
+            {/* Input Area */}
+            <form onSubmit={sendMessage} className="border-t border-white/10 bg-white/5 p-4 sm:p-6">
+              <div className="flex gap-3">
                 <div className="flex-1 relative">
                   <input
                     type="text"
@@ -321,20 +274,20 @@ export default function ChatPage() {
                           : t.chat.placeholderUnavailable
                         : t.chat.placeholder
                     }
-                    className="w-full text-sm rounded-2xl px-3 py-2 sm:px-6 sm:py-4 pr-10 bg-slate-700/50 border border-slate-600 text-white placeholder-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+                    className="w-full text-sm rounded-xl px-4 py-3 sm:px-5 sm:py-4 pr-12 bg-white/5 border border-white/10 text-white placeholder-slate-500 focus:ring-2 focus:ring-cyan-400/50 focus:border-cyan-400/50 transition-all duration-200 outline-none"
                     disabled={isLoading}
                   />
                   {inputMessage && (
-                    <Sparkles className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-400 animate-pulse" />
+                    <Sparkles className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-cyan-400 animate-pulse" />
                   )}
                 </div>
                 <button
                   type="submit"
                   disabled={!inputMessage.trim() || isLoading || !token}
-                  className="px-3 py-2 sm:px-6 sm:py-4 rounded-2xl shadow-lg bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 transition-all duration-300 hover:scale-105 disabled:cursor-not-allowed disabled:opacity-50 disabled:scale-100"
+                  className="px-4 py-3 sm:px-6 sm:py-4 rounded-xl bg-white text-black font-medium hover:bg-slate-100 transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 shadow-[0_0_20px_rgba(255,255,255,0.15)]"
                 >
                   {isLoading ? (
-                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    <div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin" />
                   ) : (
                     <Send size={20} />
                   )}
@@ -343,12 +296,13 @@ export default function ChatPage() {
 
               {messages.length === 0 && (
                 <div className="mt-4 flex flex-wrap gap-2 justify-center">
-                  {t.chat.topics.map(topic => (
+                  {t.chat.topics.map((topic: string) => (
                     <button
                       key={topic}
+                      type="button"
                       onClick={() => setInputMessage(t.chat.topicPrompt.replace('{topic}', topic))}
                       disabled={!token}
-                      className="px-3 py-1 rounded-full text-xs border border-slate-600 bg-slate-700/50 text-slate-300 hover:bg-slate-600/50 hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:hover:scale-100"
+                      className="px-3 py-1.5 rounded-full text-xs bg-white/5 hover:bg-cyan-500/10 border border-white/10 hover:border-cyan-400/50 text-slate-400 hover:text-cyan-400 transition-all duration-200 disabled:opacity-50"
                     >
                       {topic}
                     </button>
@@ -358,42 +312,7 @@ export default function ChatPage() {
             </form>
           </div>
         </div>
-      </section>
-
-      <style jsx>{`
-        @keyframes float {
-          0% {
-            transform: translateY(0px) rotate(0deg);
-          }
-          100% {
-            transform: translateY(-20px) rotate(180deg);
-          }
-        }
-        @keyframes fade-in {
-          from {
-            opacity: 0;
-          }
-          to {
-            opacity: 1;
-          }
-        }
-        @keyframes slide-in {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        .animate-fade-in {
-          animation: fade-in 0.5s ease-out;
-        }
-        .animate-slide-in {
-          animation: slide-in 0.4s ease-out;
-        }
-      `}</style>
-    </div>
+      </div>
+    </section>
   );
 }

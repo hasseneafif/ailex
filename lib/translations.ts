@@ -4,6 +4,8 @@ export const translations = {
   en: {
     // Common
     back: 'Back',
+    serviceError: 'Service temporarily unavailable. Please try again later.',
+    limitExceededError: 'Daily limit exceeded. Please try again tomorrow.',
     
     // Home page
     home: {
@@ -105,6 +107,8 @@ export const translations = {
   fr: {
     // Common
     back: 'Retour',
+    serviceError: 'Service temporairement indisponible. Veuillez réessayer plus tard.',
+    limitExceededError: 'Limite quotidienne dépassée. Veuillez réessayer demain.',
     
     // Home page
     home: {
