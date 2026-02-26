@@ -1,4 +1,4 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'BACKEND_URL_NOT_SET';
+const API_BASE_URL = '';
 
 class ApiError extends Error {
   constructor(message: string, status?: number) {

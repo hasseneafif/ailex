@@ -9,16 +9,21 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.542.0",
     "next": "^13.5.6",
     "next-intl": "^4.3.5",
+    "openai": "^5.19.1",
+    "pdf-parse": "^1.1.1",
     "react": "^18.2.0",
     "react-markdown": "^10.1.0",
     "react-responsive-carousel": "^3.2.23",
     "zustand": "^5.0.8"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.9",
     "@types/node": "^20.8.9",
+    "@types/pdf-parse": "^1.1.4",
     "@types/react": "^18.2.33",
     "autoprefixer": "^10.4.16",
     "eslint": "^9.35.0",
