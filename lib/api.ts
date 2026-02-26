@@ -30,7 +30,11 @@ export const tokenService = {
 };
 
 export const chatService = {
-  async sendMessage(message: string, token?: string) {
+  async sendMessage(
+    message: string,
+    token?: string,
+    history?: { role: 'user' | 'assistant'; content: string }[]
+  ) {
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
     };
@@ -42,7 +46,7 @@ export const chatService = {
     const response = await fetch(`${API_BASE_URL}/api/chat`, {
       method: 'POST',
       headers,
-      body: JSON.stringify({ message }),
+      body: JSON.stringify({ message, history }),
     });
 
     return handleResponse(response);

@@ -49,10 +49,21 @@ export default function ChatPage() {
     const userMessage = inputMessage.trim();
     setInputMessage('');
     setIsLoading(true);
+
+    const history = messages
+      .filter((m): m is { type: 'user'; content: string } | { type: 'ai'; content: string; risks: Risk[] } =>
+        m.type === 'user' || m.type === 'ai'
+      )
+      .slice(-4)
+      .map(m => ({
+        role: (m.type === 'user' ? 'user' : 'assistant') as 'user' | 'assistant',
+        content: m.content,
+      }));
+
     setMessages(prev => [...prev, { type: 'user', content: userMessage }]);
 
     try {
-      const response = await chatService.sendMessage(userMessage, token);
+      const response = await chatService.sendMessage(userMessage, token, history);
       setMessages(prev => [
         ...prev,
         { type: 'ai', content: response.answer, risks: response.risks || [] },

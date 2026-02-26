@@ -14,7 +14,7 @@ export async function POST(request: Request) {
 
   try {
     const body = await request.json();
-    const { message } = body;
+    const { message, history } = body;
 
     if (!message || typeof message !== 'string') {
       return NextResponse.json(
@@ -30,7 +30,14 @@ export async function POST(request: Request) {
       );
     }
 
-    const parsedResponse = (await callChatCompletion(message, CHAT_SYSTEM_PROMPT)) as {
+    const safeHistory: { role: 'user' | 'assistant'; content: string }[] = Array.isArray(history)
+      ? history.filter(
+          (m): m is { role: 'user' | 'assistant'; content: string } =>
+            (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string'
+        )
+      : [];
+
+    const parsedResponse = (await callChatCompletion(message, CHAT_SYSTEM_PROMPT, safeHistory)) as {
       answer?: string;
       risks?: unknown[];
     };

@@ -75,9 +75,14 @@ async function callAI(
   return parsed;
 }
 
-export async function callChatCompletion(userMessage: string, systemPrompt: string) {
-  const messages: { role: 'system' | 'user'; content: string }[] = [
+export async function callChatCompletion(
+  userMessage: string,
+  systemPrompt: string,
+  history: { role: 'user' | 'assistant'; content: string }[] = []
+) {
+  const messages: { role: 'system' | 'user' | 'assistant'; content: string }[] = [
     { role: 'system', content: systemPrompt },
+    ...history,
     { role: 'user', content: userMessage },
   ];
 
