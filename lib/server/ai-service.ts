@@ -93,7 +93,7 @@ const RISKS_DELIMITER = '<<<RISKS>>>';
 const STREAMING_PROMPT_SUFFIX = `
 
 IMPORTANT: Structure your response using this exact format:
-1. Write your answer as plain text
+1. Write your answer as plain text — keep it to 1-2 sentences maximum, no more.
 2. On a new line write exactly: <<<RISKS>>>
 3. Then write a JSON array of risks: [{"type":"string","severity":"low|medium|high","law_reference":"string","explanation":"string"}] — use [] if none.
 Do not use any other format or markdown fences.`;

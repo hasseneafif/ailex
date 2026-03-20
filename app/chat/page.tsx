@@ -15,6 +15,8 @@ import {
   Sparkles,
   MessageCircle,
   AlertTriangle,
+  CheckCircle,
+  AlertCircle,
 } from 'lucide-react';
 
 type Severity = 'low' | 'medium' | 'high';
@@ -112,8 +114,11 @@ export default function ChatPage() {
     return badges[severity];
   };
 
-  const getSeverityIcon = (severity: Severity) =>
-    ({ low: '✅', medium: '⚠️', high: '🚨' }[severity]);
+  const getSeverityIcon = (severity: Severity) => ({
+    low: <CheckCircle size={12} />,
+    medium: <AlertTriangle size={12} />,
+    high: <AlertCircle size={12} />,
+  }[severity]);
 
   const exampleQuestions = t.chat.exampleQuestions;
 
@@ -215,7 +220,7 @@ export default function ChatPage() {
                       {m.type === 'user' && (
                         <div className="flex justify-end">
                           <div className="flex items-start gap-3 max-w-[80%]">
-                            <div className="bg-gradient-to-r from-cyan-500 to-purple-500 text-white rounded-2xl px-5 py-3">
+                            <div className="bg-cyan-500 text-white rounded-2xl px-5 py-3">
                               {m.content}
                             </div>
                             <div className="w-8 h-8 bg-white/10 border border-white/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
@@ -253,8 +258,8 @@ export default function ChatPage() {
                                     >
                                       <div className="flex items-center justify-between">
                                         <h5 className="font-medium text-white">{r.type}</h5>
-                                        <span className={`px-3 py-1 rounded-full text-xs ${getSeverityBadge(r.severity)}`}>
-                                          {getSeverityIcon(r.severity)} {r.severity}
+                                        <span className={`px-3 py-1 rounded-full text-xs flex items-center gap-1 whitespace-nowrap shrink-0 h-fit ${getSeverityBadge(r.severity)}`}>
+                                          {getSeverityIcon(r.severity)} {r.severity.charAt(0).toUpperCase() + r.severity.slice(1)}
                                         </span>
                                       </div>
                                       <p className="text-xs mt-2 text-cyan-400">{r.law_reference}</p>

@@ -110,8 +110,11 @@ export default function PdfAnalyzerPage() {
     return badges[severity];
   };
 
-  const getSeverityIcon = (severity: Severity) =>
-    ({ low: '✅', medium: '⚠️', high: '🚨' }[severity]);
+  const getSeverityIcon = (severity: Severity) => ({
+    low: <CheckCircle size={12} />,
+    medium: <AlertTriangle size={12} />,
+    high: <AlertCircle size={12} />,
+  }[severity]);
 
   if (tokenLoading) {
     return (
@@ -322,8 +325,8 @@ export default function PdfAnalyzerPage() {
                         <h3 className="font-medium text-white">{issue.issue}</h3>
                         <p className="text-sm text-purple-400">{issue.law_reference}</p>
                       </div>
-                      <span className={`px-3 py-1 rounded-full text-xs flex items-center gap-1 h-fit ${getSeverityBadge(issue.severity)}`}>
-                        {getSeverityIcon(issue.severity)} {issue.severity}
+                      <span className={`px-3 py-1 rounded-full text-xs flex items-center gap-1 whitespace-nowrap shrink-0 h-fit ${getSeverityBadge(issue.severity)}`}>
+                        {getSeverityIcon(issue.severity)} {issue.severity.charAt(0).toUpperCase() + issue.severity.slice(1)}
                       </span>
                     </div>
                     {issue.clause && (
