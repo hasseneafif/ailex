@@ -29,6 +29,7 @@ export default function PdfAnalyzerPage() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [dragActive, setDragActive] = useState(false);
+  const [progress, setProgress] = useState<{ current: number; total: number } | null>(null);
   const { t } = useLanguage();
 
   const { token, isLoading: tokenLoading, error: tokenError } = useToken();
@@ -74,9 +75,19 @@ export default function PdfAnalyzerPage() {
 
     setIsAnalyzing(true);
     setError(null);
+    setIssues([]);
+    setProgress(null);
     try {
-      const response = await pdfService.analyzePdf(file, token);
-      setIssues(response.issues || []);
+      for await (const event of pdfService.streamAnalyzePdf(file, token)) {
+        if (event.type === 'progress') {
+          setProgress({ current: event.current, total: event.total });
+        } else if (event.type === 'issues') {
+          setIssues((prev) => [...prev, ...(event.issues as Issue[])]);
+        } else if (event.type === 'error') {
+          setError(t.pdf.errors.analysisFailed);
+        }
+        // 'complete' — no action needed, isAnalyzing will be cleared in finally
+      }
     } catch (err) {
       console.error('PDF analysis error:', err);
       if (err instanceof ApiError && err.status === 429) {
@@ -86,6 +97,7 @@ export default function PdfAnalyzerPage() {
       }
     } finally {
       setIsAnalyzing(false);
+      setProgress(null);
     }
   };
 
@@ -263,20 +275,37 @@ export default function PdfAnalyzerPage() {
                   <p className="text-sm text-slate-400">{t.pdf.analyze.subtitle}</p>
                 </div>
                 <div className="max-w-md mx-auto mt-6">
-                  <div className="flex justify-between text-xs mb-2 text-slate-500">
-                    <span>{t.pdf.analyze.steps.extracting}</span>
-                    <span>{t.pdf.analyze.steps.analyzing}</span>
-                    <span>{t.pdf.analyze.steps.checking}</span>
-                  </div>
-                  <div className="w-full h-2 rounded-full bg-white/10">
-                    <div className="h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full animate-pulse" style={{ width: '60%' }} />
-                  </div>
+                  {progress ? (
+                    <>
+                      <div className="flex justify-between text-xs mb-2 text-slate-500">
+                        <span>{t.pdf.analyze.steps.analyzing}</span>
+                        <span>{progress.current}/{progress.total}</span>
+                      </div>
+                      <div className="w-full h-2 rounded-full bg-white/10">
+                        <div
+                          className="h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full transition-all duration-500"
+                          style={{ width: `${(progress.current / progress.total) * 100}%` }}
+                        />
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="flex justify-between text-xs mb-2 text-slate-500">
+                        <span>{t.pdf.analyze.steps.extracting}</span>
+                        <span>{t.pdf.analyze.steps.analyzing}</span>
+                        <span>{t.pdf.analyze.steps.checking}</span>
+                      </div>
+                      <div className="w-full h-2 rounded-full bg-white/10">
+                        <div className="h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full animate-pulse" style={{ width: '20%' }} />
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             )}
 
             {/* Results */}
-            {!isAnalyzing && issues.length > 0 && (
+            {issues.length > 0 && (
               <div className="space-y-4 animate-fade-in">
                 <h2 className="text-lg font-semibold text-white">
                   {t.pdf.results.issuesDetected
@@ -313,7 +342,7 @@ export default function PdfAnalyzerPage() {
             )}
 
             {/* No Issues Found */}
-            {!isAnalyzing && issues.length === 0 && file && !error && (
+            {!isAnalyzing && issues.length === 0 && file && !error && progress === null && (
               <div className="text-center space-y-3 py-8 animate-fade-in">
                 <CheckCircle className="mx-auto w-12 h-12 text-green-400" />
                 <h3 className="text-lg font-semibold text-white">{t.pdf.results.noIssues}</h3>

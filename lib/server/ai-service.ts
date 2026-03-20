@@ -89,6 +89,85 @@ export async function callChatCompletion(
   return callAI(messages, { temperature: 0.3, max_tokens: 500 });
 }
 
+const RISKS_DELIMITER = '<<<RISKS>>>';
+const STREAMING_PROMPT_SUFFIX = `
+
+IMPORTANT: Structure your response using this exact format:
+1. Write your answer as plain text
+2. On a new line write exactly: <<<RISKS>>>
+3. Then write a JSON array of risks: [{"type":"string","severity":"low|medium|high","law_reference":"string","explanation":"string"}] — use [] if none.
+Do not use any other format or markdown fences.`;
+
+export async function* streamChatCompletion(
+  userMessage: string,
+  systemPrompt: string,
+  history: { role: 'user' | 'assistant'; content: string }[] = []
+): AsyncGenerator<{ type: 'chunk'; text: string } | { type: 'risks'; risks: unknown[] }> {
+  const model = process.env.AI_MODEL;
+
+  if (!process.env.AI_URL || !process.env.AI_KEY || !model) {
+    throw new Error('Missing required AI environment variables');
+  }
+
+  const messages: { role: 'system' | 'user' | 'assistant'; content: string }[] = [
+    { role: 'system', content: systemPrompt + STREAMING_PROMPT_SUFFIX },
+    ...history,
+    { role: 'user', content: userMessage },
+  ];
+
+  const stream = await client.chat.completions.create({
+    model,
+    messages,
+    temperature: 0.3,
+    max_tokens: 500,
+    stream: true,
+  });
+
+  let buffer = '';
+  let delimiterFound = false;
+
+  for await (const chunk of stream) {
+    const text = chunk.choices[0]?.delta?.content || '';
+    if (!text) continue;
+
+    buffer += text;
+
+    if (delimiterFound) continue;
+
+    const delimIdx = buffer.indexOf(RISKS_DELIMITER);
+    if (delimIdx !== -1) {
+      delimiterFound = true;
+      const answerPart = buffer.substring(0, delimIdx);
+      if (answerPart) yield { type: 'chunk', text: answerPart };
+      buffer = buffer.substring(delimIdx + RISKS_DELIMITER.length);
+    } else {
+      // Yield safe portion, keeping enough to detect the delimiter
+      const safeLen = Math.max(0, buffer.length - RISKS_DELIMITER.length);
+      if (safeLen > 0) {
+        yield { type: 'chunk', text: buffer.substring(0, safeLen) };
+        buffer = buffer.substring(safeLen);
+      }
+    }
+  }
+
+  if (!delimiterFound) {
+    if (buffer) yield { type: 'chunk', text: buffer };
+    yield { type: 'risks', risks: [] };
+  } else {
+    let risks: unknown[] = [];
+    const risksText = buffer.trim();
+    if (risksText) {
+      try {
+        const parsed = JSON.parse(risksText);
+        risks = Array.isArray(parsed) ? parsed : [];
+      } catch {
+        risks = [];
+      }
+    }
+    yield { type: 'risks', risks };
+  }
+}
+
 export async function callPdfAnalysis(textContent: string, systemPrompt: string) {
   const messages: { role: 'system' | 'user'; content: string }[] = [
     { role: 'system', content: systemPrompt },

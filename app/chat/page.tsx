@@ -61,15 +61,37 @@ export default function ChatPage() {
       }));
 
     setMessages(prev => [...prev, { type: 'user', content: userMessage }]);
+    // Add empty AI message placeholder — streaming will fill it in
+    setMessages(prev => [...prev, { type: 'ai', content: '', risks: [] }]);
 
     try {
-      const response = await chatService.sendMessage(userMessage, token, history);
-      setMessages(prev => [
-        ...prev,
-        { type: 'ai', content: response.answer, risks: response.risks || [] },
-      ]);
+      for await (const event of chatService.streamMessage(userMessage, token, history)) {
+        if (event.type === 'chunk') {
+          setMessages(prev => {
+            const updated = [...prev];
+            const last = updated[updated.length - 1];
+            if (last.type === 'ai') {
+              updated[updated.length - 1] = { ...last, content: last.content + event.text };
+            }
+            return updated;
+          });
+        } else if (event.type === 'risks') {
+          setMessages(prev => {
+            const updated = [...prev];
+            const last = updated[updated.length - 1];
+            if (last.type === 'ai') {
+              updated[updated.length - 1] = { ...last, risks: event.risks as Risk[] };
+            }
+            return updated;
+          });
+        } else if (event.type === 'error') {
+          throw new Error(event.message);
+        }
+      }
     } catch (err) {
       console.error('Chat error:', err);
+      // Remove the empty AI placeholder on error
+      setMessages(prev => prev.filter((_, i) => i !== prev.length - 1));
       if (err instanceof ApiError && err.status === 429) {
         refetch();
         setMessages(prev => [...prev, { type: 'error', content: t.chat.errors.limitExceeded }]);
@@ -216,7 +238,12 @@ export default function ChatPage() {
                               <Bot size={14} className="text-cyan-400" />
                             </div>
                             <div className="bg-white/5 border border-white/10 rounded-2xl px-5 py-3 text-slate-200">
-                              <p>{m.content}</p>
+                              <p>
+                                {m.content}
+                                {isLoading && i === messages.length - 1 && (
+                                  <span className="inline-block w-0.5 h-4 bg-cyan-400 ml-0.5 align-middle animate-pulse" />
+                                )}
+                              </p>
                               {m.risks?.length > 0 && (
                                 <div className="mt-4 space-y-3">
                                   {m.risks.map((r, j) => (
@@ -242,7 +269,7 @@ export default function ChatPage() {
                       )}
                     </div>
                   ))}
-                  {isLoading && (
+                  {isLoading && messages[messages.length - 1]?.type !== 'ai' && (
                     <div className="flex justify-start animate-fade-in">
                       <div className="flex items-start gap-3">
                         <div className="w-8 h-8 bg-white/10 border border-cyan-400/50 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
